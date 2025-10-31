@@ -181,3 +181,5 @@ body.has-perimeter::before{
 .site-footer{padding:2rem 0;border-top:1px solid rgba(255,255,255,.08);text-align:center;color:#9aa1a9;position:relative}
 .footer-attack{display:inline-block;font-weight:800;color:#fff;transition:.05s;pointer-events:none;text-shadow:0 0 10px var(--gold)}
 .small{font-size:.9rem;color:#9aa1a9}
+
+/* Test auto-deploy - 10/31/2025 02:33:35 */
