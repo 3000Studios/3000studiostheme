@@ -13,9 +13,18 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Create theme ZIP
+      - name: Create theme ZIP with timestamp
         run: |
-          zip -r 3000studios-clean.zip . \
+          TIMESTAMP=$(date -u +"%Y-%m-%d %H:%M UTC")
+          THEME_NAME="3000studios-$(date -u +"%Y%m%d-%H%M%S")"
+          echo "THEME_NAME=${THEME_NAME}" >> $GITHUB_ENV
+          echo "BUILD_TIME=${TIMESTAMP}" >> $GITHUB_ENV
+          
+          # Update style.css with build timestamp
+          sed -i "s/{{BUILD_TIME}}/${TIMESTAMP}/g" style.css
+          
+          # Create ZIP
+          zip -r ${THEME_NAME}.zip . \
             -x ".git/*" \
             -x ".github/*" \
             -x "node_modules/*" \
@@ -26,7 +35,8 @@ jobs:
             -x "scripts/*" \
             -x "webhook-server/*" \
             -x "mobile-client/*"
-          ls -lh 3000studios-clean.zip
+          ls -lh ${THEME_NAME}.zip
+          echo "✓ Created: ${THEME_NAME}.zip (Built: ${TIMESTAMP})"
 
       - name: Upload theme ZIP via SCP
         uses: appleboy/scp-action@v0.1.7
@@ -35,38 +45,40 @@ jobs:
           username: ${{ secrets.WP_SSH_USER }}
           password: ${{ secrets.WP_SSH_PASSWORD }}
           port: ${{ secrets.WP_SSH_PORT }}
-          source: "3000studios-clean.zip"
+          source: "${{ env.THEME_NAME }}.zip"
           target: "/tmp/"
           overwrite: true
 
       - name: Extract theme on server
         uses: appleboy/ssh-action@v1.0.3
+        env:
+          THEME_NAME: ${{ env.THEME_NAME }}
         with:
           host: ${{ secrets.WP_SSH_HOST }}
           username: ${{ secrets.WP_SSH_USER }}
           password: ${{ secrets.WP_SSH_PASSWORD }}
           port: ${{ secrets.WP_SSH_PORT }}
+          envs: THEME_NAME
           script: |
             # Navigate to themes directory
             cd /clickandbuilds/3000Studios/wp-content/themes
             
-            # Backup existing theme if it exists
-            if [ -d "3000studios-clean" ]; then
-              BACKUP_NAME="3000studios-clean-backup-$(date +%Y%m%d-%H%M%S)"
-              mv 3000studios-clean "$BACKUP_NAME"
-              echo "Backed up existing theme to $BACKUP_NAME"
-            fi
+            echo "Deploying new theme: ${THEME_NAME}"
             
-            # Extract new theme
-            mkdir -p 3000studios-clean-new
-            unzip -o /tmp/3000studios-clean.zip -d 3000studios-clean-new
-            rm -rf 3000studios-clean
-            mv 3000studios-clean-new 3000studios-clean
+            # Extract new theme with timestamped name
+            mkdir -p ${THEME_NAME}
+            unzip -o /tmp/${THEME_NAME}.zip -d ${THEME_NAME}
             
             # Set proper permissions
-            chmod -R 755 3000studios-clean
+            chmod -R 755 ${THEME_NAME}
             
             # Cleanup
-            rm /tmp/3000studios-clean.zip
+            rm /tmp/${THEME_NAME}.zip
             
-            echo "✓ Theme deployed successfully!"
+            # List all 3000studios themes with timestamps
+            echo ""
+            echo "=== All 3000 Studios Themes ==="
+            ls -lht | grep "3000studios" | head -10
+            echo ""
+            echo "✓ Theme deployed successfully: ${THEME_NAME}"
+            echo "✓ Activate it in WordPress: Appearance > Themes > ${THEME_NAME}"
