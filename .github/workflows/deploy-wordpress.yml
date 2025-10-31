@@ -15,17 +15,18 @@ jobs:
 
       - name: Create theme ZIP
         run: |
-          cd ..
-          zip -r 3000studios-clean.zip 3000studios \
-            -x "3000studios/.git/*" \
-            -x "3000studios/.github/*" \
-            -x "3000studios/node_modules/*" \
-            -x "3000studios/.DS_Store" \
-            -x "3000studios/README*.md" \
-            -x "3000studios/QUICKSTART.md" \
-            -x "3000studios/scripts/*"
-          mv 3000studios-clean.zip 3000studios/
-          cd 3000studios
+          zip -r 3000studios-clean.zip . \
+            -x ".git/*" \
+            -x ".github/*" \
+            -x "node_modules/*" \
+            -x ".DS_Store" \
+            -x "README*.md" \
+            -x "SETUP_COMPLETE.md" \
+            -x "QUICKSTART.md" \
+            -x "scripts/*" \
+            -x "webhook-server/*" \
+            -x "mobile-client/*"
+          ls -lh 3000studios-clean.zip
 
       - name: Upload theme ZIP via SCP
         uses: appleboy/scp-action@v0.1.7
@@ -57,8 +58,10 @@ jobs:
             fi
             
             # Extract new theme
-            unzip -o /tmp/3000studios-clean.zip
-            mv 3000studios 3000studios-clean
+            mkdir -p 3000studios-clean-new
+            unzip -o /tmp/3000studios-clean.zip -d 3000studios-clean-new
+            rm -rf 3000studios-clean
+            mv 3000studios-clean-new 3000studios-clean
             
             # Set proper permissions
             chmod -R 755 3000studios-clean
