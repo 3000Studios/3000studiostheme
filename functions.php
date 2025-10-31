@@ -57,3 +57,10 @@ register_nav_menus(array(
     'primary' => __('Primary Menu','threek')
 ));
 
+// Load AI Intelligence Systems
+require_once get_template_directory() . '/includes/ai-learning.php';
+require_once get_template_directory() . '/includes/wp-intelligence.php';
+
+// Initialize AI database tables
+add_action('after_switch_theme', 'studios_ai_create_tables');
+
