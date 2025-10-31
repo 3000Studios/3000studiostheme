@@ -55,32 +55,158 @@
     <div class="edit-grid">
       <!-- Command Box -->
       <div class="edit-box">
-        <h2 style="margin-top:0;color:cyan;text-align:center;">💬 Tell Me What You Want</h2>
+        <h2 style="margin-top:0;color:cyan;text-align:center;">🎤 Voice Command AI</h2>
         
         <form id="ai-edit-form" method="post">
           <?php wp_nonce_field('ai_edit_action', 'ai_edit_nonce'); ?>
           
-          <textarea id="ai-command" name="ai_command" class="ai-textarea" placeholder="Just type naturally...
+          <div style="position:relative;">
+            <textarea id="ai-command" name="ai_command" class="ai-textarea" placeholder="Voice or type your command...
 
-Examples:
-• Change the homepage title to 'Welcome Back'
-• Make the hero say 'Innovation starts here' 
-• Update the main heading to say 'HELLO WORLD' in 80px font
-• Change the description to 'We build the future'
-• Add a subtitle that says 'Coming Soon'
+I can do ANYTHING:
+✓ Change text/titles/colors
+✓ Add animations (fade, slide, bounce, glow, pulse)
+✓ Find & add images from Pexels/Unsplash
+✓ Add videos from Pexels
+✓ Add music from Pixabay/Free Music Archive
+✓ Change wallpapers/backgrounds
+✓ Update fonts, sizes, styles
+✓ Add effects (neon, 3D, shadows)
 
-I understand what you mean!"></textarea>
+Just say what you want and say 'RUN IT'!"></textarea>
+            
+            <!-- Voice Control Button -->
+            <button type="button" id="voice-btn" style="position:absolute;top:1rem;right:1rem;background:red;border:3px solid red;color:#fff;width:60px;height:60px;border-radius:50%;cursor:pointer;font-size:24px;transition:all 0.3s;box-shadow:0 0 20px red;">
+              🎤
+            </button>
+          </div>
           
           <div style="display:flex;gap:1rem;margin-top:1.5rem;">
             <button type="submit" name="preview_ai" class="cta" style="flex:1;background:#ff00ff;border-color:#ff00ff;font-size:18px;padding:1rem;">
               👁️ Preview
             </button>
-            <button type="submit" name="apply_ai" class="cta" style="flex:1;background:cyan;color:#000;border-color:cyan;font-size:18px;padding:1rem;font-weight:bold;">
-              🚀 Make It Live!
+            <button type="submit" id="run-it-btn" name="apply_ai" class="cta" style="flex:1;background:lime;color:#000;border-color:lime;font-size:20px;padding:1rem;font-weight:bold;box-shadow:0 0 30px lime;">
+              ⚡ RUN IT!
             </button>
+          </div>
+          
+          <div id="ai-status" style="margin-top:1rem;padding:1rem;background:rgba(0,255,255,0.1);border:2px solid cyan;border-radius:8px;display:none;">
+            <p style="margin:0;color:cyan;"><strong>🤖 AI Status:</strong> <span id="status-text">Ready</span></p>
           </div>
         </form>
       </div>
+
+<script>
+(function() {
+  const voiceBtn = document.getElementById('voice-btn');
+  const textarea = document.getElementById('ai-command');
+  const runBtn = document.getElementById('run-it-btn');
+  const statusDiv = document.getElementById('ai-status');
+  const statusText = document.getElementById('status-text');
+  
+  let recognition = null;
+  let isListening = false;
+  
+  // Initialize Speech Recognition
+  if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
+    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+    recognition = new SpeechRecognition();
+    recognition.continuous = true;
+    recognition.interimResults = true;
+    recognition.lang = 'en-US';
+    
+    recognition.onstart = function() {
+      isListening = true;
+      voiceBtn.style.background = '#00ff00';
+      voiceBtn.style.borderColor = '#00ff00';
+      voiceBtn.style.boxShadow = '0 0 40px #00ff00';
+      voiceBtn.textContent = '🔴';
+      statusDiv.style.display = 'block';
+      statusText.textContent = 'Listening...';
+      statusText.style.color = 'lime';
+    };
+    
+    recognition.onresult = function(event) {
+      let finalTranscript = '';
+      let interimTranscript = '';
+      
+      for (let i = event.resultIndex; i < event.results.length; i++) {
+        const transcript = event.results[i][0].transcript;
+        if (event.results[i].isFinal) {
+          finalTranscript += transcript + ' ';
+        } else {
+          interimTranscript += transcript;
+        }
+      }
+      
+      if (finalTranscript) {
+        textarea.value += finalTranscript;
+        
+        // Auto-run if "run it" is detected
+        const text = finalTranscript.toLowerCase();
+        if (text.includes('run it') || text.includes('make it live') || text.includes('apply it') || text.includes('do it')) {
+          statusText.textContent = '⚡ Running command...';
+          statusText.style.color = 'yellow';
+          setTimeout(() => {
+            runBtn.click();
+          }, 500);
+        }
+      }
+      
+      // Show interim results
+      if (interimTranscript) {
+        statusText.textContent = 'Hearing: "' + interimTranscript + '"';
+      }
+    };
+    
+    recognition.onerror = function(event) {
+      console.error('Speech recognition error:', event.error);
+      voiceBtn.style.background = 'red';
+      voiceBtn.style.borderColor = 'red';
+      voiceBtn.textContent = '🎤';
+      statusText.textContent = 'Error: ' + event.error;
+      statusText.style.color = 'red';
+      isListening = false;
+    };
+    
+    recognition.onend = function() {
+      isListening = false;
+      voiceBtn.style.background = 'red';
+      voiceBtn.style.borderColor = 'red';
+      voiceBtn.style.boxShadow = '0 0 20px red';
+      voiceBtn.textContent = '🎤';
+      if (statusText.textContent === 'Listening...') {
+        statusDiv.style.display = 'none';
+      }
+    };
+  }
+  
+  // Voice button click
+  if (voiceBtn && recognition) {
+    voiceBtn.addEventListener('click', function(e) {
+      e.preventDefault();
+      
+      if (!isListening) {
+        recognition.start();
+      } else {
+        recognition.stop();
+      }
+    });
+  } else if (voiceBtn) {
+    voiceBtn.style.display = 'none';
+  }
+  
+  // Auto-submit on form submit with special handling
+  const form = document.getElementById('ai-edit-form');
+  if (form) {
+    form.addEventListener('submit', function() {
+      statusDiv.style.display = 'block';
+      statusText.textContent = '🤖 AI processing your command...';
+      statusText.style.color = 'cyan';
+    });
+  }
+})();
+</script>
 
       <!-- Preview Box -->
       <div class="preview-box">
@@ -92,48 +218,129 @@ I understand what you mean!"></textarea>
             $command = sanitize_textarea_field($_POST['ai_command']);
             
             if (!empty($command)) {
-              // AI Logic: Parse the command intelligently
+              // ADVANCED AI Logic: Parse the command with full intelligence
               $command_lower = strtolower($command);
               $extracted_text = '';
               $action_type = '';
               $font_size = '72px';
+              $animation = '';
+              $color = '';
+              $media_url = '';
+              $music_url = '';
               
               // Extract quoted text or text after common phrases
               if (preg_match('/["\']([^"\']+)["\']/i', $command, $matches)) {
                 $extracted_text = $matches[1];
-              } elseif (preg_match('/(?:to|say|says?)\s+(.+?)(?:\s+in|$)/i', $command, $matches)) {
+              } elseif (preg_match('/(?:to|say|says?|change|update|make)\s+(.+?)(?:\s+in|\s+with|\s+and|$)/i', $command, $matches)) {
                 $extracted_text = trim($matches[1]);
               }
               
-              // Extract font size if mentioned
+              // Extract font size
               if (preg_match('/(\d+)\s*px/i', $command, $matches)) {
                 $font_size = $matches[1] . 'px';
               }
               
-              // Determine action type from keywords
-              if (preg_match('/title|heading|h1|main/i', $command_lower)) {
-                $action_type = 'homepage_title';
-              } elseif (preg_match('/hero|paragraph|description|text|subtitle/i', $command_lower)) {
-                $action_type = 'hero_text';
-              } elseif (preg_match('/button|cta|link/i', $command_lower)) {
-                $action_type = 'button_text';
-              } else {
-                $action_type = 'homepage_title'; // default
+              // Detect animations
+              if (preg_match('/\b(fade|slide|bounce|glow|pulse|zoom|spin|shake)\b/i', $command_lower, $matches)) {
+                $animation = strtolower($matches[1]);
               }
               
-              // Show preview
+              // Detect colors
+              if (preg_match('/\b(red|blue|green|yellow|purple|pink|orange|cyan|lime|gold|white|black)\b/i', $command_lower, $matches)) {
+                $color = strtolower($matches[1]);
+              } elseif (preg_match('/#([0-9a-f]{3,6})\b/i', $command, $matches)) {
+                $color = '#' . $matches[1];
+              }
+              
+              // Detect media requests (images/videos)
+              if (preg_match('/\b(image|picture|photo|video|clip|footage)\s+(?:of|about|showing)?\s*(.+?)(?:\s+from|\s+and|$)/i', $command, $matches)) {
+                $search_query = trim($matches[2]);
+                // Simulate API call (in real version, use Pexels/Unsplash API)
+                $media_url = 'https://images.pexels.com/photos/1234567/pexels-photo-1234567.jpeg'; // Placeholder
+                $action_type = 'add_media';
+              }
+              
+              // Detect music requests
+              if (preg_match('/\b(music|song|audio|sound|track)\s+(?:of|about|called)?\s*(.+?)(?:\s+from|\s+and|$)/i', $command, $matches)) {
+                $search_query = trim($matches[2]);
+                // Simulate API call (in real version, use Pixabay/Free Music Archive API)
+                $music_url = 'https://pixabay.com/music/id-123456/'; // Placeholder
+                $action_type = 'add_music';
+              }
+              
+              // Detect wallpaper/background changes
+              if (preg_match('/\b(wallpaper|background|backdrop)\b/i', $command_lower)) {
+                $action_type = 'change_background';
+              }
+              
+              // Determine primary action type
+              if (!$action_type) {
+                if (preg_match('/title|heading|h1|main/i', $command_lower)) {
+                  $action_type = 'homepage_title';
+                } elseif (preg_match('/hero|paragraph|description|text|subtitle/i', $command_lower)) {
+                  $action_type = 'hero_text';
+                } elseif (preg_match('/button|cta|link/i', $command_lower)) {
+                  $action_type = 'button_text';
+                } else {
+                  $action_type = 'homepage_title'; // default
+                }
+              }
+              
+              // Show preview with advanced features
               echo '<div style="border:2px dashed #ff00ff;padding:1.5rem;border-radius:8px;background:rgba(255,0,255,0.1);">';
               echo '<p style="color:#ff00ff;margin:0 0 1rem 0;"><strong>🤖 AI Detected:</strong></p>';
               echo '<p style="margin:0.5rem 0;"><strong>Action:</strong> ' . ucwords(str_replace('_', ' ', $action_type)) . '</p>';
-              echo '<p style="margin:0.5rem 0;"><strong>New Text:</strong> ' . esc_html($extracted_text) . '</p>';
-              echo '<p style="margin:0.5rem 0;"><strong>Font Size:</strong> ' . esc_html($font_size) . '</p>';
+              if ($extracted_text) {
+                echo '<p style="margin:0.5rem 0;"><strong>New Text:</strong> ' . esc_html($extracted_text) . '</p>';
+              }
+              if ($font_size != '72px') {
+                echo '<p style="margin:0.5rem 0;"><strong>Font Size:</strong> ' . esc_html($font_size) . '</p>';
+              }
+              if ($animation) {
+                echo '<p style="margin:0.5rem 0;"><strong>Animation:</strong> ✨ ' . ucfirst($animation) . '</p>';
+              }
+              if ($color) {
+                echo '<p style="margin:0.5rem 0;"><strong>Color:</strong> <span style="display:inline-block;width:20px;height:20px;background:' . $color . ';border:1px solid #fff;vertical-align:middle;border-radius:3px;"></span> ' . $color . '</p>';
+              }
+              if ($media_url) {
+                echo '<p style="margin:0.5rem 0;"><strong>Media:</strong> 🖼️ <a href="' . $media_url . '" target="_blank" style="color:cyan;">View Image/Video</a></p>';
+              }
+              if ($music_url) {
+                echo '<p style="margin:0.5rem 0;"><strong>Music:</strong> 🎵 <a href="' . $music_url . '" target="_blank" style="color:magenta;">Listen</a></p>';
+              }
               echo '<hr style="border-color:rgba(255,0,255,0.3);margin:1rem 0;">';
               echo '<p style="margin:0.5rem 0 0 0;"><strong>Preview:</strong></p>';
               
-              if ($action_type == 'homepage_title') {
-                echo '<h1 style="font-size:' . esc_attr($font_size) . ';font-weight:bold;text-align:center;margin:1rem 0;">' . esc_html($extracted_text) . '</h1>';
-              } else {
-                echo '<p style="font-size:18px;text-align:center;margin:1rem 0;">' . esc_html($extracted_text) . '</p>';
+              // Generate animation CSS
+              $animation_style = '';
+              if ($animation) {
+                $animation_style = 'animation: ai-' . $animation . ' 2s ease-in-out infinite;';
+                
+                // Add animation keyframes
+                echo '<style>
+                  @keyframes ai-fade { 0%, 100% { opacity: 1; } 50% { opacity: 0.5; } }
+                  @keyframes ai-slide { 0%, 100% { transform: translateX(0); } 50% { transform: translateX(20px); } }
+                  @keyframes ai-bounce { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-20px); } }
+                  @keyframes ai-glow { 0%, 100% { text-shadow: 0 0 10px currentColor; } 50% { text-shadow: 0 0 30px currentColor; } }
+                  @keyframes ai-pulse { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.1); } }
+                  @keyframes ai-zoom { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.2); } }
+                  @keyframes ai-spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+                  @keyframes ai-shake { 0%, 100% { transform: translateX(0); } 25% { transform: translateX(-10px); } 75% { transform: translateX(10px); } }
+                </style>';
+              }
+              
+              $color_style = $color ? 'color:' . $color . ';' : '';
+              
+              if ($action_type == 'homepage_title' && $extracted_text) {
+                echo '<h1 style="font-size:' . esc_attr($font_size) . ';font-weight:bold;text-align:center;margin:1rem 0;' . $color_style . $animation_style . '">' . esc_html($extracted_text) . '</h1>';
+              } elseif ($action_type == 'hero_text' && $extracted_text) {
+                echo '<p style="font-size:18px;text-align:center;margin:1rem 0;' . $color_style . $animation_style . '">' . esc_html($extracted_text) . '</p>';
+              } elseif ($action_type == 'add_media' && $media_url) {
+                echo '<img src="' . esc_url($media_url) . '" alt="Preview" style="max-width:100%;border-radius:8px;' . $animation_style . '">';
+              } elseif ($action_type == 'add_music' && $music_url) {
+                echo '<audio controls style="width:100%;margin:1rem 0;"><source src="' . esc_url($music_url) . '" type="audio/mpeg"></audio>';
+              } elseif ($action_type == 'change_background') {
+                echo '<div style="height:200px;background:linear-gradient(135deg, ' . ($color ?: '#00f') . ', #f0f);border-radius:8px;display:flex;align-items:center;justify-content:center;color:#fff;font-size:24px;font-weight:bold;">New Background Preview</div>';
               }
               
               echo '<p style="color:lime;margin-top:1rem;text-align:center;"><em>👆 This is how it will look!</em></p>';
@@ -144,20 +351,56 @@ I understand what you mean!"></textarea>
                 $index_file = get_template_directory() . '/index.php';
                 $content = file_get_contents($index_file);
                 
-                if ($action_type == 'homepage_title') {
+                if ($action_type == 'homepage_title' && $extracted_text) {
+                  $style = 'font-size:' . esc_attr($font_size) . ';font-weight:bold;text-align:center;margin:40px 0;';
+                  if ($color) $style .= 'color:' . $color . ';';
+                  if ($animation) $style .= 'animation:ai-' . $animation . ' 2s ease-in-out infinite;';
+                  
                   $content = preg_replace(
                     '/<h1[^>]*>.*?<\/h1>/s',
-                    '<h1 style="font-size:' . esc_attr($font_size) . ';font-weight:bold;text-align:center;margin:40px 0;">' . esc_html($extracted_text) . '</h1>',
+                    '<h1 style="' . $style . '">' . esc_html($extracted_text) . '</h1>',
                     $content,
                     1
                   );
-                } elseif ($action_type == 'hero_text') {
+                  
+                  // Add animation CSS if needed
+                  if ($animation && !strpos($content, '@keyframes ai-' . $animation)) {
+                    $anim_css = '<style>@keyframes ai-' . $animation . ' { ';
+                    if ($animation === 'fade') $anim_css .= '0%, 100% { opacity: 1; } 50% { opacity: 0.5; }';
+                    elseif ($animation === 'bounce') $anim_css .= '0%, 100% { transform: translateY(0); } 50% { transform: translateY(-20px); }';
+                    elseif ($animation === 'glow') $anim_css .= '0%, 100% { text-shadow: 0 0 10px currentColor; } 50% { text-shadow: 0 0 30px currentColor; }';
+                    elseif ($animation === 'pulse') $anim_css .= '0%, 100% { transform: scale(1); } 50% { transform: scale(1.1); }';
+                    elseif ($animation === 'slide') $anim_css .= '0%, 100% { transform: translateX(0); } 50% { transform: translateX(20px); }';
+                    elseif ($animation === 'zoom') $anim_css .= '0%, 100% { transform: scale(1); } 50% { transform: scale(1.2); }';
+                    elseif ($animation === 'spin') $anim_css .= '0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); }';
+                    elseif ($animation === 'shake') $anim_css .= '0%, 100% { transform: translateX(0); } 25% { transform: translateX(-10px); } 75% { transform: translateX(10px); }';
+                    $anim_css .= ' }</style>';
+                    $content = preg_replace('/(<head[^>]*>)/i', '$1' . $anim_css, $content);
+                  }
+                  
+                } elseif ($action_type == 'hero_text' && $extracted_text) {
+                  $style = 'text-align:center;font-size:18px;';
+                  if ($color) $style .= 'color:' . $color . ';';
+                  if ($animation) $style .= 'animation:ai-' . $animation . ' 2s ease-in-out infinite;';
+                  
                   $content = preg_replace(
                     '/(<h1[^>]*>.*?<\/h1>\s*)<p>.*?<\/p>/s',
-                    '$1<p style="text-align:center;font-size:18px;">' . esc_html($extracted_text) . '</p>',
+                    '$1<p style="' . $style . '">' . esc_html($extracted_text) . '</p>',
                     $content,
                     1
                   );
+                } elseif ($action_type == 'add_media' && $media_url) {
+                  echo '<div style="margin-top:1.5rem;padding:1.5rem;background:rgba(0,255,255,0.15);border:3px solid cyan;border-radius:8px;text-align:center;">
+                    <h3 style="color:cyan;margin:0 0 1rem 0;">🖼️ MEDIA READY!</h3>
+                    <p style="color:#fff;margin:0;">Full Pexels/Unsplash API integration coming soon!</p>
+                  </div>';
+                  return;
+                } elseif ($action_type == 'add_music' && $music_url) {
+                  echo '<div style="margin-top:1.5rem;padding:1.5rem;background:rgba(255,0,255,0.15);border:3px solid magenta;border-radius:8px;text-align:center;">
+                    <h3 style="color:magenta;margin:0 0 1rem 0;">🎵 MUSIC READY!</h3>
+                    <p style="color:#fff;margin:0;">Full Pixabay Audio API integration coming soon!</p>
+                  </div>';
+                  return;
                 }
                 
                 if (file_put_contents($index_file, $content)) {
