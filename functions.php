@@ -1,10 +1,34 @@
 
 <?php
 /**
- * Minimal functions for 3000 Studios theme - basic enqueue
+ * 3000 Studios Theme - Functions & Configuration
+ * 
+ * @package     3000Studios
+ * @author      Mr. jwswain
+ * @copyright   Copyright (c) 2025, Mr. jwswain & 3000 Studios
+ * @license     Proprietary - All Rights Reserved
+ * @link        https://3000studios.com
+ * @since       1.0.0
+ * 
+ * ⚠️ COPYRIGHT NOTICE:
+ * This code is protected by U.S. and international copyright law.
+ * 
+ * ALL RIGHTS RESERVED. No part of this code may be reproduced,
+ * distributed, or transmitted in any form or by any means, including
+ * photocopying, recording, or other electronic or mechanical methods,
+ * without the prior written permission of Mr. jwswain & 3000 Studios.
+ * 
+ * Unauthorized use, copying, modification, or distribution of this
+ * code is STRICTLY PROHIBITED and will result in severe civil and
+ * criminal penalties. Violators will be prosecuted to the maximum
+ * extent possible under the law.
+ * 
+ * For licensing information, contact: https://3000studios.com
+ * 
+ * © 2025 Mr. jwswain & 3000 Studios. All Rights Reserved.
  */
 
-if ( ! defined('ABSPATH') ) { exit; }
+if ( ! defined('ABSPATH') ) { exit; } // Prevent direct access
 
 function studios_enqueue_assets() {
   // Main stylesheet
