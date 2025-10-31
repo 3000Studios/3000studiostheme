@@ -607,29 +607,119 @@ I understand WordPress, pages, layouts, grids, colors, animations, and more!"
     `;
   }
   
-  // Preview button
-  document.getElementById('btn-preview')?.addEventListener('click', function() {
+  // Preview button - REAL AJAX CALL
+  document.getElementById('btn-preview')?.addEventListener('click', async function() {
     const command = commandInput.value;
+    const pageId = document.getElementById('page-selector')?.value || 0;
+    
     if (!command.trim()) {
       alert('Please enter a command first');
       return;
     }
     
-    updateStatus('processing', '🔄 Processing...', 'Analyzing your command');
+    updateStatus('processing', '🔄 Processing...', 'AI analyzing your command');
     
-    // Simulate preview (in production, this would be AJAX)
-    setTimeout(() => {
-      const preview = document.getElementById('preview-area');
-      preview.innerHTML = `
-        <h3 class="preview-title">🔮 Preview</h3>
-        <div style="padding:1rem;background:rgba(0,255,0,0.1);border-radius:8px;border:1px solid var(--success);">
-          <p style="color:var(--success);margin:0 0 0.5rem 0;"><strong>✓ Command understood!</strong></p>
-          <p style="color:#ccc;margin:0;font-size:14px;">${command}</p>
-        </div>
-        <p style="color:#888;margin-top:1rem;font-size:13px;">Ready to execute. Click "Execute Now" to apply changes.</p>
-      `;
-      updateStatus('ready', '✅ Preview Ready', 'Review and execute');
-    }, 1500);
+    try {
+      const response = await fetch('<?php echo admin_url("admin-ajax.php"); ?>', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded',
+        },
+        body: new URLSearchParams({
+          action: 'studios_preview_command',
+          nonce: '<?php echo wp_create_nonce("studios_ai_nonce"); ?>',
+          command: command,
+          page_id: pageId
+        })
+      });
+      
+      const data = await response.json();
+      
+      if (data.success) {
+        const preview = document.getElementById('preview-area');
+        preview.innerHTML = `
+          <h3 class="preview-title">🔮 AI Analysis</h3>
+          <div style="padding:1rem;background:rgba(0,255,231,0.1);border-radius:8px;border:1px solid var(--primary);margin-bottom:1rem;">
+            <p style="color:var(--primary);margin:0 0 0.5rem 0;"><strong>✓ Command Parsed</strong></p>
+            <p style="color:#ccc;margin:0;font-size:14px;"><strong>Action:</strong> ${data.data.parsed.action || 'unknown'}</p>
+            <p style="color:#ccc;margin:0;font-size:14px;"><strong>Target:</strong> ${data.data.parsed.target || 'N/A'}</p>
+            <p style="color:#ccc;margin:0;font-size:14px;"><strong>Confidence:</strong> ${Math.round((data.data.parsed.confidence || 0) * 100)}%</p>
+          </div>
+          <div style="padding:1rem;background:rgba(255,255,255,0.03);border-radius:8px;">
+            <p style="color:#888;margin:0;font-size:13px;"><strong>Page Structure:</strong></p>
+            <p style="color:#666;margin:0.5rem 0 0 0;font-size:12px;">
+              ${data.data.page_structure.layout_type || 'standard'} layout
+              ${data.data.page_structure.has_blocks ? '• Gutenberg blocks detected' : ''}
+              ${data.data.page_structure.has_grid ? '• CSS Grid' : ''}
+              ${data.data.page_structure.has_flex ? '• Flexbox' : ''}
+            </p>
+          </div>
+          <p style="color:#00ff00;margin-top:1rem;font-size:14px;text-align:center;">✓ Ready to execute. Click "Execute Now" to apply.</p>
+        `;
+        updateStatus('ready', '✅ Preview Ready', 'AI understood your request');
+      } else {
+        throw new Error(data.data?.message || 'Preview failed');
+      }
+    } catch (error) {
+      console.error('Preview error:', error);
+      updateStatus('ready', '⚠️ Preview Error', error.message);
+      alert('Preview failed: ' + error.message);
+    }
+  });
+  
+  // Execute button - REAL AJAX CALL
+  document.querySelector('.btn-execute')?.addEventListener('click', async function() {
+    const command = commandInput.value;
+    const pageId = document.getElementById('page-selector')?.value || 0;
+    
+    if (!command.trim()) {
+      alert('Please enter a command first');
+      return;
+    }
+    
+    if (!confirm('Are you sure you want to execute this command? A backup will be created.')) {
+      return;
+    }
+    
+    updateStatus('processing', '⚡ Executing...', 'AI making changes to your site');
+    
+    try {
+      const response = await fetch('<?php echo admin_url("admin-ajax.php"); ?>', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded',
+        },
+        body: new URLSearchParams({
+          action: 'studios_execute_command',
+          nonce: '<?php echo wp_create_nonce("studios_ai_nonce"); ?>',
+          command: command,
+          page_id: pageId
+        })
+      });
+      
+      const data = await response.json();
+      
+      if (data.success && data.data.result.success) {
+        updateStatus('ready', '✅ Success!', `Command executed in ${data.data.execution_time}s`);
+        alert('✓ Changes applied successfully!\n\n' + (data.data.result.message || 'Command executed'));
+        
+        // Reload stats
+        loadStats();
+        
+        // Clear input
+        commandInput.value = '';
+        document.getElementById('preview-area').innerHTML = `
+          <h3 class="preview-title">🔮 Live Preview</h3>
+          <p style="color:#666;text-align:center;padding:2rem;">Enter another command to continue editing</p>
+        `;
+      } else {
+        throw new Error(data.data?.result?.message || data.data?.message || 'Execution failed');
+      }
+    } catch (error) {
+      console.error('Execution error:', error);
+      updateStatus('ready', '❌ Execution Failed', error.message);
+      alert('Execution failed: ' + error.message);
+    }
   });
 })();
 
@@ -640,11 +730,47 @@ function insertCommand(template) {
   input.focus();
 }
 
-// Load stats from database
-window.addEventListener('load', function() {
-  // In production, load from AJAX
-  document.getElementById('commands-count').textContent = '<?php echo wp_count_posts()->publish ?? 0; ?>';
-});
+// Load learning stats from database
+async function loadStats() {
+  try {
+    const response = await fetch('<?php echo admin_url("admin-ajax.php"); ?>', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded',
+      },
+      body: new URLSearchParams({
+        action: 'studios_get_stats'
+      })
+    });
+    
+    const data = await response.json();
+    
+    if (data.success) {
+      document.getElementById('commands-count').textContent = data.data.total_commands || '0';
+      document.getElementById('success-rate').textContent = (data.data.success_rate || 0) + '%';
+      
+      // Update suggestions if patterns exist
+      if (data.data.top_patterns && data.data.top_patterns.length > 0) {
+        const suggestionsDiv = document.querySelector('.suggestion-chips');
+        if (suggestionsDiv) {
+          suggestionsDiv.innerHTML = '<p style="color:#888;margin:0 0 0.5rem 0;font-size:13px;">🎯 Smart Suggestions:</p>';
+          data.data.top_patterns.slice(0, 3).forEach(pattern => {
+            const chip = document.createElement('button');
+            chip.className = 'suggestion-chip';
+            chip.textContent = `${pattern.action_type} (${Math.round(pattern.confidence_score * 100)}% confidence)`;
+            chip.onclick = () => insertCommand(pattern.action_type);
+            suggestionsDiv.appendChild(chip);
+          });
+        }
+      }
+    }
+  } catch (error) {
+    console.error('Failed to load stats:', error);
+  }
+}
+
+// Load stats on page load
+window.addEventListener('load', loadStats);
 </script>
 
 <?php get_footer(); ?>

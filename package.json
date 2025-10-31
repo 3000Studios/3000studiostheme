@@ -1,0 +1,26 @@
+{
+  "name": "3000studios",
+  "version": "1.0.0",
+  "description": "![License](https://img.shields.io/badge/license-Proprietary-red)\r ![Version](https://img.shields.io/badge/version-1.0.0-blue)\r ![Author](https://img.shields.io/badge/author-Mr.%20jwswain-lime)",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/3000Studios/3000studiostheme.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/3000Studios/3000studiostheme/issues"
+  },
+  "homepage": "https://github.com/3000Studios/3000studiostheme#readme",
+  "dependencies": {
+    "axios": "^1.13.1",
+    "dotenv": "^17.2.3",
+    "openai": "^6.7.0"
+  }
+}
