@@ -1,0 +1,69 @@
+name: Deploy WordPress Theme via SFTP
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Create theme ZIP
+        run: |
+          cd ..
+          zip -r 3000studios-clean.zip 3000studios \
+            -x "3000studios/.git/*" \
+            -x "3000studios/.github/*" \
+            -x "3000studios/node_modules/*" \
+            -x "3000studios/.DS_Store" \
+            -x "3000studios/README*.md" \
+            -x "3000studios/QUICKSTART.md" \
+            -x "3000studios/scripts/*"
+          mv 3000studios-clean.zip 3000studios/
+          cd 3000studios
+
+      - name: Upload theme ZIP via SCP
+        uses: appleboy/scp-action@v0.1.7
+        with:
+          host: ${{ secrets.WP_SSH_HOST }}
+          username: ${{ secrets.WP_SSH_USER }}
+          password: ${{ secrets.WP_SSH_PASSWORD }}
+          port: ${{ secrets.WP_SSH_PORT }}
+          source: "3000studios-clean.zip"
+          target: "/tmp/"
+          overwrite: true
+
+      - name: Extract theme on server
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.WP_SSH_HOST }}
+          username: ${{ secrets.WP_SSH_USER }}
+          password: ${{ secrets.WP_SSH_PASSWORD }}
+          port: ${{ secrets.WP_SSH_PORT }}
+          script: |
+            # Navigate to themes directory
+            cd /clickandbuilds/3000Studios/wp-content/themes
+            
+            # Backup existing theme if it exists
+            if [ -d "3000studios-clean" ]; then
+              BACKUP_NAME="3000studios-clean-backup-$(date +%Y%m%d-%H%M%S)"
+              mv 3000studios-clean "$BACKUP_NAME"
+              echo "Backed up existing theme to $BACKUP_NAME"
+            fi
+            
+            # Extract new theme
+            unzip -o /tmp/3000studios-clean.zip
+            mv 3000studios 3000studios-clean
+            
+            # Set proper permissions
+            chmod -R 755 3000studios-clean
+            
+            # Cleanup
+            rm /tmp/3000studios-clean.zip
+            
+            echo "✓ Theme deployed successfully!"
