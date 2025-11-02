@@ -21,6 +21,18 @@
 console.log("%c© 2025 3000 Studios - PROPRIETARY CODE", "color:lime;font-size:14px;font-weight:bold;");
 console.log("%cCreated by Mr. jwswain | All Rights Reserved", "color:cyan;font-size:12px;");
 
+// Emergency preloader hide - prevents black screen
+document.addEventListener('DOMContentLoaded', () => {
+  // Fallback: hide preloader after max 4 seconds no matter what
+  setTimeout(() => {
+    const preloader = document.querySelector('.preloader');
+    if (preloader && preloader instanceof HTMLElement) {
+      preloader.style.display = 'none';
+      console.log('Preloader emergency hide activated');
+    }
+  }, 4000);
+});
+
 // ==================== OPTIMIZED CODE ====================
 // Random background music (optimized with error handling)
 const tracks = [
@@ -31,8 +43,22 @@ const tracks = [
   "http://3000studios.com/wp-content/uploads/2025/10/coffee-lounge-145030.mp3"
 ];
 
-// Optimize: Use passive listener for better scroll performance
+// Hide preloader and initialize page
 window.addEventListener("load", () => {
+  // Hide the preloader after page loads
+  const preloader = document.querySelector('.preloader');
+  if (preloader && preloader instanceof HTMLElement) {
+    // Clear any CSS animation and manually control fade out
+    preloader.style.animation = 'none';
+    setTimeout(() => {
+      preloader.classList.add('fade-out');
+      setTimeout(() => {
+        preloader.style.display = 'none';
+      }, 500);
+    }, 500); // Show for 500ms then fade out
+  }
+  
+  // Initialize background audio
   const audio = new Audio(tracks[Math.floor(Math.random() * tracks.length)]);
   audio.volume = 0.3;
   audio.loop = true;

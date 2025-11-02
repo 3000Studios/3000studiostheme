@@ -1,5 +1,15 @@
+<?php
+/*
+ *   Copyright (c) 2025 NAME.
+ *   All rights reserved.
+ *   Unauthorized copying, modification, distribution, or use of this is prohibited without express written permission.
+ */
 
-<?php /* Template Name: Live Stream */ if ( ! defined('ABSPATH') ) { exit; } get_header(); ?>
+/*!
+ * 3000 Studios Theme
+ * Copyright © 2025 3000 Studios. All rights reserved.
+ */
+/* Template Name: Live Stream */ if ( ! defined('ABSPATH') ) { exit; } get_header(); ?>
 <section class="hero">
   <div class="container">
     <h1>Live Stream</h1>

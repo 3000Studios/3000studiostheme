@@ -1,10 +1,18 @@
+# Copyright (c) 2025 NAME.
+# All rights reserved.
+# Unauthorized copying, modification, distribution, or use of this is prohibited without express written permission.
+
 {
   "name": "3000studios",
   "version": "1.0.0",
   "description": "![License](https://img.shields.io/badge/license-Proprietary-red)\r ![Version](https://img.shields.io/badge/version-1.0.0-blue)\r ![Author](https://img.shields.io/badge/author-Mr.%20jwswain-lime)",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "lint": "eslint .",
+    "typecheck": "tsc --noEmit",
+    "test:all": "npm run lint && npm run typecheck",
+    "prepare": "husky"
   },
   "repository": {
     "type": "git",
@@ -22,5 +30,10 @@
     "axios": "^1.13.1",
     "dotenv": "^17.2.3",
     "openai": "^6.7.0"
+  },
+  "devDependencies": {
+    "eslint": "^9.39.0",
+    "husky": "^9.1.7",
+    "typescript": "^5.9.3"
   }
 }
