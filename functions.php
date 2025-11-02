@@ -114,7 +114,7 @@ function studios_ajax_preview_command()
 
     // Generate enhanced HTML preview
     $preview_html = studios_generate_preview($parsed);
-    
+
     wp_send_json_success([
         'parsed' => $parsed,
         'page_structure' => $page_structure,
@@ -125,64 +125,65 @@ function studios_ajax_preview_command()
 /**
  * Generate HTML Preview for Commands
  */
-function studios_generate_preview($parsed) {
+function studios_generate_preview($parsed)
+{
     $action = $parsed['action'] ?? 'unknown';
     $value = $parsed['value'] ?? '';
     $target = $parsed['target'] ?? 'main';
     $color = $parsed['color'] ?? '';
     $animation = $parsed['animation'] ?? '';
-    
+
     $preview_html = '<div style="border:2px dashed #00ffe7;padding:1.5rem;border-radius:15px;background:rgba(0,255,231,0.1);backdrop-filter:blur(10px);">';
     $preview_html .= '<h3 style="color:#00ffe7;margin:0 0 1rem 0;text-shadow:0 0 15px currentColor;">🤖 AI Preview</h3>';
-    
-    switch($action) {
+
+    switch ($action) {
         case 'update_text':
         case 'change_title':
             $style = 'font-size:72px;font-weight:bold;text-align:center;margin:2rem 0;';
             if ($color) $style .= 'color:' . $color . ';';
             if ($animation) $style .= 'animation:ai-' . $animation . ' 2s ease-in-out infinite;';
-            
+
             $preview_html .= '<p style="color:#00ffe7;margin-bottom:1rem;"><strong>Action:</strong> Update ' . ucfirst($target) . ' Text</p>';
             $preview_html .= '<div style="background:rgba(0,0,0,0.5);padding:2rem;border-radius:10px;margin:1rem 0;">';
             $preview_html .= '<h1 style="' . $style . '">' . esc_html($value) . '</h1>';
             $preview_html .= '</div>';
             break;
-            
+
         case 'change_color':
             $preview_html .= '<p style="color:#00ffe7;margin-bottom:1rem;"><strong>Action:</strong> Change Color</p>';
             $preview_html .= '<div style="background:rgba(0,0,0,0.5);padding:2rem;border-radius:10px;margin:1rem 0;">';
             $preview_html .= '<p style="color:' . $color . ';font-size:24px;font-weight:bold;text-align:center;">Sample text in new color: ' . $color . '</p>';
             $preview_html .= '</div>';
             break;
-            
+
         case 'add_animation':
             $preview_html .= '<p style="color:#00ffe7;margin-bottom:1rem;"><strong>Action:</strong> Add Animation</p>';
             $preview_html .= '<div style="background:rgba(0,0,0,0.5);padding:2rem;border-radius:10px;margin:1rem 0;">';
             $preview_html .= '<p style="animation:ai-' . $animation . ' 2s ease-in-out infinite;font-size:24px;text-align:center;">✨ Animated Element</p>';
             $preview_html .= '</div>';
             break;
-            
+
         case 'add_media':
             $preview_html .= '<p style="color:#00ffe7;margin-bottom:1rem;"><strong>Action:</strong> Add Media</p>';
             $preview_html .= '<div style="background:rgba(0,0,0,0.5);padding:2rem;border-radius:10px;margin:1rem 0;text-align:center;">';
             $preview_html .= '<div style="width:300px;height:200px;background:linear-gradient(45deg,#333,#666);border-radius:10px;display:flex;align-items:center;justify-content:center;margin:0 auto;color:#fff;font-size:18px;">🖼️ Media Preview</div>';
             $preview_html .= '</div>';
             break;
-            
+
         case 'change_background':
             $preview_html .= '<p style="color:#00ffe7;margin-bottom:1rem;"><strong>Action:</strong> Change Background</p>';
             $preview_html .= '<div style="background:linear-gradient(135deg,' . ($color ?: '#667eea') . ',#764ba2);padding:2rem;border-radius:10px;margin:1rem 0;text-align:center;color:#fff;font-size:20px;font-weight:bold;">';
             $preview_html .= '🌈 New Background Preview';
             $preview_html .= '</div>';
             break;
-            
+
         default:
             $preview_html .= '<p style="color:#00ffe7;margin-bottom:1rem;"><strong>Action:</strong> ' . ucfirst(str_replace('_', ' ', $action)) . '</p>';
             $preview_html .= '<div style="background:rgba(0,0,0,0.5);padding:2rem;border-radius:10px;margin:1rem 0;text-align:center;">';
             $preview_html .= '<p style="color:#00ffe7;font-size:18px;">⚡ Command ready to execute!</p>';
             $preview_html .= '</div>';
     }
-    
+
     // Add animation CSS if needed
     if ($animation) {
         $preview_html .= '<style>';
@@ -196,10 +197,10 @@ function studios_generate_preview($parsed) {
         $preview_html .= '@keyframes ai-shake { 0%, 100% { transform: translateX(0); } 25% { transform: translateX(-10px); } 75% { transform: translateX(10px); } }';
         $preview_html .= '</style>';
     }
-    
+
     $preview_html .= '<p style="color:#00ffe7;margin-top:1rem;text-align:center;font-weight:bold;"><em>👆 This is how it will look!</em></p>';
     $preview_html .= '</div>';
-    
+
     return $preview_html;
 }
 

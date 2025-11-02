@@ -1,0 +1,45 @@
+name: BlackVault Nightly Emergency Backup
+
+on:
+  schedule:
+    - cron: '0 0 * * *' # Every day at midnight UTC
+  workflow_dispatch: # Manual trigger if you want to run it anytime
+
+jobs:
+  backup-repo:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Create repo ZIP archive
+        run: |
+          git fetch --all
+          git checkout ${{ github.ref }}
+          zip -r repo-backup-$(date +'%Y-%m-%d').zip . -x '*.git*' 'node_modules/*' '*.DS_Store' '.env*'
+
+      # === S3 Example ===
+      - name: Upload backup to S3 (AWS CLI)
+        if: env.AWS_ACCESS_KEY_ID != ''
+        run: |
+          aws s3 cp repo-backup-$(date +'%Y-%m-%d').zip s3://${{ secrets.BV_S3_BUCKET }}/backups/
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.BV_AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.BV_AWS_SECRET_ACCESS_KEY }}
+          AWS_DEFAULT_REGION: ${{ secrets.BV_AWS_REGION }}
+
+      # === Google Drive Example ===
+      # Requires rclone configured in repo secrets and rclone.conf checked in or setup with secrets
+      # - name: Upload backup to Google Drive
+      #   run: |
+      #     rclone copy repo-backup-$(date +'%Y-%m-%d').zip gdrive:BlackVaultBackups/
+      #   env:
+      #     RCLONE_CONFIG: ${{ secrets.RCLONE_CONFIG }}
+
+      # === HiDrive Example (WebDAV) ===
+      # - name: Upload backup to HiDrive
+      #   run: |
+      #     curl -T repo-backup-$(date +'%Y-%m-%d').zip -u "${{ secrets.BV_HIDRIVE_USER }}:${{ secrets.BV_HIDRIVE_PASS }}" "https://webdav.hidrive.strato.com/backup/repo-backup-$(date +'%Y-%m-%d').zip"
+
+      - name: Cleanup backup ZIP
+        run: rm repo-backup-*.zip
