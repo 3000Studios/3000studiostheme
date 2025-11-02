@@ -674,7 +674,7 @@ Just tell me what you want, sexy... then say 'RUN IT' and watch the magic! 😈�
       <div class="preview-panel">
         <h2 class="panel-title">👁️ Live Preview</h2>
 
-        <div class="preview-content" id="preview-content">
+        <div class="preview-content" id="ai-preview-area">
           <?php
           if (isset($_POST['ai_edit_nonce']) && wp_verify_nonce($_POST['ai_edit_nonce'], 'ai_edit_action')) {
             $command = sanitize_textarea_field($_POST['ai_command']);
@@ -1110,16 +1110,77 @@ Just tell me what you want, sexy... then say 'RUN IT' and watch the magic! 😈�
           });
         }
 
-        // Form submission handling
+        // AJAX Command Processing
         if (form) {
           form.addEventListener('submit', function(e) {
+            e.preventDefault(); // Prevent form submission
+
+            const command = document.querySelector('#ai-command').value.trim();
+            const isPreview = e.submitter && e.submitter.name === 'preview_ai';
+            const isExecute = e.submitter && e.submitter.name === 'apply_ai';
+
+            if (!command) {
+              speakAI('Hey! I need a command to work with. Tell me what you want me to do!');
+              return;
+            }
+
             isProcessing = true;
             statusDiv.classList.remove('hidden');
             statusText.textContent = '🧠 ' + getRandomResponse('processing');
             speakAI(getRandomResponse('processing'));
 
-            // Update stats during processing
-            updateStats();
+            // Prepare AJAX data
+            const formData = new FormData();
+            formData.append('action', isPreview ? 'studios_preview_command' : 'studios_execute_command');
+            formData.append('command', command);
+            formData.append('page_id', '<?php echo get_the_ID(); ?>');
+            formData.append('nonce', '<?php echo wp_create_nonce('studios_ai_nonce'); ?>');
+
+            // Make AJAX request
+            fetch('<?php echo admin_url('admin-ajax.php'); ?>', {
+                method: 'POST',
+                body: formData
+              })
+              .then(response => response.json())
+              .then(data => {
+                isProcessing = false;
+
+                if (data.success) {
+                  // Update preview area
+                  const previewArea = document.querySelector('#ai-preview-area');
+                  if (previewArea) {
+                    if (isPreview) {
+                      previewArea.innerHTML = data.data.preview || '<p style="color:lime;">✅ Preview generated successfully!</p>';
+                      statusText.textContent = '✨ Preview ready! Check it out above.';
+                      speakAI('Preview is ready! Take a look at what I created for you.');
+                    } else {
+                      previewArea.innerHTML = '<div style="color:lime;text-align:center;padding:2rem;"><h3>🚀 EXECUTED SUCCESSFULLY!</h3><p>Changes have been applied to your site!</p></div>';
+                      statusText.textContent = '🚀 Command executed! Your site has been updated.';
+                      speakAI('Boom! I executed your command. Your site is now updated and looking fresh!');
+                    }
+                  }
+
+                  // Update stats
+                  updateStats();
+
+                  // Auto-hide after success
+                  setTimeout(() => {
+                    if (!isListening && !isProcessing) {
+                      statusDiv.classList.add('hidden');
+                    }
+                  }, 8000);
+
+                } else {
+                  statusText.textContent = '❌ Error: ' + (data.data?.message || 'Something went wrong');
+                  speakAI('Oops! Something went wrong. ' + (data.data?.message || 'Let me try that again.'));
+                }
+              })
+              .catch(error => {
+                isProcessing = false;
+                console.error('AJAX Error:', error);
+                statusText.textContent = '💥 Network error occurred';
+                speakAI('Hmm, I am having trouble connecting. Check your internet connection and try again.');
+              });
           });
         }
 
