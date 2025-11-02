@@ -1,0 +1,53 @@
+name: 3000 Studios Theme – Build & Deploy
+
+on:
+  push:
+    branches: [ main ]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  build-deploy:
+    runs-on: ubuntu-latest
+    env:
+      WP_THEME: 3000studiostheme
+      ZIP_FILE: 3000studiostheme.zip
+      SFTP_HOST: access-5018843677.webspace-host.com
+      SFTP_PORT: 22
+      SFTP_USER: a1841664
+      SFTP_PASS: ${{ secrets.IONOS_PASS }}
+      REMOTE_PATH: /htdocs/wp-content/themes/3000studiostheme
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: "8.2"
+
+      - name: Lint PHP for syntax errors
+        run: |
+          find . -type f -name "*.php" -print0 | xargs -0 -n1 php -l
+
+      - name: Package theme
+        run: |
+          mkdir -p wp-content/themes/$WP_THEME
+          rsync -a --exclude '.git' --exclude '.github' --exclude 'node_modules' ./ wp-content/themes/$WP_THEME/
+          cd wp-content/themes
+          zip -r $ZIP_FILE $WP_THEME
+          mv $ZIP_FILE ../../
+          echo "Theme packaged → $ZIP_FILE"
+
+      - name: Deploy to 3000studios.com
+        run: |
+          sudo apt-get update -qq && sudo apt-get install -y lftp
+          echo "Uploading theme"
+          lftp -u $SFTP_USER,$SFTP_PASS -p $SFTP_PORT sftp://$SFTP_HOST <<EOF
+          mirror -R ./ wp-content/themes/$WP_THEME --exclude ".git/" --exclude ".github/"
+          bye
+          EOF
+          echo "✅ Deployment complete"
