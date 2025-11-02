@@ -36,7 +36,17 @@ jobs:
           OPENAI_MODEL: ${{ secrets.OPENAI_MODEL || 'gpt-4' }}
         run: |
           set -euo pipefail
-          prompt='You are 3000 Studios DevOps Planner. Summarize the repository root files and list obvious CI/workflow issues in bullet points. Then suggest a 3-phase plan: Phase 1 urgent fixes, Phase 2 refactors and features, Phase 3 polish and marketing.'
+          prompt='You are 3000 Studios'\'' DevOps Planner.
+          1. Read the linter / scan outputs from the current job.
+          2. Produce a table:
+             • File
+             • Issue summary
+             • Fix priority (P1–P3)
+          3. Then suggest a 3-phase plan:
+             - Phase 1: urgent fixes and cleanup
+             - Phase 2: refactors and new features
+             - Phase 3: polish, monetization, marketing
+          Keep it concise and actionable.'
           # Construct JSON payload safely using jq
           payload=$(jq -n \
             --arg model "$OPENAI_MODEL" \
@@ -50,7 +60,13 @@ jobs:
           echo "OpenAI response:"
           echo "$response"
           # Extract the content from the response and save to a file
-          echo "$response" | jq -r '.choices[0].message.content // "No response from OpenAI"' > /tmp/advisor_output.txt
+          # Check for API error first
+          if echo "$response" | jq -e '.error' > /dev/null 2>&1; then
+            echo "Error from OpenAI API:"
+            echo "$response" | jq -r '.error.message // "Unknown error"' > /tmp/advisor_output.txt
+          else
+            echo "$response" | jq -r '.choices[0].message.content // "No response from OpenAI"' > /tmp/advisor_output.txt
+          fi
           cat /tmp/advisor_output.txt
           # Set output for next step (file path for create-issue-from-file action)
           echo "text=/tmp/advisor_output.txt" >> $GITHUB_OUTPUT
