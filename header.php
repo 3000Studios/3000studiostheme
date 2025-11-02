@@ -103,9 +103,11 @@
 
 <header class="site-header">
   <div class="nav-wrap">
+    <?php if ( file_exists( get_template_directory() . '/assets/video/nav-bg.mp4' ) ) : ?>
     <video class="nav-video" autoplay loop muted playsinline>
       <source src="<?php echo esc_url(get_template_directory_uri()); ?>/assets/video/nav-bg.mp4" type="video/mp4">
     </video>
+    <?php endif; ?>
     <div class="container">
       <div class="site-brand">
         <div class="prelogo">
