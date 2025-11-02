@@ -21,16 +21,22 @@
 console.log("%c© 2025 3000 Studios - PROPRIETARY CODE", "color:lime;font-size:14px;font-weight:bold;");
 console.log("%cCreated by Mr. jwswain | All Rights Reserved", "color:cyan;font-size:12px;");
 
-// Emergency preloader hide - prevents black screen
+// IMMEDIATE preloader hide - KILL BLACK SCREEN NOW!
+(function() {
+  const preloader = document.querySelector('.preloader');
+  if (preloader) {
+    preloader.style.display = 'none';
+    console.log('🔥 BLACK SCREEN DESTROYED! Preloader killed immediately!');
+  }
+})();
+
+// Emergency preloader hide - additional safety net
 document.addEventListener('DOMContentLoaded', () => {
-  // Fallback: hide preloader after max 4 seconds no matter what
-  setTimeout(() => {
-    const preloader = document.querySelector('.preloader');
-    if (preloader && preloader instanceof HTMLElement) {
-      preloader.style.display = 'none';
-      console.log('Preloader emergency hide activated');
-    }
-  }, 4000);
+  const preloader = document.querySelector('.preloader');
+  if (preloader && preloader instanceof HTMLElement) {
+    preloader.style.display = 'none';
+    console.log('Preloader emergency hide activated');
+  }
 });
 
 // ==================== OPTIMIZED CODE ====================

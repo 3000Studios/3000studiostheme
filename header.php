@@ -86,6 +86,26 @@
   <link rel="dns-prefetch" href="//fonts.googleapis.com">
   
   <?php wp_head(); ?>
+  
+  <!-- KILL BLACK SCREEN IMMEDIATELY -->
+  <script>
+  (function() {
+    // Hide preloader as soon as possible
+    const hidePreloader = () => {
+      const preloader = document.querySelector('.preloader');
+      if (preloader) {
+        preloader.style.display = 'none';
+        console.log('🔥 PRELOADER KILLED IMMEDIATELY!');
+      }
+    };
+    
+    // Try multiple times to catch the preloader
+    hidePreloader();
+    document.addEventListener('DOMContentLoaded', hidePreloader);
+    setTimeout(hidePreloader, 100);
+    setTimeout(hidePreloader, 500);
+  })();
+  </script>
 </head>
 <body <?php body_class('has-perimeter'); ?>>
 <?php wp_body_open(); ?>
@@ -104,7 +124,7 @@
 <header class="site-header">
   <div class="nav-wrap">
     <video class="nav-video" autoplay loop muted playsinline>
-      <source src="<?php echo esc_url(get_template_directory_uri()); ?>/assets/video/nav-bg.mp4" type="video/mp4">
+      <source src="http://3000studios.com/wp-content/uploads/2025/10/aquarium-live-wallpaper-with-sounds-Made-with-Clipchamp.mp4" type="video/mp4">
     </video>
     <div class="container">
       <div class="site-brand">

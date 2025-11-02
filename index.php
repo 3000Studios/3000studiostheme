@@ -20,10 +20,6 @@ add_action('wp_footer', function () {
 });
 ?>
 
-<video autoplay loop muted playsinline style="position:fixed;inset:0;width:100%;height:100%;object-fit:cover;z-index:-3;opacity:.45;">
-  <source src="http://3000studios.com/wp-content/uploads/2025/10/aquarium-live-wallpaper-with-sounds-Made-with-Clipchamp.mp4" type="video/mp4">
-</video>
-
 <section class="hero">
   <canvas id="particle-bg" style="position:absolute;inset:0;z-index:-2;"></canvas>
   <div class="container">

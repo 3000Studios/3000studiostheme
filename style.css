@@ -27,6 +27,15 @@ html,body {
   background:#000;
   overflow-x:hidden;
   scroll-behavior:smooth;
+  visibility: visible !important;
+  opacity: 1 !important;
+}
+
+/* ENSURE CONTENT IS ALWAYS VISIBLE */
+.site-main, main, .hero, .section {
+  visibility: visible !important;
+  opacity: 1 !important;
+  z-index: 1 !important;
 }
 .hero {
   position:relative;
@@ -441,14 +450,21 @@ body.has-perimeter::before{
 .preloader.fade-out{opacity:0;pointer-events:none}
 .pre-hidden{display:none}
 
-/* Auto-hide preloader after 3 seconds if JS fails */
+/* PRELOADER DISABLED - NO MORE BLACK SCREEN! */
+.preloader {
+  display: none !important;
+  opacity: 0 !important;
+  visibility: hidden !important;
+  pointer-events: none !important;
+}
+
+/* Auto-hide preloader after 3 seconds if JS fails - DISABLED */
 @keyframes auto-hide-preloader {
-  0% { opacity: 1; }
-  90% { opacity: 1; }
+  0% { opacity: 0; visibility: hidden; }
   100% { opacity: 0; visibility: hidden; }
 }
 .preloader {
-  animation: auto-hide-preloader 3s ease-out forwards;
+  animation: none !important;
 }
 .pre-rings{width:17em;height:17em;display:flex;flex-direction:column;justify-content:center;align-items:center;animation:tiltSpin 8s linear infinite;transform-style:preserve-3d}
 .pre-ring{font-size:2em;position:relative;height:3rem;width:1.5rem;animation:spin 4s linear infinite;transform-style:preserve-3d}
