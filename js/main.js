@@ -24,11 +24,11 @@ console.log("%cCreated by Mr. jwswain | All Rights Reserved", "color:cyan;font-s
 // ==================== OPTIMIZED CODE ====================
 // Random background music (optimized with error handling)
 const tracks = [
-  "http://3000studios.com/wp-content/uploads/2025/10/atmospheric-tech-387712.mp3",
-  "http://3000studios.com/wp-content/uploads/2025/10/smooth-coffee-254076.mp3",
-  "http://3000studios.com/wp-content/uploads/2025/10/lounge-398189.mp3",
-  "http://3000studios.com/wp-content/uploads/2025/10/good-vibe-398183.mp3",
-  "http://3000studios.com/wp-content/uploads/2025/10/coffee-lounge-145030.mp3"
+  "https://3000studios.com/wp-content/uploads/2025/10/atmospheric-tech-387712.mp3",
+  "https://3000studios.com/wp-content/uploads/2025/10/smooth-coffee-254076.mp3",
+  "https://3000studios.com/wp-content/uploads/2025/10/lounge-398189.mp3",
+  "https://3000studios.com/wp-content/uploads/2025/10/good-vibe-398183.mp3",
+  "https://3000studios.com/wp-content/uploads/2025/10/coffee-lounge-145030.mp3"
 ];
 
 // Optimize: Use passive listener for better scroll performance
@@ -46,7 +46,7 @@ window.addEventListener("load", () => {
 
 // Click sound (optimized with debouncing and caching)
 (function() {
-  const clickSound = new Audio("http://3000studios.com/wp-content/uploads/2025/10/click-21156.mp3");
+  const clickSound = new Audio("https://3000studios.com/wp-content/uploads/2025/10/click-21156.mp3");
   clickSound.preload = "auto";
   clickSound.volume = 0.5;
   
