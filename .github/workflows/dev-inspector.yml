@@ -63,7 +63,8 @@ jobs:
           # Check for API error first
           if echo "$response" | jq -e '.error' > /dev/null 2>&1; then
             echo "Error from OpenAI API:"
-            echo "$response" | jq -r '.error.message // "Unknown error"' > /tmp/advisor_output.txt
+            echo "$response" | jq -r '.error.message // "Unknown error"'
+            exit 1
           else
             echo "$response" | jq -r '.choices[0].message.content // "No response from OpenAI"' > /tmp/advisor_output.txt
           fi
