@@ -24,11 +24,21 @@ add_action('admin_menu', function() {
     );
 });
 
+add_action('admin_enqueue_scripts', function($hook) {
+    if ( 'toplevel_page_cc-command-center' !== $hook ) {
+        return;
+    }
+    wp_enqueue_script('cc-admin-js', plugin_dir_url(__FILE__) . 'js/cc-admin.js', [], '0.1', true);
+    wp_localize_script('cc-admin-js', 'ccData', [
+        'ajaxUrl' => admin_url('admin-ajax.php'),
+        'nonce' => wp_create_nonce('cc-nonce')
+    ]);
+});
+
 function cc_render_page() {
     if ( ! current_user_can('manage_options') ) {
         wp_die(__('Insufficient permissions'));
     }
-    $nonce = wp_create_nonce('cc-nonce');
     ?>
     <div class="wrap">
         <h1>3000 Studios Command Center</h1>
@@ -58,11 +68,6 @@ function cc_render_page() {
         </div>
     </div>
     <?php
-    wp_enqueue_script('cc-admin-js', plugin_dir_url(__FILE__) . 'js/cc-admin.js', [], '0.1', true);
-    wp_localize_script('cc-admin-js', 'ccData', [
-        'ajaxUrl' => admin_url('admin-ajax.php'),
-        'nonce' => $nonce
-    ]);
 }
 
 add_action('wp_ajax_cc_call_openai', 'cc_call_openai_handler');

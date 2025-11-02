@@ -16,9 +16,11 @@
     recognition.continuous = false;
 
     recognition.onresult = function (e) {
-      const text = e.results[0][0].transcript;
-      transcriptBox.textContent = text;
-      sendPromptToServer(text);
+      if (e.results && e.results[0] && e.results[0][0]) {
+        const text = e.results[0][0].transcript;
+        transcriptBox.textContent = text;
+        sendPromptToServer(text);
+      }
     };
     recognition.onend = function() {
       startBtn.disabled = false;
@@ -40,7 +42,7 @@
   function sendPromptToServer(prompt) {
     responseBox.textContent = 'Thinking...';
     const data = new FormData();
-    data.append('action','cc_call_openai');
+    data.append('action', 'cc_call_openai');
     data.append('_ajax_nonce', ccData.nonce);
     data.append('prompt', prompt);
     fetch(ccData.ajaxUrl, { method: 'POST', body: data, credentials: 'same-origin' })
@@ -77,9 +79,9 @@
   draftBtn.addEventListener('click', () => {
     const content = draftBtn.dataset.content || '';
     const data = new FormData();
-    data.append('action','cc_create_draft');
+    data.append('action', 'cc_create_draft');
     data.append('_ajax_nonce', ccData.nonce);
-    data.append('title','AI Suggestion');
+    data.append('title', 'AI Suggestion');
     data.append('content', content);
     fetch(ccData.ajaxUrl, { method: 'POST', body: data, credentials: 'same-origin' })
       .then(r => r.json())
@@ -89,6 +91,9 @@
         } else {
           alert('Create draft failed: ' + JSON.stringify(json.data || json));
         }
+      })
+      .catch(err => {
+        alert('Request failed: ' + err);
       });
   });
 
