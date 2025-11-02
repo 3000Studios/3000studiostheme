@@ -1,0 +1,55 @@
+name: Dev Inspector
+
+on:
+  push:
+    branches: [ main ]
+  schedule:
+    - cron: "0 * * * *"   # every hour
+  workflow_dispatch:
+
+jobs:
+  inspect:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install tools
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y jq php-cli nodejs npm pylint flake8
+          npm install -g eslint markdownlint-cli
+
+      - name: Scan & lint
+        run: |
+          echo "🧩 Running linters"
+          eslint . || true
+          flake8 . || true
+          php -l $(find . -type f -name "*.php") || true
+          markdownlint '**/*.md' || true
+
+      - name: Summarize results + ask AI
+        id: advisor
+        uses: openai/openai-assistant-action@v1
+        with:
+          model: gpt-4o
+          instructions: |
+            You are 3000 Studios' DevOps Planner.
+            1. Read the linter / scan outputs from the current job.
+            2. Produce a table:
+               • File
+               • Issue summary
+               • Fix priority (P1–P3)
+            3. Then suggest a 3-phase plan:
+               - Phase 1: urgent fixes and cleanup
+               - Phase 2: refactors and new features
+               - Phase 3: polish, monetization, marketing
+            Keep it concise and actionable.
+
+      - name: Post Blueprint to Issues
+        if: ${{ steps.advisor.outputs.text != '' }}
+        uses: peter-evans/create-issue-from-file@v5
+        with:
+          title: "📋 Dev-Inspector Report & Phase Blueprint"
+          content-file: ${{ steps.advisor.outputs.text }}
+          labels: ai, planning, backlog
