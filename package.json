@@ -6,7 +6,8 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "lint": "eslint .",
-    "typecheck": "tsc --noEmit || true",
+    "typecheck": "tsc --noEmit",
+    "typecheck:lenient": "tsc --noEmit || true",
     "test:all": "npm run lint",
     "prepare": "husky"
   },

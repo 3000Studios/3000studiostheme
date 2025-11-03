@@ -6,7 +6,15 @@
 
 /*!
  * 3000 Studios Theme - Centralized Styles
+ * Version: 1.2.0
+ * Last Modified: 2025-11-03
  * Copyright © 2025 3000 Studios. All rights reserved.
+ * 
+ * This file consolidates inline styles from:
+ * - index.php (music player, game container, hero)
+ * - footer.php (legal notices, attributions)
+ * - page-experience.php (loading spinner, game interface)
+ * - page-livestream.php (video container, ghost text)
  */
 
 /* ==== NAVIGATION & HEADER ==== */
