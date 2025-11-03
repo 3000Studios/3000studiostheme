@@ -1,3 +1,12 @@
+// Copyright (c) 2025 NAME.
+// All rights reserved.
+// Unauthorized copying, modification, distribution, or use of this is prohibited without express written permission.
+
+/*!
+ * 3000 Studios Theme
+ * Copyright © 2025 3000 Studios. All rights reserved.
+ */
+
 /* theme.js scaffold: initializes audio via Howler, sets nav video src if THREEK present,
    and provides a lightweight custom cursor + ripple trigger.  Expand per CodePen effects later. */
 (function(){
