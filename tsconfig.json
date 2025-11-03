@@ -13,5 +13,5 @@
     "resolveJsonModule": true
   },
   "include": ["**/*.js", "**/*.ts"],
-  "exclude": ["node_modules"]
+  "exclude": ["node_modules", "assets/js/vscode_ai_bridge.ts"]
 }

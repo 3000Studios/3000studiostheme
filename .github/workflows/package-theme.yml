@@ -1,0 +1,120 @@
+name: Package WordPress Theme
+
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'Theme version (optional, defaults to timestamp)'
+        required: false
+        type: string
+
+jobs:
+  package:
+    name: Create Theme Package
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        
+      - name: Get theme directory name
+        id: theme
+        run: |
+          # Extract theme name from style.css
+          THEME_NAME=$(grep -m 1 "Theme Name:" style.css | sed 's/Theme Name: *//' | sed 's/ /-/g' | tr '[:upper:]' '[:lower:]')
+          if [ -z "$THEME_NAME" ]; then
+            THEME_NAME="3000studiostheme"
+          fi
+          echo "name=$THEME_NAME" >> $GITHUB_OUTPUT
+          echo "Theme name: $THEME_NAME"
+      
+      - name: Set version
+        id: version
+        run: |
+          if [ -n "${{ github.event.inputs.version }}" ]; then
+            VERSION="${{ github.event.inputs.version }}"
+          else
+            VERSION=$(date +'%Y%m%d-%H%M%S')
+          fi
+          echo "number=$VERSION" >> $GITHUB_OUTPUT
+          echo "Version: $VERSION"
+      
+      - name: Create theme directory
+        run: |
+          THEME_NAME="${{ steps.theme.outputs.name }}"
+          mkdir -p "/tmp/$THEME_NAME"
+          
+          # Copy all files except excluded ones
+          rsync -av --progress . "/tmp/$THEME_NAME/" \
+            --exclude '.git' \
+            --exclude '.github' \
+            --exclude '.gitignore' \
+            --exclude '.gitattributes' \
+            --exclude 'README.md' \
+            --exclude 'README*.md' \
+            --exclude 'AGENTS.md' \
+            --exclude 'API-SETUP.md' \
+            --exclude 'GEMINI.md' \
+            --exclude 'LICENSE' \
+            --exclude 'QUICKSTART.md' \
+            --exclude 'SETUP_COMPLETE.md' \
+            --exclude '*.zip' \
+            --exclude 'node_modules' \
+            --exclude 'package.json' \
+            --exclude 'package-lock.json' \
+            --exclude 'tsconfig.json' \
+            --exclude '.eslintrc.json' \
+            --exclude '.vscode' \
+            --exclude '.husky' \
+            --exclude 'voice-vscode.ps1' \
+            --exclude '3000studios-build-deploy.yml' \
+            --exclude 'webhook_package_Version2.json' \
+            --exclude 'webhook-server' \
+            --exclude 'mobile-client' \
+            --exclude 'scripts'
+          
+          echo "Theme directory created at /tmp/$THEME_NAME"
+          
+      - name: Create ZIP archive
+        run: |
+          THEME_NAME="${{ steps.theme.outputs.name }}"
+          VERSION="${{ steps.version.outputs.number }}"
+          ZIP_NAME="${THEME_NAME}-${VERSION}.zip"
+          
+          cd /tmp
+          zip -r "$ZIP_NAME" "$THEME_NAME" -x "*.DS_Store"
+          
+          echo "ZIP_NAME=$ZIP_NAME" >> $GITHUB_ENV
+          echo "ZIP_PATH=/tmp/$ZIP_NAME" >> $GITHUB_ENV
+          
+          # Show ZIP contents for verification
+          echo "=== ZIP Contents ==="
+          unzip -l "$ZIP_NAME" | head -30
+          
+          # Show file size
+          ls -lh "$ZIP_NAME"
+      
+      - name: Upload theme artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ steps.theme.outputs.name }}-${{ steps.version.outputs.number }}
+          path: ${{ env.ZIP_PATH }}
+          retention-days: 90
+          
+      - name: Summary
+        run: |
+          echo "## 🎉 Theme Package Created Successfully" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "**Theme Name:** ${{ steps.theme.outputs.name }}" >> $GITHUB_STEP_SUMMARY
+          echo "**Version:** ${{ steps.version.outputs.number }}" >> $GITHUB_STEP_SUMMARY
+          echo "**Archive:** ${{ env.ZIP_NAME }}" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "### 📦 Download" >> $GITHUB_STEP_SUMMARY
+          echo "The theme package is available as an artifact in this workflow run." >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "### 🚀 Installation" >> $GITHUB_STEP_SUMMARY
+          echo "1. Download the ZIP file from the artifacts" >> $GITHUB_STEP_SUMMARY
+          echo "2. Log into WordPress admin" >> $GITHUB_STEP_SUMMARY
+          echo "3. Go to Appearance → Themes → Add New → Upload Theme" >> $GITHUB_STEP_SUMMARY
+          echo "4. Choose the downloaded ZIP file" >> $GITHUB_STEP_SUMMARY
+          echo "5. Click 'Install Now' and then 'Activate'" >> $GITHUB_STEP_SUMMARY
