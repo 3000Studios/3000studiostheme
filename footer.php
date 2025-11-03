@@ -12,49 +12,49 @@
  */
 -->
 <footer style="position:relative;padding:3rem 0;">
-  <div style="max-width:1200px;margin:0 auto;text-align:center;">
-    <p style="margin:0 0 1rem 0;font-size:16px;">
+  <div class="footer-container">
+    <p class="footer-main-text">
       © <?php echo date('Y'); ?> <strong>3000 Studios</strong> · Created by <strong>Mr. jwswain</strong>
       <br>
-      <a id="footer-attack" class="footer-attack" href="mailto:J@3000studios.com" style="color:cyan;text-decoration:none;">J@3000studios.com</a>
+      <a id="footer-attack" class="footer-attack footer-email" href="mailto:J@3000studios.com">J@3000studios.com</a>
     </p>
     
     <!-- Legal Notice -->
-    <div style="margin-top:2rem;padding:1.5rem;background:rgba(255,0,0,0.1);border:2px solid rgba(255,0,0,0.5);border-radius:8px;max-width:800px;margin-left:auto;margin-right:auto;">
-      <p style="margin:0 0 0.5rem 0;color:#ff4444;font-weight:bold;font-size:14px;">⚠️ COPYRIGHT PROTECTED</p>
-      <p style="margin:0;font-size:12px;line-height:1.6;color:#ccc;">
+    <div class="footer-legal-notice">
+      <p class="footer-legal-title">⚠️ COPYRIGHT PROTECTED</p>
+      <p class="footer-legal-text">
         All code, designs, and functionality are proprietary property of <strong>Mr. jwswain</strong> and <strong>3000 Studios</strong>.
         <br>
-        <strong style="color:#ff6666;">Unauthorized copying, modification, or distribution is STRICTLY PROHIBITED.</strong>
+        <strong class="footer-legal-strong">Unauthorized copying, modification, or distribution is STRICTLY PROHIBITED.</strong>
         <br>
         Violators will be prosecuted. © <?php echo date('Y'); ?> All Rights Reserved.
       </p>
-      <p style="margin:0.5rem 0 0 0;font-size:11px;">
-        <a href="<?php echo get_template_directory_uri(); ?>/LICENSE.md" target="_blank" style="color:lime;text-decoration:underline;">View Full License</a>
+      <p class="footer-legal-links">
+        <a href="<?php echo get_template_directory_uri(); ?>/LICENSE.md" target="_blank" class="footer-legal-link">View Full License</a>
         |
-        <strong style="color:gold;">Interested in licensing? Contact us for pricing.</strong>
+        <strong class="footer-legal-licensing">Interested in licensing? Contact us for pricing.</strong>
       </p>
     </div>
     
     <!-- Third-Party Attributions -->
-    <details style="margin-top:2rem;padding:1rem;background:rgba(100,100,100,0.1);border-radius:8px;cursor:pointer;max-width:800px;margin-left:auto;margin-right:auto;">
-      <summary style="font-size:12px;color:#888;cursor:pointer;user-select:none;">📜 Third-Party Attributions & Credits</summary>
-      <div style="margin-top:1rem;font-size:11px;color:#666;text-align:left;line-height:1.8;">
+    <details class="footer-attributions">
+      <summary>📜 Third-Party Attributions & Credits</summary>
+      <div class="footer-attributions-content">
         <p><strong>Technologies Used:</strong></p>
-        <ul style="list-style:none;padding:0;margin:0;">
+        <ul class="footer-attributions-list">
           <li>• <strong>WordPress:</strong> GPL-licensed CMS platform</li>
           <li>• <strong>Web Speech API:</strong> Browser-native speech recognition (public API)</li>
           <li>• <strong>Google Fonts (Orbitron, Rajdhani):</strong> Open Font License</li>
-          <li>• <strong>Pexels API:</strong> Royalty-free images (<a href="https://www.pexels.com/license/" target="_blank" style="color:cyan;">License</a>)</li>
-          <li>• <strong>Unsplash API:</strong> Free images (<a href="https://unsplash.com/license" target="_blank" style="color:cyan;">License</a>)</li>
-          <li>• <strong>Pixabay:</strong> Free media library (<a href="https://pixabay.com/service/license/" target="_blank" style="color:cyan;">License</a>)</li>
+          <li>• <strong>Pexels API:</strong> Royalty-free images (<a href="https://www.pexels.com/license/" target="_blank" class="footer-attribution-link">License</a>)</li>
+          <li>• <strong>Unsplash API:</strong> Free images (<a href="https://unsplash.com/license" target="_blank" class="footer-attribution-link">License</a>)</li>
+          <li>• <strong>Pixabay:</strong> Free media library (<a href="https://pixabay.com/service/license/" target="_blank" class="footer-attribution-link">License</a>)</li>
         </ul>
         <p style="margin-top:1rem;"><strong>Note:</strong> All third-party resources are used in compliance with their respective licenses. The custom code, AI logic, animations, and integrations are © <?php echo date('Y'); ?> Mr. jwswain & 3000 Studios.</p>
       </div>
     </details>
     
     <!-- Powered By Badge -->
-    <p style="margin-top:2rem;font-size:11px;color:#555;">
+    <p class="footer-powered">
       🚀 Powered by AI Technology | Built with 💚 by Mr. jwswain
     </p>
   </div>

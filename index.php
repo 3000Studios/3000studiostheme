@@ -21,9 +21,9 @@ add_action('wp_footer', function () {
 ?>
 
 <section class="hero">
-  <canvas id="particle-bg" style="position:absolute;inset:0;z-index:-2;"></canvas>
+  <canvas id="particle-bg"></canvas>
   <div class="container">
-    <h1 style="font-size:72px;font-weight:bold;text-align:center;margin:40px 0;">HEY WE DID IT!</h1>
+    <h1 class="hero-title">HEY WE DID IT!</h1>
     <p>Code, creativity, and innovation collide here. Dive into the fusion of art, AI, and engineering.</p>
     <a class="cta" href="<?php echo home_url(); ?>/experience">Enter the Experience</a>
   </div>
@@ -38,7 +38,7 @@ add_action('wp_footer', function () {
       while ($q->have_posts()): $q->the_post(); ?>
         <div class="card">
           <h3><?php the_title(); ?></h3>
-          <div style="max-height:200px;overflow:auto;"><?php the_excerpt(); ?></div>
+          <div class="excerpt-content"><?php the_excerpt(); ?></div>
           <a class="cta" href="<?php the_permalink(); ?>">Read More</a>
         </div>
       <?php endwhile;
@@ -61,7 +61,7 @@ add_action('wp_footer', function () {
   </div>
   
   <!-- Music Player Footer -->
-  <div class="music-player-footer" style="margin-top: 4rem;">
+  <div class="music-player-footer">
     <div class="album-cover">
       <div class="swiper">
         <div class="swiper-wrapper">
@@ -133,228 +133,6 @@ add_action('wp_footer', function () {
     </div>
   </div>
 </section>
-
-<style>
-/* Music Player Styles */
-@import url("https://fonts.googleapis.com/css2?family=Nunito:wght@300;400;500;600&display=swap");
-
-.music-player-footer {
-  --primary-clr: rgba(228, 228, 229, 1);
-}
-
-.music-player-footer * {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-  font-family: "Nunito", sans-serif;
-}
-
-.music-player-footer {
-  position: relative;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  min-height: 500px;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  border-radius: 20px;
-  padding: 2rem;
-  overflow: hidden;
-}
-
-.music-player-footer::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: 
-    radial-gradient(circle at 20% 50%, rgba(120, 119, 198, 0.3), transparent 50%),
-    radial-gradient(circle at 80% 20%, rgba(255, 119, 198, 0.3), transparent 50%),
-    radial-gradient(circle at 40% 80%, rgba(120, 200, 255, 0.3), transparent 50%);
-  animation: music-bg-float 20s ease-in-out infinite;
-}
-
-@keyframes music-bg-float {
-  0%, 100% { transform: translateY(0px) rotate(0deg); }
-  33% { transform: translateY(-15px) rotate(1deg); }
-  66% { transform: translateY(8px) rotate(-0.5deg); }
-}
-
-.album-cover {
-  position: relative;
-  width: 250px;
-  height: 250px;
-  border-radius: 50%;
-  overflow: hidden;
-  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.4);
-  z-index: 2;
-  margin-bottom: 2rem;
-}
-
-.swiper {
-  width: 100%;
-  height: 100%;
-}
-
-.swiper-slide {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  position: relative;
-}
-
-.swiper-slide img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  border-radius: 50%;
-}
-
-.overlay {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: rgba(0, 0, 0, 0.6);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  opacity: 0;
-  transition: opacity 0.3s ease;
-  border-radius: 50%;
-}
-
-.swiper-slide:hover .overlay {
-  opacity: 1;
-}
-
-.overlay a {
-  color: white;
-  font-size: 2rem;
-  text-decoration: none;
-  transition: transform 0.3s ease;
-}
-
-.overlay a:hover {
-  transform: scale(1.2);
-}
-
-.music-player {
-  background: rgba(255, 255, 255, 0.1);
-  backdrop-filter: blur(20px);
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  border-radius: 20px;
-  padding: 2rem;
-  text-align: center;
-  color: white;
-  width: 100%;
-  max-width: 400px;
-  z-index: 2;
-  position: relative;
-}
-
-.music-player h1 {
-  font-size: 1.8rem;
-  font-weight: 600;
-  margin-bottom: 0.5rem;
-  background: linear-gradient(45deg, #fff, #f0f0f0);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-}
-
-.music-player p {
-  font-size: 1rem;
-  opacity: 0.8;
-  margin-bottom: 2rem;
-}
-
-.progress-container {
-  position: relative;
-  width: 100%;
-  height: 6px;
-  background: rgba(255, 255, 255, 0.2);
-  border-radius: 3px;
-  margin-bottom: 1rem;
-  cursor: pointer;
-}
-
-.progress {
-  height: 100%;
-  background: linear-gradient(90deg, #ff6b6b, #4ecdc4);
-  border-radius: 3px;
-  width: 0%;
-  transition: width 0.1s ease;
-}
-
-.music-duration {
-  display: flex;
-  justify-content: space-between;
-  font-size: 0.8rem;
-  opacity: 0.7;
-  margin-bottom: 2rem;
-}
-
-.controls {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 1.5rem;
-}
-
-.controls button {
-  background: rgba(255, 255, 255, 0.1);
-  border: none;
-  border-radius: 50%;
-  width: 50px;
-  height: 50px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: white;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  backdrop-filter: blur(10px);
-}
-
-.play-pause-btn {
-  width: 60px !important;
-  height: 60px !important;
-  background: rgba(255, 255, 255, 0.2) !important;
-}
-
-.controls button:hover {
-  background: rgba(255, 255, 255, 0.2);
-  transform: scale(1.1);
-}
-
-.controls button ion-icon {
-  font-size: 1.5rem;
-}
-
-.play-pause-btn ion-icon {
-  font-size: 2rem;
-}
-
-/* Responsive design */
-@media (max-width: 768px) {
-  .album-cover {
-    width: 200px;
-    height: 200px;
-  }
-  
-  .music-player {
-    padding: 1.5rem;
-  }
-  
-  .music-player h1 {
-    font-size: 1.5rem;
-  }
-}
-</style>
 
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
 <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
@@ -492,51 +270,27 @@ updateSongInfo();
 
 <section id="game" class="section container">
   <h2>KBH Games Arcade</h2>
-  <div class="kbh-game-container" style="width:100%;max-width:1000px;margin:0 auto;background:linear-gradient(135deg, #667eea 0%, #764ba2 100%);border-radius:20px;padding:2rem;position:relative;overflow:hidden;">
-    <div class="game-background" style="position:absolute;top:0;left:0;right:0;bottom:0;background:radial-gradient(circle at 30% 40%, rgba(120, 119, 198, 0.4), transparent 50%), radial-gradient(circle at 70% 60%, rgba(255, 119, 198, 0.4), transparent 50%);animation:game-bg-float 15s ease-in-out infinite;"></div>
+  <div class="kbh-game-container">
+    <div class="game-background"></div>
 
     <div style="position:relative;z-index:2;">
-      <h3 style="color:#fff;text-align:center;margin-bottom:1.5rem;font-size:2rem;background:linear-gradient(45deg, #ff6b6b, #4ecdc4);-webkit-background-clip:text;-webkit-text-fill-color:transparent;font-weight:bold;">🎮 Epic Runner Game</h3>
+      <h3 class="game-title">🎮 Epic Runner Game</h3>
 
-      <canvas id="mini-game" width="800" height="400" style="width:100%;height:400px;background:#000;border-radius:15px;border:3px solid rgba(255,255,255,0.2);box-shadow:0 10px 30px rgba(0,0,0,0.3);display:block;"></canvas>
+      <canvas id="mini-game" width="800" height="400"></canvas>
 
-      <div class="game-controls" style="display:flex;justify-content:center;gap:1rem;margin-top:1.5rem;flex-wrap:wrap;">
-        <button onclick="kbhGame.start()" style="background:rgba(255,107,107,0.8);border:none;padding:12px 24px;border-radius:25px;color:#fff;font-weight:bold;cursor:pointer;transition:all 0.3s ease;backdrop-filter:blur(10px);">🎮 START</button>
-        <button onclick="kbhGame.pause()" style="background:rgba(78,205,196,0.8);border:none;padding:12px 24px;border-radius:25px;color:#fff;font-weight:bold;cursor:pointer;transition:all 0.3s ease;backdrop-filter:blur(10px);">⏸️ PAUSE</button>
-        <button onclick="kbhGame.reset()" style="background:rgba(69,183,209,0.8);border:none;padding:12px 24px;border-radius:25px;color:#fff;font-weight:bold;cursor:pointer;transition:all 0.3s ease;backdrop-filter:blur(10px);">🔄 RESET</button>
-        <a href="<?php echo home_url(); ?>/experience" style="background:rgba(249,202,36,0.8);border:none;padding:12px 24px;border-radius:25px;color:#000;font-weight:bold;text-decoration:none;transition:all 0.3s ease;backdrop-filter:blur(10px);display:inline-block;">🚀 FULL GAME</a>
+      <div class="game-controls">
+        <button onclick="kbhGame.start()" class="btn-start">🎮 START</button>
+        <button onclick="kbhGame.pause()" class="btn-pause">⏸️ PAUSE</button>
+        <button onclick="kbhGame.reset()" class="btn-reset">🔄 RESET</button>
+        <a href="<?php echo home_url(); ?>/experience" class="btn-full-game">🚀 FULL GAME</a>
       </div>
 
-      <div class="game-instructions" style="text-align:center;margin-top:1rem;color:rgba(255,255,255,0.8);font-size:0.9rem;">
-        <p style="margin:0.5rem 0;">🖱️ Click or press SPACE to jump • 🎯 Avoid obstacles • 🏆 Beat your high score!</p>
+      <div class="game-instructions">
+        <p>🖱️ Click or press SPACE to jump • 🎯 Avoid obstacles • 🏆 Beat your high score!</p>
       </div>
     </div>
   </div>
 </section>
-
-<style>
-  @keyframes game-bg-float {
-
-    0%,
-    100% {
-      transform: translateY(0px) rotate(0deg);
-    }
-
-    33% {
-      transform: translateY(-10px) rotate(2deg);
-    }
-
-    66% {
-      transform: translateY(5px) rotate(-1deg);
-    }
-  }
-
-  .game-controls button:hover,
-  .game-controls a:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 5px 15px rgba(255, 255, 255, 0.3);
-  }
-</style>
 
 <script>
   // KBH Games - Epic Runner (Mini Version)

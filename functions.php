@@ -32,48 +32,71 @@ if (! defined('ABSPATH')) {
     exit;
 } // Prevent direct access
 
+// Theme Constants
+define('STUDIOS_THEME_VERSION', '1.2.0');
+define('STUDIOS_THEME_PATH', get_template_directory());
+define('STUDIOS_THEME_URI', get_template_directory_uri());
+
+/**
+ * Get asset version for cache busting
+ * Uses filemtime in development (WP_DEBUG), static version in production
+ * 
+ * @param string $file_path Relative path to asset file
+ * @return string Version string for cache busting
+ */
+function studios_get_asset_version($file_path = '')
+{
+    if (defined('WP_DEBUG') && WP_DEBUG && !empty($file_path)) {
+        $full_path = STUDIOS_THEME_PATH . $file_path;
+        if (file_exists($full_path)) {
+            return filemtime($full_path);
+        }
+    }
+    return STUDIOS_THEME_VERSION;
+}
+
 function studios_enqueue_assets()
 {
     // Main stylesheet
-    wp_enqueue_style('3000studios-style', get_stylesheet_uri());
+    wp_enqueue_style('3000studios-style', get_stylesheet_uri(), array(), studios_get_asset_version('/style.css'));
 
     // Additional theme CSS scaffold (ripples, cursor, mobile tweaks)
-    if (file_exists(get_template_directory() . '/assets/css/theme.css')) {
-        wp_enqueue_style('3000studios-theme', get_template_directory_uri() . '/assets/css/theme.css', array('3000studios-style'), '1.0.0');
+    if (file_exists(STUDIOS_THEME_PATH . '/assets/css/theme.css')) {
+        wp_enqueue_style('3000studios-theme', STUDIOS_THEME_URI . '/assets/css/theme.css', array('3000studios-style'), studios_get_asset_version('/assets/css/theme.css'));
     }
 
     // Howler for audio handling (optional)
     wp_enqueue_script('howler-cdn', 'https://cdnjs.cloudflare.com/ajax/libs/howler/2.2.3/howler.min.js', array(), '2.2.3', true);
 
     // Main javascript (page features)
-    wp_enqueue_script('3000studios-main', get_template_directory_uri() . '/js/main.js', array(), '1.1', true);
+    wp_enqueue_script('3000studios-main', STUDIOS_THEME_URI . '/js/main.js', array(), studios_get_asset_version('/js/main.js'), true);
 
     // Theme behaviour script (cursor, ripples, audio helpers)
-    if (file_exists(get_template_directory() . '/assets/js/theme.js')) {
-        wp_enqueue_script('3000studios-theme-js', get_template_directory_uri() . '/assets/js/theme.js', array('3000studios-main', 'howler-cdn'), '1.0.0', true);
+    if (file_exists(STUDIOS_THEME_PATH . '/assets/js/theme.js')) {
+        wp_enqueue_script('3000studios-theme-js', STUDIOS_THEME_URI . '/assets/js/theme.js', array('3000studios-main', 'howler-cdn'), studios_get_asset_version('/assets/js/theme.js'), true);
     }
 
     // Enqueue galaxy background for homepage
     if (is_front_page() || is_home()) {
-        wp_enqueue_script('3000studios-galaxy', get_template_directory_uri() . '/assets/js/galaxy-background.js', array(), '1.0.0', true);
+        wp_enqueue_script('3000studios-galaxy', STUDIOS_THEME_URI . '/assets/js/galaxy-background.js', array(), studios_get_asset_version('/assets/js/galaxy-background.js'), true);
     }
 
     // Enqueue ball pit footer animation
-    wp_enqueue_script('3000studios-ballpit', get_template_directory_uri() . '/assets/js/ball-pit-footer.js', array(), '1.0.0', true);
+    wp_enqueue_script('3000studios-ballpit', STUDIOS_THEME_URI . '/assets/js/ball-pit-footer.js', array(), studios_get_asset_version('/assets/js/ball-pit-footer.js'), true);
 }
 add_action('wp_enqueue_scripts', 'studios_enqueue_assets');
 
 // Register navigation menus
 register_nav_menus(array(
-    'primary' => __('Primary Menu', 'threek')
+    'primary' => __('Primary Menu', '3000studios')
 ));
 
 // Load AI Intelligence Systems
-require_once get_template_directory() . '/includes/ai-learning.php';
-require_once get_template_directory() . '/includes/wp-intelligence.php';
-require_once get_template_directory() . '/includes/api-settings.php';
-require_once get_template_directory() . '/includes/api-connector.php';
-require_once get_template_directory() . '/includes/monetization.php';
+require_once STUDIOS_THEME_PATH . '/includes/ai-learning.php';
+require_once STUDIOS_THEME_PATH . '/includes/wp-intelligence.php';
+require_once STUDIOS_THEME_PATH . '/includes/api-settings.php';
+require_once STUDIOS_THEME_PATH . '/includes/api-connector.php';
+require_once STUDIOS_THEME_PATH . '/includes/monetization.php';
 
 // Initialize AI database tables
 add_action('after_switch_theme', 'studios_ai_create_tables');
@@ -331,9 +354,9 @@ function studios_update_page_content($page, $target, $value, $parsed)
     }
 
     // Determine target file
-    $file_path = get_template_directory() . '/index.php';
+    $file_path = STUDIOS_THEME_PATH . '/index.php';
     if ($page !== 'homepage') {
-        $page_file = get_template_directory() . '/page-' . sanitize_file_name($page) . '.php';
+        $page_file = STUDIOS_THEME_PATH . '/page-' . sanitize_file_name($page) . '.php';
         if (file_exists($page_file)) {
             $file_path = $page_file;
         }
@@ -398,7 +421,7 @@ function studios_add_css_animation($parsed)
         return ['success' => false, 'message' => 'No animation specified'];
     }
 
-    $css_file = get_template_directory() . '/style.css';
+    $css_file = STUDIOS_THEME_PATH . '/style.css';
     if (!file_exists($css_file)) {
         return ['success' => false, 'message' => 'Style file not found'];
     }
