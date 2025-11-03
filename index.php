@@ -59,7 +59,7 @@ add_action('wp_footer', function () {
     <div class="slide"><img src="<?php echo esc_url(get_template_directory_uri() . '/assets/placeholder.png'); ?>" alt=""></div>
     <div class="slide"><img src="<?php echo esc_url(get_template_directory_uri() . '/assets/placeholder.png'); ?>" alt=""></div>
   </div>
-  
+
   <!-- Music Player Footer -->
   <div class="music-player-footer" style="margin-top: 4rem;">
     <div class="album-cover">
@@ -135,225 +135,235 @@ add_action('wp_footer', function () {
 </section>
 
 <style>
-/* Music Player Styles */
-@import url("https://fonts.googleapis.com/css2?family=Nunito:wght@300;400;500;600&display=swap");
+  /* Music Player Styles */
+  @import url("https://fonts.googleapis.com/css2?family=Nunito:wght@300;400;500;600&display=swap");
 
-.music-player-footer {
-  --primary-clr: rgba(228, 228, 229, 1);
-}
+  .music-player-footer {
+    --primary-clr: rgba(228, 228, 229, 1);
+  }
 
-.music-player-footer * {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-  font-family: "Nunito", sans-serif;
-}
+  .music-player-footer * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: "Nunito", sans-serif;
+  }
 
-.music-player-footer {
-  position: relative;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  min-height: 500px;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  border-radius: 20px;
-  padding: 2rem;
-  overflow: hidden;
-}
+  .music-player-footer {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 500px;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    border-radius: 20px;
+    padding: 2rem;
+    overflow: hidden;
+  }
 
-.music-player-footer::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: 
-    radial-gradient(circle at 20% 50%, rgba(120, 119, 198, 0.3), transparent 50%),
-    radial-gradient(circle at 80% 20%, rgba(255, 119, 198, 0.3), transparent 50%),
-    radial-gradient(circle at 40% 80%, rgba(120, 200, 255, 0.3), transparent 50%);
-  animation: music-bg-float 20s ease-in-out infinite;
-}
+  .music-player-footer::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background:
+      radial-gradient(circle at 20% 50%, rgba(120, 119, 198, 0.3), transparent 50%),
+      radial-gradient(circle at 80% 20%, rgba(255, 119, 198, 0.3), transparent 50%),
+      radial-gradient(circle at 40% 80%, rgba(120, 200, 255, 0.3), transparent 50%);
+    animation: music-bg-float 20s ease-in-out infinite;
+  }
 
-@keyframes music-bg-float {
-  0%, 100% { transform: translateY(0px) rotate(0deg); }
-  33% { transform: translateY(-15px) rotate(1deg); }
-  66% { transform: translateY(8px) rotate(-0.5deg); }
-}
+  @keyframes music-bg-float {
 
-.album-cover {
-  position: relative;
-  width: 250px;
-  height: 250px;
-  border-radius: 50%;
-  overflow: hidden;
-  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.4);
-  z-index: 2;
-  margin-bottom: 2rem;
-}
+    0%,
+    100% {
+      transform: translateY(0px) rotate(0deg);
+    }
 
-.swiper {
-  width: 100%;
-  height: 100%;
-}
+    33% {
+      transform: translateY(-15px) rotate(1deg);
+    }
 
-.swiper-slide {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  position: relative;
-}
+    66% {
+      transform: translateY(8px) rotate(-0.5deg);
+    }
+  }
 
-.swiper-slide img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  border-radius: 50%;
-}
-
-.overlay {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: rgba(0, 0, 0, 0.6);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  opacity: 0;
-  transition: opacity 0.3s ease;
-  border-radius: 50%;
-}
-
-.swiper-slide:hover .overlay {
-  opacity: 1;
-}
-
-.overlay a {
-  color: white;
-  font-size: 2rem;
-  text-decoration: none;
-  transition: transform 0.3s ease;
-}
-
-.overlay a:hover {
-  transform: scale(1.2);
-}
-
-.music-player {
-  background: rgba(255, 255, 255, 0.1);
-  backdrop-filter: blur(20px);
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  border-radius: 20px;
-  padding: 2rem;
-  text-align: center;
-  color: white;
-  width: 100%;
-  max-width: 400px;
-  z-index: 2;
-  position: relative;
-}
-
-.music-player h1 {
-  font-size: 1.8rem;
-  font-weight: 600;
-  margin-bottom: 0.5rem;
-  background: linear-gradient(45deg, #fff, #f0f0f0);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-}
-
-.music-player p {
-  font-size: 1rem;
-  opacity: 0.8;
-  margin-bottom: 2rem;
-}
-
-.progress-container {
-  position: relative;
-  width: 100%;
-  height: 6px;
-  background: rgba(255, 255, 255, 0.2);
-  border-radius: 3px;
-  margin-bottom: 1rem;
-  cursor: pointer;
-}
-
-.progress {
-  height: 100%;
-  background: linear-gradient(90deg, #ff6b6b, #4ecdc4);
-  border-radius: 3px;
-  width: 0%;
-  transition: width 0.1s ease;
-}
-
-.music-duration {
-  display: flex;
-  justify-content: space-between;
-  font-size: 0.8rem;
-  opacity: 0.7;
-  margin-bottom: 2rem;
-}
-
-.controls {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 1.5rem;
-}
-
-.controls button {
-  background: rgba(255, 255, 255, 0.1);
-  border: none;
-  border-radius: 50%;
-  width: 50px;
-  height: 50px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: white;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  backdrop-filter: blur(10px);
-}
-
-.play-pause-btn {
-  width: 60px !important;
-  height: 60px !important;
-  background: rgba(255, 255, 255, 0.2) !important;
-}
-
-.controls button:hover {
-  background: rgba(255, 255, 255, 0.2);
-  transform: scale(1.1);
-}
-
-.controls button ion-icon {
-  font-size: 1.5rem;
-}
-
-.play-pause-btn ion-icon {
-  font-size: 2rem;
-}
-
-/* Responsive design */
-@media (max-width: 768px) {
   .album-cover {
-    width: 200px;
-    height: 200px;
+    position: relative;
+    width: 250px;
+    height: 250px;
+    border-radius: 50%;
+    overflow: hidden;
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.4);
+    z-index: 2;
+    margin-bottom: 2rem;
   }
-  
+
+  .swiper {
+    width: 100%;
+    height: 100%;
+  }
+
+  .swiper-slide {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+  }
+
+  .swiper-slide img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 50%;
+  }
+
+  .overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.6);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    border-radius: 50%;
+  }
+
+  .swiper-slide:hover .overlay {
+    opacity: 1;
+  }
+
+  .overlay a {
+    color: white;
+    font-size: 2rem;
+    text-decoration: none;
+    transition: transform 0.3s ease;
+  }
+
+  .overlay a:hover {
+    transform: scale(1.2);
+  }
+
   .music-player {
-    padding: 1.5rem;
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 20px;
+    padding: 2rem;
+    text-align: center;
+    color: white;
+    width: 100%;
+    max-width: 400px;
+    z-index: 2;
+    position: relative;
   }
-  
+
   .music-player h1 {
+    font-size: 1.8rem;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+    background: linear-gradient(45deg, #fff, #f0f0f0);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .music-player p {
+    font-size: 1rem;
+    opacity: 0.8;
+    margin-bottom: 2rem;
+  }
+
+  .progress-container {
+    position: relative;
+    width: 100%;
+    height: 6px;
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 3px;
+    margin-bottom: 1rem;
+    cursor: pointer;
+  }
+
+  .progress {
+    height: 100%;
+    background: linear-gradient(90deg, #ff6b6b, #4ecdc4);
+    border-radius: 3px;
+    width: 0%;
+    transition: width 0.1s ease;
+  }
+
+  .music-duration {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.8rem;
+    opacity: 0.7;
+    margin-bottom: 2rem;
+  }
+
+  .controls {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1.5rem;
+  }
+
+  .controls button {
+    background: rgba(255, 255, 255, 0.1);
+    border: none;
+    border-radius: 50%;
+    width: 50px;
+    height: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    backdrop-filter: blur(10px);
+  }
+
+  .play-pause-btn {
+    width: 60px !important;
+    height: 60px !important;
+    background: rgba(255, 255, 255, 0.2) !important;
+  }
+
+  .controls button:hover {
+    background: rgba(255, 255, 255, 0.2);
+    transform: scale(1.1);
+  }
+
+  .controls button ion-icon {
     font-size: 1.5rem;
   }
-}
+
+  .play-pause-btn ion-icon {
+    font-size: 2rem;
+  }
+
+  /* Responsive design */
+  @media (max-width: 768px) {
+    .album-cover {
+      width: 200px;
+      height: 200px;
+    }
+
+    .music-player {
+      padding: 1.5rem;
+    }
+
+    .music-player h1 {
+      font-size: 1.5rem;
+    }
+  }
 </style>
 
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
@@ -362,132 +372,131 @@ add_action('wp_footer', function () {
 <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
 
 <script>
-// Music Player JavaScript
-const progress = document.getElementById("progress");
-const song = document.getElementById("song");
-const controlIcon = document.getElementById("controlIcon");
-const playPauseButton = document.querySelector(".play-pause-btn");
-const nextButton = document.querySelector(".controls button.forward");
-const prevButton = document.querySelector(".controls button.backward");
-const songName = document.querySelector(".music-player h1");
-const artistName = document.querySelector(".music-player p");
-const currentTimeEl = document.getElementById("current-time");
-const durationEl = document.getElementById("duration");
+  // Music Player JavaScript
+  const progress = document.getElementById("progress");
+  const song = document.getElementById("song");
+  const controlIcon = document.getElementById("controlIcon");
+  const playPauseButton = document.querySelector(".play-pause-btn");
+  const nextButton = document.querySelector(".controls button.forward");
+  const prevButton = document.querySelector(".controls button.backward");
+  const songName = document.querySelector(".music-player h1");
+  const artistName = document.querySelector(".music-player p");
+  const currentTimeEl = document.getElementById("current-time");
+  const durationEl = document.getElementById("duration");
 
-const songs = [
-  {
-    title: "Symphony",
-    name: "Clean Bandit ft. Zara Larsson",
-    source: "https://github.com/ecemgo/mini-samples-great-tricks/raw/main/song-list/Clean-Bandit-Symphony.mp3",
-  },
-  {
-    title: "Levitating",
-    name: "Dua Lipa",
-    source: "https://github.com/ecemgo/mini-samples-great-tricks/raw/main/song-list/Dua-Lipa-Levitating.mp3",
-  },
-  {
-    title: "Flowers",
-    name: "Miley Cyrus",
-    source: "https://github.com/ecemgo/mini-samples-great-tricks/raw/main/song-list/Miley-Cyrus-Flowers.mp3",
-  },
-  {
-    title: "Heat Waves",
-    name: "Glass Animals",
-    source: "https://github.com/ecemgo/mini-samples-great-tricks/raw/main/song-list/Glass-Animals-Heat-Waves.mp3",
-  },
-];
+  const songs = [{
+      title: "Symphony",
+      name: "Clean Bandit ft. Zara Larsson",
+      source: "https://github.com/ecemgo/mini-samples-great-tricks/raw/main/song-list/Clean-Bandit-Symphony.mp3",
+    },
+    {
+      title: "Levitating",
+      name: "Dua Lipa",
+      source: "https://github.com/ecemgo/mini-samples-great-tricks/raw/main/song-list/Dua-Lipa-Levitating.mp3",
+    },
+    {
+      title: "Flowers",
+      name: "Miley Cyrus",
+      source: "https://github.com/ecemgo/mini-samples-great-tricks/raw/main/song-list/Miley-Cyrus-Flowers.mp3",
+    },
+    {
+      title: "Heat Waves",
+      name: "Glass Animals",
+      source: "https://github.com/ecemgo/mini-samples-great-tricks/raw/main/song-list/Glass-Animals-Heat-Waves.mp3",
+    },
+  ];
 
-let currentSongIndex = 2;
+  let currentSongIndex = 2;
 
-function updateSongInfo() {
-  songName.textContent = songs[currentSongIndex].title;
-  artistName.textContent = songs[currentSongIndex].name;
-  song.src = songs[currentSongIndex].source;
-  
-  song.addEventListener("loadedmetadata", function () {
-    const duration = song.duration;
-    const minutes = Math.floor(duration / 60);
-    const seconds = Math.floor(duration % 60);
-    durationEl.textContent = `${minutes}:${seconds.toString().padStart(2, '0')}`;
+  function updateSongInfo() {
+    songName.textContent = songs[currentSongIndex].title;
+    artistName.textContent = songs[currentSongIndex].name;
+    song.src = songs[currentSongIndex].source;
+
+    song.addEventListener("loadedmetadata", function() {
+      const duration = song.duration;
+      const minutes = Math.floor(duration / 60);
+      const seconds = Math.floor(duration % 60);
+      durationEl.textContent = `${minutes}:${seconds.toString().padStart(2, '0')}`;
+    });
+  }
+
+  function playPause() {
+    if (song.paused) {
+      song.play();
+      controlIcon.setAttribute("name", "pause");
+    } else {
+      song.pause();
+      controlIcon.setAttribute("name", "play");
+    }
+  }
+
+  function nextSong() {
+    currentSongIndex = (currentSongIndex + 1) % songs.length;
+    updateSongInfo();
+    playPause();
+    swiper.slideNext();
+  }
+
+  function prevSong() {
+    currentSongIndex = (currentSongIndex - 1 + songs.length) % songs.length;
+    updateSongInfo();
+    playPause();
+    swiper.slidePrev();
+  }
+
+  function updateProgressBar() {
+    if (song.duration) {
+      const progressPercent = (song.currentTime / song.duration) * 100;
+      progress.style.width = progressPercent + "%";
+
+      const currentMinutes = Math.floor(song.currentTime / 60);
+      const currentSeconds = Math.floor(song.currentTime % 60);
+      currentTimeEl.textContent = `${currentMinutes}:${currentSeconds.toString().padStart(2, '0')}`;
+    }
+  }
+
+  playPauseButton.addEventListener("click", playPause);
+  nextButton.addEventListener("click", nextSong);
+  prevButton.addEventListener("click", prevSong);
+  song.addEventListener("timeupdate", updateProgressBar);
+
+  song.addEventListener("ended", function() {
+    nextSong();
   });
-}
 
-function playPause() {
-  if (song.paused) {
-    song.play();
-    controlIcon.setAttribute("name", "pause");
-  } else {
-    song.pause();
-    controlIcon.setAttribute("name", "play");
-  }
-}
+  // Progress bar click to seek
+  document.querySelector('.progress-container').addEventListener('click', function(e) {
+    const clickX = e.offsetX;
+    const width = this.offsetWidth;
+    const duration = song.duration;
+    song.currentTime = (clickX / width) * duration;
+  });
 
-function nextSong() {
-  currentSongIndex = (currentSongIndex + 1) % songs.length;
+  // Initialize Swiper
+  const swiper = new Swiper('.swiper', {
+    effect: 'coverflow',
+    grabCursor: true,
+    centeredSlides: true,
+    slidesPerView: 1,
+    coverflowEffect: {
+      rotate: 0,
+      stretch: 0,
+      depth: 100,
+      modifier: 2,
+      slideShadows: true,
+    },
+    loop: true,
+    initialSlide: currentSongIndex,
+  });
+
+  swiper.on('slideChange', function() {
+    currentSongIndex = swiper.realIndex;
+    updateSongInfo();
+  });
+
+  // Initialize
   updateSongInfo();
-  playPause();
-  swiper.slideNext();
-}
-
-function prevSong() {
-  currentSongIndex = (currentSongIndex - 1 + songs.length) % songs.length;
-  updateSongInfo();
-  playPause();
-  swiper.slidePrev();
-}
-
-function updateProgressBar() {
-  if (song.duration) {
-    const progressPercent = (song.currentTime / song.duration) * 100;
-    progress.style.width = progressPercent + "%";
-    
-    const currentMinutes = Math.floor(song.currentTime / 60);
-    const currentSeconds = Math.floor(song.currentTime % 60);
-    currentTimeEl.textContent = `${currentMinutes}:${currentSeconds.toString().padStart(2, '0')}`;
-  }
-}
-
-playPauseButton.addEventListener("click", playPause);
-nextButton.addEventListener("click", nextSong);
-prevButton.addEventListener("click", prevSong);
-song.addEventListener("timeupdate", updateProgressBar);
-
-song.addEventListener("ended", function () {
-  nextSong();
-});
-
-// Progress bar click to seek
-document.querySelector('.progress-container').addEventListener('click', function(e) {
-  const clickX = e.offsetX;
-  const width = this.offsetWidth;
-  const duration = song.duration;
-  song.currentTime = (clickX / width) * duration;
-});
-
-// Initialize Swiper
-const swiper = new Swiper('.swiper', {
-  effect: 'coverflow',
-  grabCursor: true,
-  centeredSlides: true,
-  slidesPerView: 1,
-  coverflowEffect: {
-    rotate: 0,
-    stretch: 0,
-    depth: 100,
-    modifier: 2,
-    slideShadows: true,
-  },
-  loop: true,
-  initialSlide: currentSongIndex,
-});
-
-swiper.on('slideChange', function () {
-  currentSongIndex = swiper.realIndex;
-  updateSongInfo();
-});
-
-// Initialize
-updateSongInfo();
 </script>
 
 <section id="game" class="section container">
