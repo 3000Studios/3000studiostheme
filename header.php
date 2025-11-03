@@ -88,6 +88,13 @@
 
   <?php wp_head(); ?>
 
+  <!-- No-JS fallback to ensure preloader never blocks rendering -->
+  <noscript>
+    <style>
+      .preloader{display:none !important}
+    </style>
+  </noscript>
+
   <!-- KILL BLACK SCREEN IMMEDIATELY -->
   <script>
     (function() {
