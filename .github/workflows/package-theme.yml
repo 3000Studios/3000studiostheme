@@ -12,6 +12,8 @@ jobs:
   package:
     name: Create Theme Package
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
     
     steps:
       - name: Checkout repository
