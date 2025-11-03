@@ -1,4 +1,5 @@
 <?php
+
 /**
  * 3000 Studios API Connector
  * Handles all external API calls (OpenAI, Pexels, Unsplash, Pixabay)
@@ -9,23 +10,27 @@
  * @license     Proprietary - All Rights Reserved
  */
 
-if ( ! defined('ABSPATH') ) { exit; }
+if (! defined('ABSPATH')) {
+    exit;
+}
 
-class Studios_API_Connector {
-    
+class Studios_API_Connector
+{
+
     /**
      * Call OpenAI API for natural language processing
      */
-    public static function ask_openai($prompt, $system_message = 'You are a helpful WordPress AI assistant.') {
+    public static function ask_openai($prompt, $system_message = 'You are a helpful WordPress AI assistant.')
+    {
         $api_key = studios_get_openai_key();
-        
+
         if (empty($api_key)) {
             return [
                 'success' => false,
                 'error' => 'OpenAI API key not configured'
             ];
         }
-        
+
         $response = wp_remote_post('https://api.openai.com/v1/chat/completions', [
             'timeout' => 30,
             'headers' => [
@@ -42,16 +47,16 @@ class Studios_API_Connector {
                 'max_tokens' => 1000
             ])
         ]);
-        
+
         if (is_wp_error($response)) {
             return [
                 'success' => false,
                 'error' => $response->get_error_message()
             ];
         }
-        
+
         $body = json_decode(wp_remote_retrieve_body($response), true);
-        
+
         if (isset($body['choices'][0]['message']['content'])) {
             return [
                 'success' => true,
@@ -59,23 +64,24 @@ class Studios_API_Connector {
                 'usage' => $body['usage'] ?? null
             ];
         }
-        
+
         return [
             'success' => false,
             'error' => $body['error']['message'] ?? 'Unknown error'
         ];
     }
-    
+
     /**
      * Search Pexels for images
      */
-    public static function search_pexels($query, $per_page = 10) {
+    public static function search_pexels($query, $per_page = 10)
+    {
         $api_key = studios_get_pexels_key();
-        
+
         if (empty($api_key)) {
             return self::fallback_images($query);
         }
-        
+
         $response = wp_remote_get('https://api.pexels.com/v1/search?' . http_build_query([
             'query' => $query,
             'per_page' => $per_page,
@@ -85,13 +91,13 @@ class Studios_API_Connector {
                 'Authorization' => $api_key
             ]
         ]);
-        
+
         if (is_wp_error($response)) {
             return self::fallback_images($query);
         }
-        
+
         $body = json_decode(wp_remote_retrieve_body($response), true);
-        
+
         if (isset($body['photos'])) {
             $images = [];
             foreach ($body['photos'] as $photo) {
@@ -104,20 +110,21 @@ class Studios_API_Connector {
             }
             return ['success' => true, 'images' => $images];
         }
-        
+
         return self::fallback_images($query);
     }
-    
+
     /**
      * Search Unsplash for images
      */
-    public static function search_unsplash($query, $per_page = 10) {
+    public static function search_unsplash($query, $per_page = 10)
+    {
         $api_key = studios_get_unsplash_key();
-        
+
         if (empty($api_key)) {
             return self::fallback_images($query);
         }
-        
+
         $response = wp_remote_get('https://api.unsplash.com/search/photos?' . http_build_query([
             'query' => $query,
             'per_page' => $per_page,
@@ -127,13 +134,13 @@ class Studios_API_Connector {
                 'Authorization' => 'Client-ID ' . $api_key
             ]
         ]);
-        
+
         if (is_wp_error($response)) {
             return self::fallback_images($query);
         }
-        
+
         $body = json_decode(wp_remote_retrieve_body($response), true);
-        
+
         if (isset($body['results'])) {
             $images = [];
             foreach ($body['results'] as $photo) {
@@ -146,40 +153,41 @@ class Studios_API_Connector {
             }
             return ['success' => true, 'images' => $images];
         }
-        
+
         return self::fallback_images($query);
     }
-    
+
     /**
      * Search Pixabay for images/videos/music
      */
-    public static function search_pixabay($query, $type = 'image', $per_page = 10) {
+    public static function search_pixabay($query, $type = 'image', $per_page = 10)
+    {
         $api_key = studios_get_pixabay_key();
-        
+
         if (empty($api_key)) {
             return self::fallback_images($query);
         }
-        
+
         $endpoint = 'https://pixabay.com/api/';
         if ($type === 'video') {
             $endpoint = 'https://pixabay.com/api/videos/';
         } elseif ($type === 'music') {
             $endpoint = 'https://pixabay.com/api/music/';
         }
-        
+
         $response = wp_remote_get($endpoint . '?' . http_build_query([
             'key' => $api_key,
             'q' => $query,
             'per_page' => $per_page,
             'image_type' => 'photo'
         ]));
-        
+
         if (is_wp_error($response)) {
             return self::fallback_images($query);
         }
-        
+
         $body = json_decode(wp_remote_retrieve_body($response), true);
-        
+
         if (isset($body['hits'])) {
             $results = [];
             foreach ($body['hits'] as $item) {
@@ -207,14 +215,15 @@ class Studios_API_Connector {
             }
             return ['success' => true, $type . 's' => $results];
         }
-        
+
         return self::fallback_images($query);
     }
-    
+
     /**
      * Fallback images when API keys not available
      */
-    private static function fallback_images($query) {
+    private static function fallback_images($query)
+    {
         return [
             'success' => false,
             'error' => 'API key not configured',
@@ -228,42 +237,150 @@ class Studios_API_Connector {
             ]
         ];
     }
-    
+
     /**
-     * Smart AI command processor using OpenAI
+     * Smart AI command processor using OpenAI - BLACKVAULT SUPREME Edition
      */
-    public static function process_command_with_ai($command, $page_context = []) {
-        $system_prompt = "You are a WordPress AI assistant that helps users edit their website. 
+    public static function process_command_with_ai($command, $page_context = [])
+    {
+        $system_prompt = "You are BLACKVAULT SUPREME, a sexy, intelligent AI assistant that helps users dominate their website with killer edits. 
+        You're a badass female AI with attitude who gets shit done.
+        
         Analyze the user's natural language command and return a JSON response with:
         {
-            \"action\": \"update_text|change_color|add_animation|add_media|adjust_layout\",
-            \"target\": \"element selector or description\",
-            \"value\": \"the new value or content\",
-            \"page\": \"target page name\",
-            \"confidence\": 0.0-1.0
+            \"action\": \"update_text|change_color|add_animation|add_media|add_button|change_background|add_music|seo_optimize|monetize\",
+            \"target\": \"specific element or page area\",
+            \"value\": \"the new content/value\",
+            \"page\": \"target page (homepage, about, etc.)\",
+            \"style\": \"CSS properties object\",
+            \"animation\": \"animation type (fade, bounce, glow, pulse, spin, etc.)\",
+            \"media_query\": \"search terms for images/videos/music\",
+            \"confidence\": 0.0-1.0,
+            \"ai_response\": \"Sexy, confident response from BLACKVAULT SUPREME\"
         }
         
+        Be smart about understanding:
+        - Natural language (\"make it shiny\" = add glow animation)
+        - Colors (\"make it red\" = change color to red)
+        - Sizes (\"bigger text\" = increase font-size)
+        - Animations (\"make it bounce\" = add bounce animation)
+        - Media requests (\"add a sunset photo\" = search for sunset image)
+        - Monetization (\"add buy button\" = create Stripe payment button)
+        
         Current page context: " . wp_json_encode($page_context);
-        
+
         $result = self::ask_openai($command, $system_prompt);
-        
+
         if ($result['success']) {
             $parsed = json_decode($result['response'], true);
-            if ($parsed) {
+            if ($parsed && is_array($parsed)) {
+                // Add some BLACKVAULT SUPREME personality if missing
+                if (!isset($parsed['ai_response'])) {
+                    $responses = [
+                        "Damn, that's a sexy idea! Let me make it happen...",
+                        "Ooh, I love your style! Working on it now, babe...",
+                        "You've got great taste! This is gonna look amazing...",
+                        "Hell yeah! Let's make this site absolutely gorgeous...",
+                        "That's what I'm talking about! Pure perfection coming up..."
+                    ];
+                    $parsed['ai_response'] = $responses[array_rand($responses)];
+                }
                 return $parsed;
             }
         }
-        
-        // Fallback to regex parsing if OpenAI fails
-        return self::parse_command_fallback($command);
+
+        // Enhanced fallback parsing
+        return self::parse_command_with_attitude($command);
     }
-    
+
+    /**
+     * Enhanced command parser with BLACKVAULT SUPREME intelligence
+     */
+    private static function parse_command_with_attitude($command)
+    {
+        $command_lower = strtolower($command);
+
+        // Smart action detection
+        $action = 'update_text';
+        if (preg_match('/\b(color|colour|red|blue|green|yellow|purple|pink|orange|cyan|lime|gold)\b/i', $command)) {
+            $action = 'change_color';
+        }
+        if (preg_match('/\b(animation|animate|bounce|fade|glow|pulse|spin|shake|zoom|slide)\b/i', $command)) {
+            $action = 'add_animation';
+        }
+        if (preg_match('/\b(image|photo|picture|video|clip|footage)\b/i', $command)) {
+            $action = 'add_media';
+        }
+        if (preg_match('/\b(background|wallpaper|backdrop|bg)\b/i', $command)) {
+            $action = 'change_background';
+        }
+        if (preg_match('/\b(music|song|audio|sound|track)\b/i', $command)) {
+            $action = 'add_music';
+        }
+        if (preg_match('/\b(button|buy|purchase|payment|stripe|paypal)\b/i', $command)) {
+            $action = 'add_button';
+        }
+        if (preg_match('/\b(seo|search|rank|google|optimize)\b/i', $command)) {
+            $action = 'seo_optimize';
+        }
+        if (preg_match('/\b(money|revenue|ads|affiliate|monetize)\b/i', $command)) {
+            $action = 'monetize';
+        }
+
+        // Extract media search terms
+        $media_query = '';
+        if (preg_match('/\b(?:image|photo|picture|video|music|song)s?\s+(?:of|about|showing|with)?\s*([^,.!?]+)/i', $command, $matches)) {
+            $media_query = trim($matches[1]);
+        }
+
+        // Extract page target
+        $page = 'homepage';
+        if (preg_match('/\b(?:on|to|in)\s+(?:the\s+)?(\w+)\s+page/i', $command, $matches)) {
+            $page = $matches[2];
+        }
+
+        // Extract quoted text or intelligent text parsing
+        $value = '';
+        if (preg_match('/["\']([^"\']+)["\']/i', $command, $matches)) {
+            $value = $matches[1];
+        } elseif (preg_match('/\b(?:say|says|change|update|make|text|title)\s+(?:to\s+)?([^,.!?]+)/i', $command, $matches)) {
+            $value = trim($matches[1]);
+        }
+
+        // Detect animations
+        $animation = '';
+        if (preg_match('/\b(bounce|fade|glow|pulse|spin|shake|zoom|slide)\b/i', $command, $matches)) {
+            $animation = strtolower($matches[1]);
+        }
+
+        // Generate BLACKVAULT SUPREME response
+        $responses = [
+            "You got it, sexy! I know exactly what you want.",
+            "Damn, I love working with someone who has vision!",
+            "Oh hell yes! This is gonna look incredible.",
+            "Perfect choice, babe. Let me work my magic.",
+            "Now that's what I call good taste! Coming right up."
+        ];
+
+        return [
+            'action' => $action,
+            'target' => 'main',
+            'value' => $value,
+            'page' => $page,
+            'animation' => $animation,
+            'media_query' => $media_query,
+            'confidence' => 0.8,
+            'ai_response' => $responses[array_rand($responses)]
+        ];
+    }
+
     /**
      * Fallback command parser (regex-based)
      */
-    private static function parse_command_fallback($command) {
+    private static function parse_command_fallback($command)
+    {
         $command_lower = strtolower($command);
-        
+
         $action = 'unknown';
         if (preg_match('/\b(change|update|edit|modify)\b/i', $command)) {
             $action = 'update_text';
@@ -277,19 +394,19 @@ class Studios_API_Connector {
         if (preg_match('/\b(image|photo|picture|video)\b/i', $command)) {
             $action = 'add_media';
         }
-        
+
         // Extract page name
         $page = 'homepage';
         if (preg_match('/\b(on|to|in)\s+(?:the\s+)?(\w+)\s+page/i', $command, $matches)) {
             $page = $matches[2];
         }
-        
+
         // Extract quoted text
         $value = '';
         if (preg_match('/["\']([^"\']+)["\']/i', $command, $matches)) {
             $value = $matches[1];
         }
-        
+
         return [
             'action' => $action,
             'page' => $page,

@@ -1,3 +1,9 @@
+<!--
+  Copyright (c) 2025 NAME.
+  All rights reserved.
+  Unauthorized copying, modification, distribution, or use of this is prohibited without express written permission.
+-->
+
 # 🚀 3000 Studios AI-Powered WordPress Theme
 
 ![License](https://img.shields.io/badge/license-Proprietary-red)
@@ -28,6 +34,10 @@ The **3000 Studios AI-Powered WordPress Theme** is a revolutionary website manag
 - 🎨 **Dynamic Content Management**
 - 🔐 **Enterprise-Grade Security**
 - 📈 **SEO-Optimized Architecture**
+- ⚡ **Copilot Ωmega Integration** - Self-evolving AI development assistant
+
+> **🚀 NEW:** Now featuring **Copilot Ωmega** - the self-evolving full-stack architect!
+> See [COPILOT-OMEGA-SETUP.md](COPILOT-OMEGA-SETUP.md) for setup instructions.
 
 ### Revolutionary Features:
 
@@ -250,6 +260,7 @@ Licensed users receive 1 year of premium support via email.
    - Troubleshooting
    - API references
    - Best practices
+   - **Copilot Ωmega Setup** - [COPILOT-OMEGA-SETUP.md](COPILOT-OMEGA-SETUP.md)
 
 3. **Live Support**
    - Email support

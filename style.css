@@ -1,4 +1,15 @@
 /*
+ *   Copyright (c) 2025 NAME.
+ *   All rights reserved.
+ *   Unauthorized copying, modification, distribution, or use of this is prohibited without express written permission.
+ */
+
+/*!
+ * 3000 Studios Theme
+ * Copyright © 2025 3000 Studios. All rights reserved.
+ */
+
+/*
 Theme Name: 3000 Studios - Build {{BUILD_TIME}}
 Author: Jeremy Swain
 Description: Custom Neon Tech Theme with Video Background + Animation + Mobile Deploy
@@ -16,6 +27,15 @@ html,body {
   background:#000;
   overflow-x:hidden;
   scroll-behavior:smooth;
+  visibility: visible !important;
+  opacity: 1 !important;
+}
+
+/* ENSURE CONTENT IS ALWAYS VISIBLE */
+.site-main, main, .hero, .section {
+  visibility: visible !important;
+  opacity: 1 !important;
+  z-index: 1 !important;
 }
 .hero {
   position:relative;
@@ -139,13 +159,313 @@ body.has-perimeter::before{
 .site-brand{display:flex;align-items:center;gap:14px;font-weight:800;letter-spacing:2px;color:var(--aqua);text-shadow:0 0 15px var(--aqua)}
 .site-brand .prelogo{width:90px;height:90px;position:relative}
 .nav{display:flex;align-items:center;gap:22px;flex-wrap:wrap}
-.nav a{padding:.75rem 1rem;border-radius:12px;transition:.25s}
+.nav a{padding:.75rem 1rem;border-radius:12px;transition:all .4s cubic-bezier(0.4, 0, 0.2, 1);position:relative;overflow:hidden;font-weight:600}
 .nav a:hover{background:rgba(255,255,255,.08);box-shadow:var(--shadow);color:var(--aqua);transform:translateY(-2px)}
+
+/* Enhanced navigation glow effects */
+.nav-menu a:hover, .nav ul a:hover {
+  text-shadow: 0 0 10px currentColor;
+  border: 1px solid rgba(255,255,255,0.1);
+}
+
+/* Smooth transitions for all pseudo-elements */
+.nav-menu a:before, .nav ul a:before,
+.nav-menu a:after, .nav ul a:after {
+  will-change: transform, opacity;
+}
+
+/* WordPress Navigation Menu Styles - Horizontal Layout */
+.nav-menu, .nav ul {
+  display: flex !important;
+  flex-direction: row !important;
+  align-items: center;
+  gap: 20px;
+  list-style: none !important;
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+.nav-menu li, .nav ul li {
+  list-style: none !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  position: relative;
+}
+
+.nav-menu li:before, .nav ul li:before {
+  display: none !important;
+}
+
+.nav-menu a, .nav ul a {
+  display: block;
+  padding: .75rem 1rem;
+  border-radius: 12px;
+  transition: all .4s cubic-bezier(0.4, 0, 0.2, 1);
+  text-decoration: none;
+  color: #fff;
+  position: relative;
+  overflow: hidden;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  z-index: 1;
+  
+  /* Gooey button effect for non-hovered state */
+  background: rgba(255,255,255,0.05);
+  border: 1px solid rgba(255,255,255,0.1);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  box-shadow: 
+    inset 0 1px 0 rgba(255,255,255,0.1),
+    0 4px 15px rgba(0,0,0,0.2),
+    0 0 20px rgba(0,255,231,0.1);
+}
+
+/* Gooey morphing animation for idle state */
+.nav-menu a:after, .nav ul a:after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0;
+  height: 0;
+  background: radial-gradient(circle, rgba(255,255,255,0.1), transparent);
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  transition: all 2s ease-in-out;
+  animation: gooeyPulse 4s ease-in-out infinite;
+  z-index: -1;
+}
+
+@keyframes gooeyPulse {
+  0%, 100% {
+    width: 0;
+    height: 0;
+    opacity: 0.3;
+  }
+  50% {
+    width: 120%;
+    height: 300%;
+    opacity: 0.1;
+  }
+}
+
+/* Enhanced gooey effect on hover */
+.nav-menu a:hover:after, .nav ul a:hover:after {
+  animation: none;
+  width: 150%;
+  height: 150%;
+  opacity: 0.2;
+}
+
+/* Different hover animations for each menu link */
+
+/* Animation 1: Left to Right Slide (First Link) */
+.nav-menu li:nth-child(1) a, .nav ul li:nth-child(1) a {
+  background: linear-gradient(45deg, rgba(0,255,231,0.1), rgba(0,255,231,0.05));
+}
+
+.nav-menu li:nth-child(1) a:before, .nav ul li:nth-child(1) a:before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(0,255,231,0.4), transparent);
+  transition: left 0.6s;
+  z-index: -1;
+}
+
+.nav-menu li:nth-child(1) a:hover:before, .nav ul li:nth-child(1) a:hover:before {
+  left: 100%;
+}
+
+.nav-menu li:nth-child(1) a:hover, .nav ul li:nth-child(1) a:hover {
+  color: var(--aqua);
+  transform: translateY(-3px) scale(1.05);
+  box-shadow: 0 8px 25px rgba(0,255,231,.4);
+}
+
+/* Animation 2: Center Expand (Second Link) */
+.nav-menu li:nth-child(2) a, .nav ul li:nth-child(2) a {
+  background: linear-gradient(45deg, rgba(245,200,75,0.1), rgba(245,200,75,0.05));
+}
+
+.nav-menu li:nth-child(2) a:before, .nav ul li:nth-child(2) a:before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0;
+  height: 0;
+  background: radial-gradient(circle, rgba(245,200,75,0.3), rgba(245,200,75,0.1));
+  transition: all 0.6s ease;
+  transform: translate(-50%, -50%);
+  border-radius: 50%;
+  z-index: -1;
+}
+
+.nav-menu li:nth-child(2) a:hover:before, .nav ul li:nth-child(2) a:hover:before {
+  width: 300px;
+  height: 300px;
+}
+
+.nav-menu li:nth-child(2) a:hover, .nav ul li:nth-child(2) a:hover {
+  color: var(--gold);
+  transform: translateY(-3px) rotate(2deg);
+  box-shadow: 0 8px 25px rgba(245,200,75,.4);
+}
+
+/* Animation 3: Right to Left Slide (Third Link) */
+.nav-menu li:nth-child(3) a, .nav ul li:nth-child(3) a {
+  background: linear-gradient(45deg, rgba(0,255,102,0.1), rgba(0,255,102,0.05));
+}
+
+.nav-menu li:nth-child(3) a:before, .nav ul li:nth-child(3) a:before {
+  content: '';
+  position: absolute;
+  top: 0;
+  right: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(-90deg, transparent, rgba(0,255,102,0.4), transparent);
+  transition: right 0.6s;
+  z-index: -1;
+}
+
+.nav-menu li:nth-child(3) a:hover:before, .nav ul li:nth-child(3) a:hover:before {
+  right: 100%;
+}
+
+.nav-menu li:nth-child(3) a:hover, .nav ul li:nth-child(3) a:hover {
+  color: var(--matrix);
+  transform: translateY(-3px) skew(-5deg);
+  box-shadow: 0 8px 25px rgba(0,255,102,.4);
+}
+
+/* Animation 4: Vertical Scale (Fourth Link) */
+.nav-menu li:nth-child(4) a, .nav ul li:nth-child(4) a {
+  background: linear-gradient(45deg, rgba(255,102,178,0.1), rgba(255,102,178,0.05));
+}
+
+.nav-menu li:nth-child(4) a:before, .nav ul li:nth-child(4) a:before {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 0;
+  background: linear-gradient(180deg, rgba(255,102,178,0.3), rgba(255,102,178,0.6));
+  transition: height 0.5s ease;
+  z-index: -1;
+}
+
+.nav-menu li:nth-child(4) a:hover:before, .nav ul li:nth-child(4) a:hover:before {
+  height: 100%;
+}
+
+.nav-menu li:nth-child(4) a:hover, .nav ul li:nth-child(4) a:hover {
+  color: #ff66b2;
+  transform: translateY(-3px) scale(1.1);
+  box-shadow: 0 8px 25px rgba(255,102,178,.4);
+}
+
+/* Animation 5: Diagonal Wipe (Fifth Link) */
+.nav-menu li:nth-child(5) a, .nav ul li:nth-child(5) a {
+  background: linear-gradient(45deg, rgba(128,90,213,0.1), rgba(128,90,213,0.05));
+}
+
+.nav-menu li:nth-child(5) a:before, .nav ul li:nth-child(5) a:before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 0;
+  height: 100%;
+  background: linear-gradient(45deg, rgba(128,90,213,0.6), rgba(128,90,213,0.3));
+  transition: width 0.5s ease;
+  transform: skew(-15deg);
+  z-index: -1;
+}
+
+.nav-menu li:nth-child(5) a:hover:before, .nav ul li:nth-child(5) a:hover:before {
+  width: 120%;
+}
+
+.nav-menu li:nth-child(5) a:hover, .nav ul li:nth-child(5) a:hover {
+  color: #805ad5;
+  transform: translateY(-3px) rotate(-2deg);
+  box-shadow: 0 8px 25px rgba(128,90,213,.4);
+}
+
+/* Animation 6+: Cycle back to variations for more links */
+.nav-menu li:nth-child(n+6) a, .nav ul li:nth-child(n+6) a {
+  background: linear-gradient(45deg, rgba(255,87,51,0.1), rgba(255,87,51,0.05));
+}
+
+.nav-menu li:nth-child(n+6) a:before, .nav ul li:nth-child(n+6) a:before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -10%;
+  width: 120%;
+  height: 200%;
+  background: radial-gradient(ellipse, rgba(255,87,51,0.3), transparent);
+  transition: transform 0.6s ease;
+  transform: scale(0);
+  z-index: -1;
+}
+
+.nav-menu li:nth-child(n+6) a:hover:before, .nav ul li:nth-child(n+6) a:hover:before {
+  transform: scale(1);
+}
+
+.nav-menu li:nth-child(n+6) a:hover, .nav ul li:nth-child(n+6) a:hover {
+  color: #ff5733;
+  transform: translateY(-3px) scale(1.05);
+  box-shadow: 0 8px 25px rgba(255,87,51,.4);
+}
+
+/* Remove all bullet points and list styling */
+.nav-menu, .nav-menu ul, .nav-menu li,
+.nav ul, .nav ul ul, .nav ul li {
+  list-style-type: none !important;
+  list-style: none !important;
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+.nav-menu li:before, .nav ul li:before,
+.nav-menu li:after, .nav ul li:after {
+  content: none !important;
+  display: none !important;
+}
+
+/* NO CSS CLASSES NEEDED IN WORDPRESS ADMIN - ALL STYLING IS AUTOMATIC */
+/* Your menu will automatically get these amazing animations when you create it in WordPress! */
 
 /* Preloader ring (also mini logo) */
 .preloader, .prelogo{display:grid;place-items:center;perspective:40em}
-.preloader{position:fixed;inset:0;background:#000;z-index:9999}
+.preloader{position:fixed;inset:0;background:#000;z-index:9999;transition:opacity 0.5s ease-out}
+.preloader.fade-out{opacity:0;pointer-events:none}
 .pre-hidden{display:none}
+
+/* PRELOADER DISABLED - NO MORE BLACK SCREEN! */
+.preloader {
+  display: none !important;
+  opacity: 0 !important;
+  visibility: hidden !important;
+  pointer-events: none !important;
+}
+
+/* Auto-hide preloader after 3 seconds if JS fails - DISABLED */
+@keyframes auto-hide-preloader {
+  0% { opacity: 0; visibility: hidden; }
+  100% { opacity: 0; visibility: hidden; }
+}
+.preloader {
+  animation: none !important;
+}
 .pre-rings{width:17em;height:17em;display:flex;flex-direction:column;justify-content:center;align-items:center;animation:tiltSpin 8s linear infinite;transform-style:preserve-3d}
 .pre-ring{font-size:2em;position:relative;height:3rem;width:1.5rem;animation:spin 4s linear infinite;transform-style:preserve-3d}
 .pre-ring:nth-child(even){animation-direction:reverse}

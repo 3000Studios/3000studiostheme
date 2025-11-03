@@ -1,3 +1,9 @@
+<!--
+  Copyright (c) 2025 NAME.
+  All rights reserved.
+  Unauthorized copying, modification, distribution, or use of this is prohibited without express written permission.
+-->
+
 # PROPRIETARY LICENSE AGREEMENT
 
 ## Copyright © 2025 Mr. jwswain (3000 Studios). All Rights Reserved.

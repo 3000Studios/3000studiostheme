@@ -1,4 +1,3 @@
-.vscode/ai-bridge.js
 /**
  * 3000 Studios AI → VS Code Bridge
  * Links ChatGPT or voice assistant commands to VS Code actions.
