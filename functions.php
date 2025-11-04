@@ -75,6 +75,11 @@ require_once get_template_directory() . '/includes/api-settings.php';
 require_once get_template_directory() . '/includes/api-connector.php';
 require_once get_template_directory() . '/includes/monetization.php';
 
+// Load Live Reload System (BlackVault SUPREME)
+if (file_exists(get_template_directory() . '/includes/live-reload-inject.php')) {
+    require_once get_template_directory() . '/includes/live-reload-inject.php';
+}
+
 // Initialize AI database tables
 add_action('after_switch_theme', 'studios_ai_create_tables');
 

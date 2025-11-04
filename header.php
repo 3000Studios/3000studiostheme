@@ -91,7 +91,9 @@
   <!-- No-JS fallback to ensure preloader never blocks rendering -->
   <noscript>
     <style>
-      .preloader{display:none !important}
+      .preloader {
+        display: none !important
+      }
     </style>
   </noscript>
 

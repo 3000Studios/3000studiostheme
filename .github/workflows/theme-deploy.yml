@@ -1,0 +1,84 @@
+name: Theme Deploy
+
+on:
+  push:
+    branches: [ main ]
+  workflow_dispatch:
+
+concurrency:
+  group: theme-deploy
+  cancel-in-progress: false
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install deployment tools
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y zip lftp
+
+      - name: Build single theme zip (overwrite any old)
+        run: |
+          set -e
+          THEME_ZIP="3000studios-theme.zip"
+          echo "🧹 Removing any existing zips in workspace root"
+          rm -f *.zip || true
+          echo "📦 Zipping theme as ${THEME_ZIP}"
+          zip -r "${THEME_ZIP}" . \
+            -x "*/.git/*" \
+               "*/.github/*" \
+               "node_modules/*" \
+               "webhook-server/*" \
+               "scripts/*" \
+               "*.zip" \
+               "*.log" \
+               "*.md" \
+               "README*" \
+               "QUICKSTART.md" \
+               "LICENSE*"
+          ls -lh "${THEME_ZIP}"
+
+      - name: Deploy to server via SFTP (sync theme dir + keep only one zip)
+        if: ${{ secrets.IONOS_HOST != '' && secrets.IONOS_USER != '' && secrets.IONOS_PASS != '' && secrets.IONOS_THEME_PATH != '' }}
+        env:
+          SFTP_HOST: ${{ secrets.IONOS_HOST }}
+          SFTP_USER: ${{ secrets.IONOS_USER }}
+          SFTP_PASS: ${{ secrets.IONOS_PASS }}
+          THEME_PATH: ${{ secrets.IONOS_THEME_PATH }}
+        run: |
+          set -e
+          THEME_ZIP="3000studios-theme.zip"
+          echo "🌐 Connecting to ${SFTP_HOST} and syncing theme"
+          lftp -u "$SFTP_USER","$SFTP_PASS" sftp://"$SFTP_HOST" -e "\
+            set sftp:connect-program 'ssh -a -x -o StrictHostKeyChecking=no'; \
+            set ssl:verify-certificate no; \
+            # Ensure theme directory exists
+            mkdir -p $THEME_PATH; \
+            cd $THEME_PATH; \
+            # Reverse mirror local repo to remote theme dir, delete extras, exclude non-theme files
+            mirror -R --delete --verbose \
+              --exclude-glob .git/ \
+              --exclude-glob .github/ \
+              --exclude-glob node_modules/ \
+              --exclude-glob webhook-server/ \
+              --exclude-glob scripts/ \
+              --exclude-glob *.zip \
+              --exclude-glob *.log \
+              --exclude-glob README* \
+              --exclude-glob QUICKSTART.md \
+              --exclude-glob LICENSE* \
+              . .; \
+            # Keep only one theme zip: remove any existing zips then upload the new one
+            rm -f *.zip; \
+            put -O $THEME_PATH ${THEME_ZIP}; \
+            bye"
+          echo "✅ Deployed and ensured only one theme zip exists on server"
+
+      - name: Save artifact (zip)
+        uses: actions/upload-artifact@v4
+        with:
+          name: 3000studios-theme
+          path: 3000studios-theme.zip
