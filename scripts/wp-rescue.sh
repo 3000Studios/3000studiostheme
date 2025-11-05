@@ -10,12 +10,14 @@ THEME_DIR="${THEME_DIR:-}" # Optional theme directory name to switch (e.g., 3000
 ACTION_DISABLE_PLUGINS=false
 ACTION_SWITCH_THEME=false
 ACTION_ENABLE_DEBUG=false
+RESTORE_PLUGIN=""
 
 for arg in "$@"; do
   case "$arg" in
     --disable-plugins) ACTION_DISABLE_PLUGINS=true ;;
     --switch-theme) ACTION_SWITCH_THEME=true ; shift ; THEME_DIR="${1:-}" ;;
     --enable-debug) ACTION_ENABLE_DEBUG=true ;;
+    --restore-plugin) shift ; RESTORE_PLUGIN="${1:-}" ;;
     *) ;;
   esac
 done
@@ -23,6 +25,22 @@ done
 if [[ -z "$WP_ROOT" ]]; then
   echo "❌ Set WP_ROOT to your WordPress root (e.g., /var/www/html)"
   exit 1
+fi
+
+# 1.5) Restore a single plugin directory from the latest plugins_off_* backup
+if [[ -n "$RESTORE_PLUGIN" ]]; then
+  latest_backup=$(ls -d wp-content/plugins_off_* 2>/dev/null | sort | tail -n1 || true)
+  if [[ -z "$latest_backup" ]]; then
+    echo "ℹ️ No plugins_off_* backup directory found."
+  else
+    if [[ -d "$latest_backup/$RESTORE_PLUGIN" ]]; then
+      echo "🔧 Restoring plugin $RESTORE_PLUGIN from $latest_backup..."
+      mv "$latest_backup/$RESTORE_PLUGIN" "wp-content/plugins/"
+      echo "✅ Restored plugin folder. Use WP admin to re-activate or enable via recovery endpoint."
+    else
+      echo "❌ Plugin $RESTORE_PLUGIN not found in $latest_backup"
+    fi
+  fi
 fi
 
 cd "$WP_ROOT"
@@ -81,6 +99,10 @@ define( 'WP_DEBUG_DISPLAY', false );" wp-config.php
     sed -i.bak "s/define( *'WP_DEBUG_LOG'.*/define( 'WP_DEBUG_LOG', true );/" wp-config.php || true
     sed -i.bak "s/define( *'WP_DEBUG_DISPLAY'.*/define( 'WP_DEBUG_DISPLAY', false );/" wp-config.php || true
     echo "✅ Debug constants updated."
+  fi
+  # Also raise memory limit to stabilize admin during recovery (non-destructive)
+  if ! grep -q "WP_MEMORY_LIMIT" wp-config.php; then
+    sed -i.bak "/That's all, stop editing/i define( 'WP_MEMORY_LIMIT', '512M' );" wp-config.php
   fi
 fi
 
