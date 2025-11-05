@@ -321,8 +321,8 @@ npm run dev
 
 ### Local Development
 1. Set up local WordPress environment (XAMPP, WAMP, Local, etc.)
-2. Clone/copy theme to `wp-content/themes/3000studiostheme/`
-3. Activate theme in WordPress admin
+2. Clone/copy theme to `wp-content/themes/` directory (folder name should match repository name)
+3. Activate theme in WordPress admin (Dashboard → Appearance → Themes)
 4. Install npm dependencies: `npm install`
 5. Use `npm run dev` for development with auto-refresh
 
