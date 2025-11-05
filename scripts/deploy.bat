@@ -1,11 +1,11 @@
 @echo off
-REM 3000 Studios Theme Deployment Script - BLACKVAULT SUPREME (Windows)
+REM 3000 Studios Theme Deployment Script - Black Vault SUPREME (Windows)
 REM Creates complete deployment package with all components
 REM Author: Mr. jwswain & 3000 Studios
 REM Copyright (c) 2025 - All Rights Reserved
 
 echo.
-echo 🚀 BLACKVAULT SUPREME - Theme Deployment Package Creator
+echo 🚀 Black Vault SUPREME - Theme Deployment Package Creator
 echo ===============================================
 echo Creating ultimate WordPress theme package...
 echo.
@@ -44,7 +44,7 @@ popd
 echo 📝 Generating documentation...
 
 REM Create README (same content as bash version)
-echo # 🚀 BLACKVAULT SUPREME - 3000 Studios Theme > "%TEMP_DIR%\README.md"
+echo # 🚀 Black Vault SUPREME - 3000 Studios Theme > "%TEMP_DIR%\README.md"
 echo. >> "%TEMP_DIR%\README.md"
 echo **The Ultimate AI-Powered WordPress Theme** >> "%TEMP_DIR%\README.md"
 echo. >> "%TEMP_DIR%\README.md"
@@ -52,7 +52,7 @@ echo ## 🔥 Features >> "%TEMP_DIR%\README.md"
 echo. >> "%TEMP_DIR%\README.md"
 echo ### 🤖 AI Command Center >> "%TEMP_DIR%\README.md"
 echo - **Voice Control**: Speak commands and watch them execute in real-time >> "%TEMP_DIR%\README.md"
-echo - **Sexy AI Assistant**: BLACKVAULT SUPREME responds with personality >> "%TEMP_DIR%\README.md"
+echo - **Sexy AI Assistant**: Black Vault SUPREME responds with personality >> "%TEMP_DIR%\README.md"
 echo - **Natural Language Processing**: Understands complex commands >> "%TEMP_DIR%\README.md"
 echo - **Live Preview**: See changes before applying them >> "%TEMP_DIR%\README.md"
 echo - **Real-time Editing**: Updates go live instantly >> "%TEMP_DIR%\README.md"
@@ -71,7 +71,7 @@ echo 4. Add your API keys (optional but recommended) >> "%TEMP_DIR%\README.md"
 echo 5. Visit your site and go to `/login` to access the Command Center >> "%TEMP_DIR%\README.md"
 
 REM Create deployment info
-echo BLACKVAULT SUPREME - 3000 Studios Theme > "%TEMP_DIR%\DEPLOYMENT_INFO.txt"
+echo Black Vault SUPREME - 3000 Studios Theme > "%TEMP_DIR%\DEPLOYMENT_INFO.txt"
 echo Deployment Package: %PACKAGE_NAME% >> "%TEMP_DIR%\DEPLOYMENT_INFO.txt"
 echo Created: %date% %time% >> "%TEMP_DIR%\DEPLOYMENT_INFO.txt"
 echo Version: %VERSION% >> "%TEMP_DIR%\DEPLOYMENT_INFO.txt"
@@ -110,7 +110,7 @@ echo Next Steps:
 echo 1. Upload to your WordPress site
 echo 2. Activate the theme
 echo 3. Configure API keys
-echo 4. Start using BLACKVAULT SUPREME!
+echo 4. Start using Black Vault SUPREME!
 echo.
 echo 💜 Made with love by Mr. jwswain ^& 3000 Studios
 echo 🌐 https://3000studios.com

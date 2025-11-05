@@ -1,5 +1,5 @@
 # Copyright (c) 2025 Mr. jwswain - 3000 Studios. All Rights Reserved.
-# BlackVault SUPREME Auto-Deploy Pipeline
+# Black Vault SUPREME Auto-Deploy Pipeline
 
 name: 3000 Studios Auto-Deploy
 
@@ -99,7 +99,7 @@ jobs:
           tag_name: v${{ env.VERSION }}
           name: 3000 Studios Theme v${{ env.VERSION }}
           body: |
-            🚀 **BlackVault SUPREME Auto-Deploy**
+            🚀 **Black Vault SUPREME Auto-Deploy**
             
             **Version:** ${{ env.VERSION }}
             **Build Time:** ${{ github.event.head_commit.timestamp }}
@@ -124,7 +124,7 @@ jobs:
       - name: 🎯 Auto-Commit Version Bump
         if: steps.version-check.outputs.changed == 'true'
         run: |
-          git config user.name "BlackVault SUPREME"
+          git config user.name "Black Vault SUPREME"
           git config user.email "ai@3000studios.com"
           git add style.css package.json
           git commit -m "🚀 Auto-bump version to ${{ env.VERSION }}" || exit 0

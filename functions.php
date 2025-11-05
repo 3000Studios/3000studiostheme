@@ -75,8 +75,8 @@ require_once get_template_directory() . '/includes/api-settings.php';
 require_once get_template_directory() . '/includes/api-connector.php';
 require_once get_template_directory() . '/includes/monetization.php';
 
-// Load Live Reload System (BlackVault SUPREME)
-if (file_exists(get_template_directory() . '/includes/live-reload-inject.php')) {
+// Load Live Reload System (Black Vault SUPREME) - Only in development
+if (defined('WP_DEBUG') && WP_DEBUG && file_exists(get_template_directory() . '/includes/live-reload-inject.php')) {
     require_once get_template_directory() . '/includes/live-reload-inject.php';
 }
 
@@ -210,7 +210,7 @@ function studios_generate_preview($parsed)
 }
 
 /**
- * AJAX Handler: Execute AI Command - BLACKVAULT SUPREME Edition
+ * AJAX Handler: Execute AI Command - Black Vault SUPREME Edition
  */
 add_action('wp_ajax_studios_execute_command', 'studios_ajax_execute_command');
 function studios_ajax_execute_command()
@@ -270,7 +270,7 @@ function studios_ajax_execute_command()
 }
 
 /**
- * BLACKVAULT SUPREME Live Command Executor
+ * Black Vault SUPREME Live Command Executor
  */
 function studios_execute_live_command($parsed, $page_id = null)
 {
@@ -415,7 +415,7 @@ function studios_add_css_animation($parsed)
 
     // Check if animation already exists
     if (strpos($content, "@keyframes ai-{$animation}") === false) {
-        $content .= "\n\n/* BLACKVAULT SUPREME Animation: {$animation} */\n{$keyframes}\n";
+        $content .= "\n\n/* Black Vault SUPREME Animation: {$animation} */\n{$keyframes}\n";
 
         if (file_put_contents($css_file, $content)) {
             return [

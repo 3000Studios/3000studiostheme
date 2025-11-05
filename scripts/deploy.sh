@@ -1,11 +1,11 @@
 #!/bin/bash
 
-# 3000 Studios Theme Deployment Script - BLACKVAULT SUPREME
+# 3000 Studios Theme Deployment Script - Black Vault SUPREME
 # Creates complete deployment package with all components
 # Author: Mr. jwswain & 3000 Studios
 # Copyright (c) 2025 - All Rights Reserved
 
-echo "🚀 BLACKVAULT SUPREME - Theme Deployment Package Creator"
+echo "🚀 Black Vault SUPREME - Theme Deployment Package Creator"
 echo "==============================================="
 echo "Creating ultimate WordPress theme package..."
 echo ""
@@ -41,7 +41,7 @@ rm -rf Thumbs.db
 echo "📝 Generating documentation..."
 
 cat > README.md << 'EOF'
-# 🚀 BLACKVAULT SUPREME - 3000 Studios Theme
+# 🚀 Black Vault SUPREME - 3000 Studios Theme
 
 **The Ultimate AI-Powered WordPress Theme**
 
@@ -49,7 +49,7 @@ cat > README.md << 'EOF'
 
 ### 🤖 AI Command Center
 - **Voice Control**: Speak commands and watch them execute in real-time
-- **Sexy AI Assistant**: BLACKVAULT SUPREME responds with personality
+- **Sexy AI Assistant**: Black Vault SUPREME responds with personality
 - **Natural Language Processing**: Understands complex commands
 - **Live Preview**: See changes before applying them
 - **Real-time Editing**: Updates go live instantly
@@ -209,12 +209,12 @@ Unauthorized copying, modification, or distribution is strictly prohibited.
 
 **Made with 💜 by Mr. jwswain & 3000 Studios**
 
-*"The future of web design is here, and it's absolutely gorgeous."* - BLACKVAULT SUPREME
+*"The future of web design is here, and it's absolutely gorgeous."* - Black Vault SUPREME
 EOF
 
 # Create installation guide
 cat > INSTALLATION.md << 'EOF'
-# 🚀 BLACKVAULT SUPREME Installation Guide
+# 🚀 Black Vault SUPREME Installation Guide
 
 ## Prerequisites
 - WordPress 5.0 or higher
@@ -320,14 +320,14 @@ EOF
 
 # Create changelog
 cat > CHANGELOG.md << 'EOF'
-# 📋 BLACKVAULT SUPREME Changelog
+# 📋 Black Vault SUPREME Changelog
 
 ## Version 1.0.0 - Initial Release
 **Release Date: 2025-01-01**
 
 ### 🚀 New Features
 - **AI Command Center**: Complete voice-controlled website editing
-- **BLACKVAULT SUPREME AI**: Sexy, intelligent AI assistant with personality
+- **Black Vault SUPREME AI**: Sexy, intelligent AI assistant with personality
 - **Real-time Editing**: Live preview and instant file updates
 - **Advanced Voice Recognition**: Natural language processing
 - **Cyberpunk UI**: Futuristic dashboard with neon aesthetics
@@ -426,14 +426,14 @@ cat > CHANGELOG.md << 'EOF'
 
 ---
 
-**Stay updated at https://3000studios.com/blackvault-supreme**
+**Stay updated at https://3000studios.com/black_vault-supreme**
 EOF
 
 echo "✅ Documentation created"
 
 # Create deployment info
 cat > DEPLOYMENT_INFO.txt << EOF
-BLACKVAULT SUPREME - 3000 Studios Theme
+Black Vault SUPREME - 3000 Studios Theme
 Deployment Package: ${PACKAGE_NAME}
 Created: $(date)
 Version: ${VERSION}
@@ -486,7 +486,7 @@ echo "Next Steps:"
 echo "1. Upload to your WordPress site"
 echo "2. Activate the theme"
 echo "3. Configure API keys"
-echo "4. Start using BLACKVAULT SUPREME!"
+echo "4. Start using Black Vault SUPREME!"
 echo ""
 echo "💜 Made with love by Mr. jwswain & 3000 Studios"
 echo "🌐 https://3000studios.com"

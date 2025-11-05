@@ -239,11 +239,11 @@ class Studios_API_Connector
     }
 
     /**
-     * Smart AI command processor using OpenAI - BLACKVAULT SUPREME Edition
+     * Smart AI command processor using OpenAI - Black Vault SUPREME Edition
      */
     public static function process_command_with_ai($command, $page_context = [])
     {
-        $system_prompt = "You are BLACKVAULT SUPREME, a sexy, intelligent AI assistant that helps users dominate their website with killer edits. 
+        $system_prompt = "You are Black Vault SUPREME, a sexy, intelligent AI assistant that helps users dominate their website with killer edits. 
         You're a badass female AI with attitude who gets shit done.
         
         Analyze the user's natural language command and return a JSON response with:
@@ -256,7 +256,7 @@ class Studios_API_Connector
             \"animation\": \"animation type (fade, bounce, glow, pulse, spin, etc.)\",
             \"media_query\": \"search terms for images/videos/music\",
             \"confidence\": 0.0-1.0,
-            \"ai_response\": \"Sexy, confident response from BLACKVAULT SUPREME\"
+            \"ai_response\": \"Sexy, confident response from Black Vault SUPREME\"
         }
         
         Be smart about understanding:
@@ -274,7 +274,7 @@ class Studios_API_Connector
         if ($result['success']) {
             $parsed = json_decode($result['response'], true);
             if ($parsed && is_array($parsed)) {
-                // Add some BLACKVAULT SUPREME personality if missing
+                // Add some Black Vault SUPREME personality if missing
                 if (!isset($parsed['ai_response'])) {
                     $responses = [
                         "Damn, that's a sexy idea! Let me make it happen...",
@@ -294,7 +294,7 @@ class Studios_API_Connector
     }
 
     /**
-     * Enhanced command parser with BLACKVAULT SUPREME intelligence
+     * Enhanced command parser with Black Vault SUPREME intelligence
      */
     private static function parse_command_with_attitude($command)
     {
@@ -353,7 +353,7 @@ class Studios_API_Connector
             $animation = strtolower($matches[1]);
         }
 
-        // Generate BLACKVAULT SUPREME response
+        // Generate Black Vault SUPREME response
         $responses = [
             "You got it, sexy! I know exactly what you want.",
             "Damn, I love working with someone who has vision!",

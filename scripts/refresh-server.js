@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 /**
  * Copyright (c) 2025 Mr. jwswain - 3000 Studios. All Rights Reserved.
- * BlackVault SUPREME Live Refresh Server
+ * Black Vault SUPREME Live Refresh Server
  */
 
 const http = require('http');
@@ -78,7 +78,7 @@ wss.on('connection', (ws) => {
 });
 
 server.listen(PORT, () => {
-    console.log('\x1b[36m%s\x1b[0m', '⚡ BlackVault SUPREME Refresh Server');
+    console.log('\x1b[36m%s\x1b[0m', '⚡ Black Vault SUPREME Refresh Server');
     console.log('\x1b[33m%s\x1b[0m', '━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
     console.log(`🌐 HTTP Trigger: http://localhost:${PORT}/refresh`);
     console.log(`🔌 WebSocket: ws://localhost:${WS_PORT}`);

@@ -1,10 +1,16 @@
+<!--
+  Copyright (c) 2025 NAME.
+  All rights reserved.
+  Unauthorized copying, modification, distribution, or use of this is prohibited without express written permission.
+-->
+
 # ⚡ 3000 Studios Theme - Auto-Update Quick Start
 
 **Version 1.3** | **Last Updated:** November 4, 2025
 
 ---
 
-## 🚀 What's New: BlackVault SUPREME Auto-Update System
+## 🚀 What's New: Black Vault SUPREME Auto-Update System
 
 Your theme now **updates itself automatically**:
 - ✅ Real-time file watching
@@ -195,5 +201,5 @@ See `AUTO-UPDATE-SYSTEM.md` for complete documentation.
 
 ---
 
-**Built with BlackVault SUPREME Technology**  
+**Built with Black Vault SUPREME Technology**  
 *"The future is always up to date."*

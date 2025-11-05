@@ -1,7 +1,7 @@
 <?php
 
 /**
- * 3000 Studios Monetization Engine - BLACKVAULT SUPREME
+ * 3000 Studios Monetization Engine - Black Vault SUPREME
  * Advanced revenue optimization and payment integration
  * 
  * @package     3000Studios
@@ -41,7 +41,7 @@ class Studios_Monetization
 
 ?>
         <script>
-            // BLACKVAULT SUPREME Revenue Tracker
+            // Black Vault SUPREME Revenue Tracker
             (function() {
                 let revenueData = {
                     pageViews: 0,

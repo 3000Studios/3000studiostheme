@@ -1,10 +1,15 @@
 {
+    "// Copyright (c) 2025 3000 Studios. All Rights Reserved.": "",
+    
     "CodeGPT.apiKey": "Google AI Studio",
     "github.copilot.enable": {
         "*": true,
         "yaml": true,
         "plaintext": true,
-        "markdown": true
+        "markdown": true,
+        "php": true,
+        "javascript": true,
+        "typescript": true
     },
     "github.copilot.advanced": {
         "inlineSuggestCount": 3
@@ -15,5 +20,53 @@
         "other": true,
         "comments": true,
         "strings": true
+    },
+    
+    "// Auto-approve and auto-save settings": "",
+    "files.autoSave": "afterDelay",
+    "files.autoSaveDelay": 1000,
+    "editor.formatOnSave": true,
+    "editor.formatOnPaste": true,
+    "editor.codeActionsOnSave": {
+        "source.fixAll": "explicit",
+        "source.organizeImports": "explicit"
+    },
+    
+    "// Git settings": "",
+    "git.autofetch": true,
+    "git.confirmSync": false,
+    "git.enableSmartCommit": true,
+    "git.postCommitCommand": "push",
+    
+    "// Disable confirmations (auto-approve)": "",
+    "explorer.confirmDelete": false,
+    "explorer.confirmDragAndDrop": false,
+    "debug.openDebug": "neverOpen",
+    "debug.showInStatusBar": "never",
+    
+    "// PHP settings": "",
+    "php.validate.enable": true,
+    "php.validate.run": "onSave",
+    
+    "// JavaScript/TypeScript settings": "",
+    "javascript.updateImportsOnFileMove.enabled": "always",
+    "typescript.updateImportsOnFileMove.enabled": "always",
+    
+    "// File watcher excludes": "",
+    "files.watcherExclude": {
+        "**/.git/objects/**": true,
+        "**/.git/subtree-cache/**": true,
+        "**/node_modules/**": true,
+        "**/.hg/store/**": true,
+        "**/*.backup.*": true,
+        "**/*.zip": true
+    },
+    
+    "// Search excludes": "",
+    "search.exclude": {
+        "**/node_modules": true,
+        "**/bower_components": true,
+        "**/*.backup.*": true,
+        "**/*.zip": true
     }
 }

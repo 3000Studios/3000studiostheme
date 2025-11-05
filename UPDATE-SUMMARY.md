@@ -1,4 +1,10 @@
-# 🎉 Theme Update Complete - BlackVault SUPREME v1.3
+<!--
+  Copyright (c) 2025 NAME.
+  All rights reserved.
+  Unauthorized copying, modification, distribution, or use of this is prohibited without express written permission.
+-->
+
+# 🎉 Theme Update Complete - Black Vault SUPREME v1.3
 
 **Date:** November 4, 2025  
 **Status:** ✅ FULLY OPERATIONAL  
@@ -329,7 +335,7 @@ Everything is working perfectly. The theme now:
 
 ## 📞 Support
 
-**3000 Studios - BlackVault SUPREME**  
+**3000 Studios - Black Vault SUPREME**  
 Web: https://3000studios.com  
 Email: mr.jwswain@gmail.com  
 GitHub: https://github.com/3000Studios/3000studiostheme  
@@ -351,7 +357,7 @@ Unauthorized copying, modification, distribution, or use is strictly prohibited 
 
 ---
 
-**Built with BlackVault SUPREME Technology**  
+**Built with Black Vault SUPREME Technology**  
 *"The future updates itself automatically."*
 
 🚀 **Ready to Deploy. Ready to Dominate.**

@@ -1,7 +1,7 @@
 {
   "_comment": "Copyright (c) 2025 3000 Studios. All rights reserved.",
   "name": "3000studios",
-  "version": "1.3",
+  "version": "1.13",
   "description": "3000 Studios WordPress Theme tooling",
   "main": "index.js",
   "scripts": {

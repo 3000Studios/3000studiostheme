@@ -1,4 +1,4 @@
-name: BlackVault Nightly Emergency Backup
+name: Black Vault Nightly Emergency Backup
 
 on:
   schedule:
@@ -32,7 +32,7 @@ jobs:
       # Requires rclone configured in repo secrets and rclone.conf checked in or setup with secrets
       # - name: Upload backup to Google Drive
       #   run: |
-      #     rclone copy repo-backup-$(date +'%Y-%m-%d').zip gdrive:BlackVaultBackups/
+      #     rclone copy repo-backup-$(date +'%Y-%m-%d').zip gdrive:Black VaultBackups/
       #   env:
       #     RCLONE_CONFIG: ${{ secrets.RCLONE_CONFIG }}
 

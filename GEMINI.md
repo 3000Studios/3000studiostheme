@@ -5,7 +5,7 @@
 -->
 
 GEMINI.md
-3000 Studios / BlackVault — The Real AI Architecture Manifesto
+3000 Studios / Black Vault — The Real AI Architecture Manifesto
 What This Is
 
 On paper? A “premium” WordPress theme.

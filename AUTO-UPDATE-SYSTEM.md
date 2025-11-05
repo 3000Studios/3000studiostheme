@@ -4,7 +4,7 @@
   Unauthorized copying, modification, distribution, or use of this is prohibited without express written permission.
 -->
 
-# 🚀 BlackVault SUPREME Auto-Update System
+# 🚀 Black Vault SUPREME Auto-Update System
 
 **Copyright © 2025 Mr. jwswain - 3000 Studios. All Rights Reserved.**
 
@@ -337,5 +337,5 @@ Unauthorized copying, modification, distribution, or use is strictly prohibited 
 
 ---
 
-**Built with BlackVault SUPREME Technology**  
+**Built with Black Vault SUPREME Technology**  
 *"The future updates itself."*

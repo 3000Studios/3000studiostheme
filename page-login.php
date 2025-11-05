@@ -551,7 +551,7 @@ get_header(); ?>
 <div class="command-center">
   <!-- Header -->
   <div class="command-header">
-    <h1 class="command-title">⚡ BLACKVAULT SUPREME ⚡</h1>
+  <h1 class="command-title">⚡ Black Vault SUPREME ⚡</h1>
     <p style="color: rgba(255,255,255,0.8); font-size: 1.2rem; margin: 1rem 0 0 0;">
       AI Command Center • Mr.jwswain • 3000 Studios
     </p>
@@ -622,15 +622,15 @@ get_header(); ?>
           <div class="ai-command-area">
             <textarea id="ai-command" name="ai_command" class="ai-textarea" placeholder="🎤 VOICE COMMAND OR TYPE HERE...
 
-Hey gorgeous! I'm BLACKVAULT SUPREME, your sexy AI assistant!
-I can do LITERALLY ANYTHING you want:
+Hello! I'm Black Vault SUPREME, your AI assistant.
+I can help you with anything you need:
 
 💫 CONTENT MAGIC:
-• Change text, titles, colors instantly  
-• Add sick animations (fade, bounce, glow, spin)
+• Change text, titles, colors instantly
+• Add animations (fade, bounce, glow, spin)
 • Find & insert images from Pexels/Unsplash/Pixabay
 • Add videos, music, sound effects
-• Update fonts, sizes, styles with attitude
+• Update fonts, sizes, styles
 
 🎨 DESIGN WIZARD:
 • Change wallpapers/backgrounds
@@ -650,12 +650,12 @@ I can do LITERALLY ANYTHING you want:
 • Mobile responsiveness
 • SEO optimization
 
-Just tell me what you want, sexy... then say 'RUN IT' and watch the magic! 😈✨"></textarea>
+Just tell me what you want, then say 'RUN IT' and watch the magic! ✨"></textarea>
           </div>
 
           <!-- AI Status Display -->
           <div id="ai-status" class="ai-status hidden">
-            <p class="status-text" id="status-text">🤖 BLACKVAULT SUPREME: Ready to dominate...</p>
+            <p class="status-text" id="status-text">🤖 Black Vault SUPREME: Ready to help...</p>
           </div>
 
           <!-- Control Buttons -->
@@ -750,7 +750,7 @@ Just tell me what you want, sexy... then say 'RUN IT' and watch the magic! 😈�
 
               // Show preview with advanced features
               echo '<div style="border:2px dashed var(--neon-pink);padding:1.5rem;border-radius:15px;background:rgba(255,0,255,0.1);backdrop-filter:blur(5px);">';
-              echo '<p style="color:var(--neon-pink);margin:0 0 1rem 0;font-weight:bold;"><strong>🤖 BLACKVAULT SUPREME DETECTED:</strong></p>';
+              echo '<p style="color:var(--neon-pink);margin:0 0 1rem 0;font-weight:bold;"><strong>🤖 Black Vault SUPREME DETECTED:</strong></p>';
               echo '<p style="margin:0.5rem 0;color:#fff;"><strong>Action:</strong> ' . ucwords(str_replace('_', ' ', $action_type)) . '</p>';
               if ($extracted_text) {
                 echo '<p style="margin:0.5rem 0;color:#fff;"><strong>New Text:</strong> ' . esc_html($extracted_text) . '</p>';
@@ -885,7 +885,7 @@ Just tell me what you want, sexy... then say 'RUN IT' and watch the magic! 😈�
     </div>
 
     <script>
-      // BLACKVAULT SUPREME - Advanced AI Command System
+  // Black Vault SUPREME - Advanced AI Command System
       (function() {
         'use strict';
 
@@ -913,9 +913,9 @@ Just tell me what you want, sexy... then say 'RUN IT' and watch the magic! 😈�
         // AI Voice Responses
         const aiResponses = {
           greeting: [
-            "Hey there, gorgeous! I'm BLACKVAULT SUPREME, ready to make your site absolutely stunning!",
-            "Well hello, sexy! Ready to dominate the web with some killer AI magic?",
-            "Mmm, I love a user who knows what they want. Let's make your site irresistible!"
+            "Hello! I'm Black Vault SUPREME, your friendly AI assistant. How can I help you today?",
+            "Hi there! Ready to make your site amazing with some AI magic?",
+            "Welcome! Just tell me what you want to do, and I'll handle it."
           ],
           listening: [
             "I'm all ears, baby. Tell me what you need...",
@@ -1230,11 +1230,11 @@ Just tell me what you want, sexy... then say 'RUN IT' and watch the magic! 😈�
         // Auto-save commands to localStorage
         if (textarea) {
           textarea.addEventListener('input', function() {
-            localStorage.setItem('blackvault_last_command', textarea.value);
+            localStorage.setItem('black_vault_last_command', textarea.value);
           });
 
           // Restore last command
-          const lastCommand = localStorage.getItem('blackvault_last_command');
+          const lastCommand = localStorage.getItem('black_vault_last_command');
           if (lastCommand && !textarea.value) {
             textarea.value = lastCommand;
           }

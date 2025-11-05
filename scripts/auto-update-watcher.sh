@@ -1,6 +1,6 @@
 #!/bin/bash
 # Copyright (c) 2025 Mr. jwswain - 3000 Studios. All Rights Reserved.
-# BlackVault SUPREME Auto-Update Watcher
+# Black Vault SUPREME Auto-Update Watcher
 
 # Colors
 CYAN='\033[0;36m'
@@ -8,7 +8,7 @@ GREEN='\033[0;32m'
 GOLD='\033[0;33m'
 NC='\033[0m' # No Color
 
-echo -e "${CYAN}⚡ BlackVault SUPREME Auto-Update Watcher ACTIVATED${NC}"
+echo -e "${CYAN}⚡ Black Vault SUPREME Auto-Update Watcher ACTIVATED${NC}"
 echo -e "${GOLD}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${NC}"
 
 # Get the directory of this script
