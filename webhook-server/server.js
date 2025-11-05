@@ -1,3 +1,7 @@
+// Copyright (c) 2025 NAME.
+// All rights reserved.
+// Unauthorized copying, modification, distribution, or use of this is prohibited without express written permission.
+
 // Mobile-to-GitHub Webhook Service
 // Accepts authenticated requests to update theme files remotely
 // Secure: Uses HMAC signature verification + GitHub token
