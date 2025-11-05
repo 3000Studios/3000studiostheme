@@ -29,7 +29,7 @@
  * © 2025 Mr. jwswain & 3000 Studios. All Rights Reserved.
  */
 
-if (! defined('ABSPATH')) {
+if (!defined('ABSPATH')) {
   exit;
 } // Security: Prevent direct access
 
@@ -1241,9 +1241,11 @@ Just tell me what you want, then say 'RUN IT' and watch the magic! ✨"></textar
         }
 
       })();
-    </script> <!-- Preview Box -->
-    <div class="preview-box">
-      <h2 style="margin-top:0;color:#ff00ff;text-align:center;">👁️ Live Preview</h2>
+    </script>
+
+      <h2 class="panel-title" style="color: var(--neon-green);">🚀 Advanced Features</h2>
+      
+      <div style="padding:1.5rem;background:rgba(0,0,0,0.5);border-radius:8px;min-height:250px;color:#fff;">
 
       <div id="preview-content" style="padding:1.5rem;background:rgba(0,0,0,0.5);border-radius:8px;min-height:250px;color:#fff;">
         <?php
@@ -1448,14 +1450,12 @@ Just tell me what you want, then say 'RUN IT' and watch the magic! ✨"></textar
           } else {
             echo '<p style="text-align:center;color:#888;padding:2rem;">Type a command to see a preview here...</p>';
           }
-        } else {
-          echo '<p style="text-align:center;color:#888;padding:2rem;">Type a command to see a preview here...</p>';
-        }
-        ?>
-      </div>
-    </div>
+    }
+    ?>
+  </div>
 </div>
-</div>
+
+<!-- Streaming Setup Box -->
 
 <!-- Streaming Setup Box -->
 <div class="edit-box" style="background:rgba(255,215,0,0.05);border-color:gold;margin-top:2rem;">
@@ -1490,8 +1490,12 @@ Just tell me what you want, then say 'RUN IT' and watch the magic! ✨"></textar
     <em>Stream control will be connected in the next update</em>
   </p>
 </div>
-<?php else: ?>
-  <?php wp_login_form(); ?>
-<?php endif; ?>
-</section>
+  <?php else: ?>
+    <div style="text-align:center;padding:4rem 2rem;">
+      <h2 style="color:var(--neon-cyan);margin-bottom:2rem;">🔒 Authentication Required</h2>
+      <?php wp_login_form(); ?>
+    </div>
+  <?php endif; ?>
+</div>
+
 <?php get_footer(); ?>
