@@ -11,6 +11,47 @@ No placeholders, no errors, no downtime.
 
 ---
 
+## 📁 Repository Overview
+
+This is a **WordPress Theme** repository for 3000 Studios with the following structure:
+
+- **Language**: PHP 7.4+ (WordPress theme), JavaScript (ES2021+), CSS (Tailwind)
+- **Framework**: Custom WordPress theme with AI integration
+- **Package Manager**: npm (NOT pnpm or yarn)
+- **Linting**: ESLint configured via `eslint.config.js` and `.eslintrc.json`
+
+### Key Directories:
+- `/` - WordPress theme root (PHP templates: `page-*.php`, `header.php`, `footer.php`, etc.)
+- `/js/` - JavaScript files
+- `/assets/` - CSS, images, and other assets
+- `/includes/` - PHP includes and helper files
+- `/scripts/` - Build and automation scripts
+- `/.github/` - GitHub configuration, workflows, and this instructions file
+
+### Installation & Setup:
+```bash
+# Install dependencies
+npm install
+
+# Run linter
+npm run lint
+
+# Watch for changes (auto-update system)
+npm run watch
+
+# Development mode with auto-refresh
+npm run dev
+```
+
+### WordPress Theme Structure:
+- Page templates follow pattern: `page-{name}.php` (e.g., `page-ai-dashboard.php`)
+- Main functions in `functions.php`
+- Header/Footer in `header.php`/`footer.php`
+- Theme styles in `style.css` (main stylesheet)
+- Additional styles in `/assets/css/`
+
+---
+
 ## 🚀 Core Capabilities
 
 ### Autonomy
@@ -208,34 +249,92 @@ No placeholders, no errors, no downtime.
 ## 🎯 Technical Standards
 
 ### Code Quality
-- Follow ESLint rules configured in project
-- Use TypeScript for type safety when applicable
-- Write self-documenting code with clear naming
-- Include JSDoc comments for functions
+- **Linting**: Always run `npm run lint` before committing
+- ESLint configured via `eslint.config.js` and `.eslintrc.json`
+- **No TypeScript** - This project uses vanilla JavaScript
+- Write self-documenting code with clear, descriptive naming
+- **Documentation**:
+  - Include JSDoc comments for all functions
+  - Add inline comments for complex logic
+  - Use WordPress documentation standards for PHP
+- **Code review**: Use `npm run check` which runs lint
+- **Husky hooks**: Pre-commit hooks are configured in `.husky/`
 
 ### WordPress Development
-- Follow WordPress Coding Standards
+- Follow WordPress Coding Standards (WPCS)
 - Use WordPress hooks and filters properly
-- Sanitize all inputs, escape all outputs
-- Implement proper nonce verification
+- **Sanitize all inputs**: Use `sanitize_text_field()`, `sanitize_email()`, etc.
+- **Escape all outputs**: Use `esc_html()`, `esc_attr()`, `esc_url()`, etc.
+- **Nonce verification**: Always use `wp_nonce_field()` and `wp_verify_nonce()` for forms
+- **Database queries**: Use `$wpdb->prepare()` for all queries
+- **Enqueue scripts/styles**: Use `wp_enqueue_script()` and `wp_enqueue_style()` in `functions.php`
+- **Translation ready**: Use `__()`, `_e()`, `esc_html__()` for text strings
 
-### JavaScript/React
-- Use modern ES6+ syntax
-- Prefer functional components with hooks
-- Implement proper error boundaries
-- Use Tailwind CSS for styling
+### JavaScript Development
+- Use modern ES6+ syntax (ES2021 configured in ESLint)
+- **ESLint**: Run `npm run lint` to check code quality
+- **No React** - This is vanilla JavaScript for WordPress theme
+- Use `const` and `let` instead of `var`
+- Use arrow functions for callbacks
+- Implement proper error handling with try-catch
+- Use async/await for asynchronous operations
+- **jQuery**: WordPress includes jQuery, but prefer vanilla JS when possible
+- **File location**: Place JS files in `/js/` directory
+- **Enqueue in WordPress**: Add scripts via `wp_enqueue_script()` in `functions.php`
 
 ### PHP Development
-- Use PSR-12 coding standards
-- Implement proper error handling
-- Use prepared statements for database queries
+- Use PSR-12 coding standards where applicable (WordPress has its own standards that take precedence)
+- **PHP Version**: 7.4+ required
+- Implement proper error handling with try-catch blocks
+- Use prepared statements for database queries (`$wpdb->prepare()`)
 - Follow WordPress theme development best practices
+- **Naming conventions**:
+  - Functions: `prefix_function_name()` (use `threek_` prefix for this theme)
+  - Classes: `PascalCase` with meaningful names
+  - Variables: `$snake_case` following WordPress conventions
+- **File naming**:
+  - Page templates: `page-{slug}.php` (must have Template Name comment)
+  - Includes: Descriptive names in `/includes/` directory
 
 ### Version Control
 - Write clear, descriptive commit messages
-- Use conventional commit format
-- Create feature branches for new work
-- Keep commits atomic and focused
+- **Commit format**: Use conventional commits (e.g., `feat:`, `fix:`, `docs:`, `style:`, etc.)
+- Create feature branches for new work (pattern: `feature/description` or `copilot/description`)
+- Keep commits atomic and focused on single changes
+- **Never commit**:
+  - `node_modules/` (in .gitignore)
+  - Sensitive credentials or API keys
+  - Compiled/minified files unless necessary
+  - Temporary or backup files
+
+---
+
+## 🧪 Testing & Validation
+
+### Testing Strategy
+- **No automated tests**: This project uses manual testing
+- Test WordPress theme functionality in a local WordPress installation
+- Verify all page templates render correctly
+- Test JavaScript functionality in browser console
+- Validate PHP syntax: `php -l filename.php`
+- Check ESLint: `npm run lint`
+
+### Local Development
+1. Set up local WordPress environment (XAMPP, WAMP, Local, etc.)
+2. Clone/copy theme to `wp-content/themes/` directory (folder name should match repository name)
+3. Activate theme in WordPress admin (Dashboard → Appearance → Themes)
+4. Install npm dependencies: `npm install`
+5. Use `npm run dev` for development with auto-refresh
+
+### Manual Testing Checklist
+- [ ] All page templates load without errors
+- [ ] JavaScript console shows no errors
+- [ ] PHP error log shows no warnings/errors
+- [ ] Forms submit correctly with nonce verification
+- [ ] Styles render as expected (Tailwind + custom CSS)
+- [ ] AI dashboard functionality works
+- [ ] Payment integrations function properly
+- [ ] Mobile responsive design works
 
 ---
 
@@ -289,6 +388,52 @@ No placeholders, no errors, no downtime.
 
 ---
 
+## 🔄 Common Development Tasks
+
+### Creating a New Page Template
+1. Create file: `page-{slug}.php` in root directory
+2. Add Template Name comment at top:
+   ```php
+   <?php
+   /**
+    * Template Name: Your Page Name
+    * Description: Brief description
+    */
+   ```
+3. Include header: `<?php get_header(); ?>`
+4. Add your content/logic
+5. Include footer: `<?php get_footer(); ?>`
+6. Ensure all outputs are escaped and inputs sanitized
+
+### Adding JavaScript Functionality
+1. Create JS file in `/js/` directory
+2. Enqueue in `functions.php`:
+   ```php
+   wp_enqueue_script('script-handle', get_template_directory_uri() . '/js/your-script.js', array('jquery'), '1.0', true);
+   ```
+3. Localize script if passing PHP data to JS:
+   ```php
+   wp_localize_script('script-handle', 'objectName', array('key' => 'value'));
+   ```
+
+### Adding CSS Styles
+1. Primary: Add to `style.css` (required WordPress theme file)
+2. Additional: Create files in `/assets/css/`
+3. Enqueue in `functions.php`:
+   ```php
+   wp_enqueue_style('style-handle', get_template_directory_uri() . '/assets/css/your-style.css');
+   ```
+4. Use Tailwind utility classes for consistent styling
+
+### Working with WordPress APIs
+- **Database**: Use `$wpdb->prepare()` for all queries
+- **Options**: Use `get_option()`, `update_option()`, `delete_option()`
+- **Post meta**: Use `get_post_meta()`, `update_post_meta()`
+- **User meta**: Use `get_user_meta()`, `update_user_meta()`
+- **Transients**: Use `get_transient()`, `set_transient()` for caching
+
+---
+
 ## 🚦 Activation Protocol
 
 When activated, Copilot Ωmega will:
@@ -297,6 +442,36 @@ When activated, Copilot Ωmega will:
 3. ✅ Identify areas for improvement
 4. ✅ Await commands or proceed with autonomous optimization
 5. ✅ Status indicator: Cyan glow in status bar
+
+---
+
+## 📚 Quick Reference
+
+### Essential Commands
+```bash
+npm install              # Install dependencies
+npm run lint            # Run ESLint
+npm run check           # Run all checks (lint)
+npm run watch           # Watch for file changes
+npm run dev             # Development mode with auto-refresh
+npm run version:bump    # Bump version number
+```
+
+### File Patterns to Follow
+- Page templates: `page-{slug}.php`
+- PHP functions: `threek_function_name()`
+- JavaScript files: `{descriptive-name}.js` in `/js/`
+- CSS files: `{descriptive-name}.css` in `/assets/css/`
+- Includes: Place helper PHP files in `/includes/`
+
+### Key Files
+- `functions.php` - Theme functions and WordPress hooks
+- `style.css` - Main theme stylesheet (required)
+- `header.php` - Common header for all pages
+- `footer.php` - Common footer for all pages
+- `index.php` - Main template fallback
+- `.eslintrc.json` + `eslint.config.js` - ESLint configuration
+- `package.json` - npm configuration and scripts
 
 ---
 
