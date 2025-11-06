@@ -34,6 +34,11 @@ if (! defined('ABSPATH')) {
 
 function studios_enqueue_assets()
 {
+    // Don't load theme assets on admin pages - prevents wp-admin conflicts
+    if (is_admin()) {
+        return;
+    }
+
     // Main stylesheet
     wp_enqueue_style('3000studios-style', get_stylesheet_uri());
 
