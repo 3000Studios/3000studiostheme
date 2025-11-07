@@ -412,11 +412,13 @@ class Studios_Monetization
             'currency' => 'BTC'
         ], $atts);
 
+        $unique_id = uniqid('crypto-');
+
         return '
         <div class="crypto-payment-button monetized-element" style="margin: 2rem 0; text-align: center; padding: 2rem; background: rgba(255, 165, 0, 0.1); border: 1px solid #ffa500; border-radius: 12px;">
             <button 
                 class="payment-button" 
-                onclick="showCryptoWallet()"
+                onclick="showCryptoWallet_' . $unique_id . '()"
                 style="
                     background: linear-gradient(135deg, #ffa500, #ff8c00);
                     color: white;
@@ -432,25 +434,56 @@ class Studios_Monetization
             >
                 🪙 ' . esc_html($description) . ' - $' . number_format($atts['amount'], 2) . ' (' . esc_html($atts['currency']) . ')
             </button>
-            <div id="crypto-wallet-info" style="display: none; margin-top: 1rem; padding: 1rem; background: rgba(0, 0, 0, 0.3); border-radius: 8px;">
+            <div id="crypto-wallet-info-' . $unique_id . '" style="display: none; margin-top: 1rem; padding: 1rem; background: rgba(0, 0, 0, 0.3); border-radius: 8px;">
                 <p style="color: #ffa500; font-weight: bold; margin-bottom: 0.5rem;">' . esc_html($atts['currency']) . ' Wallet Address:</p>
                 <p style="color: #fff; word-break: break-all; font-family: monospace; font-size: 0.9rem;">' . esc_html($atts['wallet']) . '</p>
-                <button onclick="copyCryptoWallet()" style="margin-top: 1rem; padding: 0.5rem 1rem; background: #ffa500; color: #000; border: none; border-radius: 5px; cursor: pointer; font-weight: bold;">
+                <button onclick="copyCryptoWallet_' . $unique_id . '()" style="margin-top: 1rem; padding: 0.5rem 1rem; background: #ffa500; color: #000; border: none; border-radius: 5px; cursor: pointer; font-weight: bold;">
                     📋 Copy Address
                 </button>
+                <p id="crypto-copy-status-' . $unique_id . '" style="margin-top: 0.5rem; color: #00ff00; display: none;">✓ Copied!</p>
             </div>
         </div>
         
         <script>
-        function showCryptoWallet() {
-            document.getElementById("crypto-wallet-info").style.display = "block";
+        function showCryptoWallet_' . $unique_id . '() {
+            document.getElementById("crypto-wallet-info-' . $unique_id . '").style.display = "block";
         }
         
-        function copyCryptoWallet() {
+        function copyCryptoWallet_' . $unique_id . '() {
             const walletAddress = "' . esc_js($atts['wallet']) . '";
-            navigator.clipboard.writeText(walletAddress).then(function() {
-                alert("Wallet address copied to clipboard!");
-            });
+            const statusEl = document.getElementById("crypto-copy-status-' . $unique_id . '");
+            
+            if (navigator.clipboard && window.isSecureContext) {
+                navigator.clipboard.writeText(walletAddress).then(function() {
+                    statusEl.style.display = "block";
+                    setTimeout(function() { statusEl.style.display = "none"; }, 3000);
+                }).catch(function() {
+                    fallbackCopy_' . $unique_id . '(walletAddress, statusEl);
+                });
+            } else {
+                fallbackCopy_' . $unique_id . '(walletAddress, statusEl);
+            }
+        }
+        
+        function fallbackCopy_' . $unique_id . '(text, statusEl) {
+            const textArea = document.createElement("textarea");
+            textArea.value = text;
+            textArea.style.position = "fixed";
+            textArea.style.left = "-999999px";
+            document.body.appendChild(textArea);
+            textArea.focus();
+            textArea.select();
+            try {
+                document.execCommand("copy");
+                statusEl.textContent = "✓ Copied!";
+                statusEl.style.display = "block";
+                setTimeout(function() { statusEl.style.display = "none"; }, 3000);
+            } catch (err) {
+                statusEl.textContent = "⚠️ Please copy manually";
+                statusEl.style.color = "#ff0000";
+                statusEl.style.display = "block";
+            }
+            document.body.removeChild(textArea);
         }
         </script>';
     }

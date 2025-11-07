@@ -32,6 +32,7 @@ get_header();
     </div>
   <?php else : ?>
     <!-- Manual Product Grid (when WooCommerce is not active) -->
+    <!-- NOTE: Replace #buy links with actual payment processing or use shortcodes like [studios_stripe_button amount="49.99"] -->
     <div class="manual-products-grid" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 2rem; margin-top: 2rem;">
       
       <!-- Product 1: AI Dashboard Pro -->
