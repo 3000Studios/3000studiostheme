@@ -27,6 +27,8 @@ class Studios_Monetization
         add_action('wp_ajax_studios_track_revenue', [__CLASS__, 'ajax_track_revenue']);
         add_shortcode('studios_stripe_button', [__CLASS__, 'render_stripe_button']);
         add_shortcode('studios_paypal_button', [__CLASS__, 'render_paypal_button']);
+        add_shortcode('studios_cashapp_button', [__CLASS__, 'render_cashapp_button']);
+        add_shortcode('studios_crypto_button', [__CLASS__, 'render_crypto_button']);
         add_shortcode('studios_affiliate_link', [__CLASS__, 'render_affiliate_link']);
     }
 
@@ -355,6 +357,102 @@ class Studios_Monetization
         }
 
         return '<a href="' . esc_url($atts['url']) . '" class="' . esc_attr($atts['class']) . '" target="_blank" rel="nofollow">' . $content . '</a>';
+    }
+
+    /**
+     * Render Cash App button shortcode
+     */
+    public static function render_cashapp_button($atts)
+    {
+        $atts = shortcode_atts([
+            'amount' => '9.99',
+            'cashtag' => get_option('studios_cashapp_cashtag', '$3000Studios'),
+            'description' => 'Purchase',
+        ], $atts);
+
+        $cash_app_link = 'https://cash.app/' . str_replace('$', '', $atts['cashtag']) . '/' . $atts['amount'];
+
+        return '
+        <div class="cashapp-payment-button monetized-element" style="margin: 2rem 0; text-align: center;">
+            <a 
+                href="' . esc_url($cash_app_link) . '" 
+                class="payment-button" 
+                target="_blank"
+                rel="noopener noreferrer"
+                style="
+                    display: inline-block;
+                    background: linear-gradient(135deg, #00d54b, #00c853);
+                    color: white;
+                    border: none;
+                    padding: 15px 30px;
+                    font-size: 18px;
+                    font-weight: bold;
+                    border-radius: 25px;
+                    cursor: pointer;
+                    text-decoration: none;
+                    transition: all 0.3s ease;
+                    box-shadow: 0 4px 15px rgba(0, 213, 75, 0.3);
+                "
+            >
+                💵 ' . esc_html($description) . ' - $' . number_format($atts['amount'], 2) . '
+            </a>
+            <p style="margin-top: 0.5rem; color: #aaa; font-size: 0.9rem;">Pay via Cash App: ' . esc_html($atts['cashtag']) . '</p>
+        </div>';
+    }
+
+    /**
+     * Render Crypto payment button shortcode
+     */
+    public static function render_crypto_button($atts)
+    {
+        $atts = shortcode_atts([
+            'amount' => '9.99',
+            'description' => 'Purchase',
+            'wallet' => get_option('studios_crypto_wallet', ''),
+            'currency' => 'BTC'
+        ], $atts);
+
+        return '
+        <div class="crypto-payment-button monetized-element" style="margin: 2rem 0; text-align: center; padding: 2rem; background: rgba(255, 165, 0, 0.1); border: 1px solid #ffa500; border-radius: 12px;">
+            <button 
+                class="payment-button" 
+                onclick="showCryptoWallet()"
+                style="
+                    background: linear-gradient(135deg, #ffa500, #ff8c00);
+                    color: white;
+                    border: none;
+                    padding: 15px 30px;
+                    font-size: 18px;
+                    font-weight: bold;
+                    border-radius: 25px;
+                    cursor: pointer;
+                    transition: all 0.3s ease;
+                    box-shadow: 0 4px 15px rgba(255, 165, 0, 0.3);
+                "
+            >
+                🪙 ' . esc_html($description) . ' - $' . number_format($atts['amount'], 2) . ' (' . esc_html($atts['currency']) . ')
+            </button>
+            <div id="crypto-wallet-info" style="display: none; margin-top: 1rem; padding: 1rem; background: rgba(0, 0, 0, 0.3); border-radius: 8px;">
+                <p style="color: #ffa500; font-weight: bold; margin-bottom: 0.5rem;">' . esc_html($atts['currency']) . ' Wallet Address:</p>
+                <p style="color: #fff; word-break: break-all; font-family: monospace; font-size: 0.9rem;">' . esc_html($atts['wallet']) . '</p>
+                <button onclick="copyCryptoWallet()" style="margin-top: 1rem; padding: 0.5rem 1rem; background: #ffa500; color: #000; border: none; border-radius: 5px; cursor: pointer; font-weight: bold;">
+                    📋 Copy Address
+                </button>
+            </div>
+        </div>
+        
+        <script>
+        function showCryptoWallet() {
+            document.getElementById("crypto-wallet-info").style.display = "block";
+        }
+        
+        function copyCryptoWallet() {
+            const walletAddress = "' . esc_js($atts['wallet']) . '";
+            navigator.clipboard.writeText(walletAddress).then(function() {
+                alert("Wallet address copied to clipboard!");
+            });
+        }
+        </script>';
     }
 }
 

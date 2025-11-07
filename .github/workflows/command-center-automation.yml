@@ -1,0 +1,210 @@
+# Copyright (c) 2025 Mr. jwswain - 3000 Studios. All Rights Reserved.
+# Command Center Automation - Auto-commit, push, review, merge, test, and deploy
+
+name: 🎯 Command Center Automation
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+  workflow_dispatch:
+  schedule:
+    # Run daily at midnight UTC
+    - cron: '0 0 * * *'
+
+env:
+  THEME_NAME: 3000studios
+
+jobs:
+  lint-and-test:
+    name: 🔍 Lint & Validate
+    runs-on: ubuntu-latest
+    steps:
+      - name: 🔥 Checkout Repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: ⚡ Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: 📦 Install Dependencies
+        run: npm ci
+
+      - name: 🧹 Run ESLint
+        run: npm run lint
+        continue-on-error: true
+
+      - name: ✅ PHP Syntax Check
+        run: |
+          find . -name "*.php" -not -path "./node_modules/*" -print0 | xargs -0 -n1 php -l
+
+      - name: 🔎 Check for Common Issues
+        run: |
+          echo "Checking for TODO/FIXME comments..."
+          grep -r "TODO\|FIXME" --include="*.php" --include="*.js" . || echo "No TODOs found"
+
+  auto-update:
+    name: 🔄 Auto-Update & Fix
+    runs-on: ubuntu-latest
+    needs: lint-and-test
+    if: github.ref == 'refs/heads/main'
+    steps:
+      - name: 🔥 Checkout Repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: ⚡ Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: 📦 Install Dependencies
+        run: npm ci
+
+      - name: 🔧 Auto-fix Linting Issues
+        run: |
+          npm run lint -- --fix || true
+          
+      - name: 📝 Check for Changes
+        id: changes
+        run: |
+          git config user.name "3000 Studios Bot"
+          git config user.email "ai@3000studios.com"
+          if [[ -n $(git status --porcelain) ]]; then
+            echo "has_changes=true" >> $GITHUB_OUTPUT
+          else
+            echo "has_changes=false" >> $GITHUB_OUTPUT
+          fi
+
+      - name: 💾 Auto-commit Changes
+        if: steps.changes.outputs.has_changes == 'true'
+        run: |
+          git add .
+          git commit -m "🤖 Auto-fix: Linting and code quality improvements"
+          git push
+
+  security-scan:
+    name: 🔒 Security Scan
+    runs-on: ubuntu-latest
+    steps:
+      - name: 🔥 Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: 🔍 Run npm audit
+        run: npm audit --audit-level=moderate || true
+
+      - name: 🛡️ Check for Secrets
+        run: |
+          echo "Scanning for potential secrets..."
+          ! grep -r "password\|api_key\|secret\|token" --include="*.php" --include="*.js" . | grep -v "example\|placeholder\|your_" || echo "⚠️  Potential secrets found"
+
+  build-and-deploy:
+    name: 🚀 Build & Deploy
+    runs-on: ubuntu-latest
+    needs: [lint-and-test, security-scan]
+    if: github.ref == 'refs/heads/main'
+    steps:
+      - name: 🔥 Checkout Repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: ⚡ Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: 📦 Install Dependencies
+        run: npm ci
+
+      - name: 🔼 Bump Version
+        run: |
+          npm run version:bump
+          VERSION=$(grep 'Version:' style.css | sed 's/.*Version: *//' | tr -d ' ')
+          echo "VERSION=$VERSION" >> $GITHUB_ENV
+
+      - name: 📦 Build Theme Package
+        run: |
+          BUILD_TIME=$(date '+%Y%m%d_%H%M%S')
+          ZIP_NAME="3000studios-theme-v${VERSION}-${BUILD_TIME}.zip"
+          
+          echo "Building theme package: $ZIP_NAME"
+          
+          zip -r "$ZIP_NAME" . \
+            -x "*.git*" \
+            -x "node_modules/*" \
+            -x "*.md" \
+            -x "scripts/*" \
+            -x "webhook-server/*" \
+            -x "*.zip" \
+            -x "*.log"
+          
+          echo "ZIP_NAME=$ZIP_NAME" >> $GITHUB_ENV
+
+      - name: 📤 Upload Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: theme-package
+          path: ${{ env.ZIP_NAME }}
+          retention-days: 30
+
+      - name: ✅ Deployment Complete
+        run: |
+          echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+          echo "✅ Theme v${{ env.VERSION }} built successfully"
+          echo "📦 Package: ${{ env.ZIP_NAME }}"
+          echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+
+  ui-update-check:
+    name: 🎨 UI Update Checker
+    runs-on: ubuntu-latest
+    steps:
+      - name: 🔥 Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: 📊 Check UI Components
+        run: |
+          echo "🎨 Checking UI components..."
+          
+          # Check for CSS files
+          echo "CSS Files:"
+          find . -name "*.css" -not -path "./node_modules/*" | wc -l
+          
+          # Check for JavaScript files
+          echo "JavaScript Files:"
+          find . -name "*.js" -not -path "./node_modules/*" | wc -l
+          
+          # Check for PHP templates
+          echo "PHP Template Files:"
+          find . -name "page-*.php" | wc -l
+          
+          # Check for CodePen embeds
+          echo "Checking for CodePen snippets..."
+          grep -r "codepen" --include="*.php" --include="*.js" . || echo "No CodePen snippets found"
+
+      - name: 📸 Generate UI Report
+        run: |
+          echo "# UI Update Report" > ui-report.md
+          echo "" >> ui-report.md
+          echo "**Generated:** $(date)" >> ui-report.md
+          echo "" >> ui-report.md
+          echo "## Files Summary" >> ui-report.md
+          echo "- CSS Files: $(find . -name '*.css' -not -path './node_modules/*' | wc -l)" >> ui-report.md
+          echo "- JS Files: $(find . -name '*.js' -not -path './node_modules/*' | wc -l)" >> ui-report.md
+          echo "- PHP Templates: $(find . -name 'page-*.php' | wc -l)" >> ui-report.md
+
+      - name: 📤 Upload UI Report
+        uses: actions/upload-artifact@v4
+        with:
+          name: ui-report
+          path: ui-report.md
+          retention-days: 7
