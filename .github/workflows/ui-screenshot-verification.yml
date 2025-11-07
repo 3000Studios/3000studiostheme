@@ -17,6 +17,8 @@ jobs:
   ui-screenshot:
     name: 📸 Capture UI Screenshots
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
     steps:
       - name: 🔥 Checkout Repository
         uses: actions/checkout@v4
@@ -100,6 +102,8 @@ jobs:
   verify-responsiveness:
     name: 📱 Verify Responsive Design
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
     steps:
       - name: 🔥 Checkout Repository
         uses: actions/checkout@v4
@@ -151,6 +155,8 @@ jobs:
   check-accessibility:
     name: ♿ Accessibility Check
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
     steps:
       - name: 🔥 Checkout Repository
         uses: actions/checkout@v4
@@ -210,6 +216,8 @@ jobs:
   performance-check:
     name: ⚡ Performance Check
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
     steps:
       - name: 🔥 Checkout Repository
         uses: actions/checkout@v4
@@ -276,6 +284,7 @@ jobs:
     runs-on: ubuntu-latest
     needs: [ui-screenshot, verify-responsiveness, check-accessibility, performance-check]
     if: always()
+    permissions: {}
     steps:
       - name: 📊 Final Summary
         run: |
