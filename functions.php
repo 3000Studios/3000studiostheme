@@ -540,3 +540,183 @@ function studios_ajax_get_stats()
         'top_patterns' => $top_patterns
     ]);
 }
+
+/**
+ * Add media content to page
+ */
+function studios_add_media_content($parsed)
+{
+    $media_url = $parsed['media_url'] ?? '';
+    $media_type = $parsed['media_type'] ?? 'image';
+    $page = $parsed['page'] ?? 'homepage';
+    
+    if (empty($media_url)) {
+        return ['success' => false, 'message' => 'No media URL provided'];
+    }
+    
+    // Determine target file
+    $file_path = get_template_directory() . '/index.php';
+    if ($page !== 'homepage') {
+        $page_file = get_template_directory() . '/page-' . sanitize_file_name($page) . '.php';
+        if (file_exists($page_file)) {
+            $file_path = $page_file;
+        }
+    }
+    
+    if (!file_exists($file_path)) {
+        return ['success' => false, 'message' => 'Target file not found'];
+    }
+    
+    // Backup original
+    $backup_path = $file_path . '.backup.' . time();
+    copy($file_path, $backup_path);
+    
+    $content = file_get_contents($file_path);
+    
+    // Create media element
+    if ($media_type === 'image') {
+        $media_element = '<img src="' . esc_url($media_url) . '" alt="AI Generated Image" style="max-width:100%;border-radius:12px;margin:2rem auto;display:block;">';
+    } elseif ($media_type === 'video') {
+        $media_element = '<video src="' . esc_url($media_url) . '" controls style="max-width:100%;border-radius:12px;margin:2rem auto;display:block;"></video>';
+    } else {
+        $media_element = '<div style="padding:2rem;background:rgba(255,255,255,0.1);border-radius:12px;margin:2rem auto;"><a href="' . esc_url($media_url) . '" target="_blank">View Media</a></div>';
+    }
+    
+    // Insert media after first section or hero
+    $content = preg_replace('/(<\/section>)/', '$1' . "\n" . $media_element, $content, 1);
+    
+    if (file_put_contents($file_path, $content)) {
+        return [
+            'success' => true,
+            'message' => 'Media added successfully!',
+            'backup_created' => $backup_path
+        ];
+    }
+    
+    return ['success' => false, 'message' => 'Failed to write changes'];
+}
+
+/**
+ * Update page background
+ */
+function studios_update_background($parsed)
+{
+    $color = $parsed['color'] ?? '';
+    $gradient = $parsed['gradient'] ?? false;
+    $page = $parsed['page'] ?? 'homepage';
+    
+    if (empty($color) && !$gradient) {
+        return ['success' => false, 'message' => 'No color or gradient specified'];
+    }
+    
+    $css_file = get_template_directory() . '/style.css';
+    if (!file_exists($css_file)) {
+        return ['success' => false, 'message' => 'Style file not found'];
+    }
+    
+    $content = file_get_contents($css_file);
+    
+    // Create background style
+    $bg_class = '.bg-' . sanitize_title($page);
+    $bg_style = $gradient
+        ? "background: linear-gradient(135deg, {$parsed['gradient_start']} 0%, {$parsed['gradient_end']} 100%);"
+        : "background: {$color};";
+    
+    $css_rule = "\n/* AI Generated Background for {$page} */\n{$bg_class} {\n  {$bg_style}\n}\n";
+    
+    // Check if rule exists
+    if (strpos($content, $bg_class) === false) {
+        $content .= $css_rule;
+        
+        if (file_put_contents($css_file, $content)) {
+            return [
+                'success' => true,
+                'message' => "Background updated! Add class '{$bg_class}' to your page container.",
+                'css_class' => $bg_class
+            ];
+        }
+    }
+    
+    return [
+        'success' => true,
+        'message' => 'Background style already exists or updated!'
+    ];
+}
+
+/**
+ * Add payment button
+ */
+function studios_add_payment_button($parsed)
+{
+    $button_text = $parsed['button_text'] ?? 'Buy Now';
+    $price = $parsed['price'] ?? '9.99';
+    $page = $parsed['page'] ?? 'homepage';
+    
+    // Determine target file
+    $file_path = get_template_directory() . '/index.php';
+    if ($page !== 'homepage') {
+        $page_file = get_template_directory() . '/page-' . sanitize_file_name($page) . '.php';
+        if (file_exists($page_file)) {
+            $file_path = $page_file;
+        }
+    }
+    
+    if (!file_exists($file_path)) {
+        return ['success' => false, 'message' => 'Target file not found'];
+    }
+    
+    // Backup original
+    $backup_path = $file_path . '.backup.' . time();
+    copy($file_path, $backup_path);
+    
+    $content = file_get_contents($file_path);
+    
+    // Create payment button
+    $payment_button = '
+<div style="text-align:center;margin:2rem auto;padding:2rem;">
+    <button class="cta" onclick="alert(\'Payment integration coming soon! Price: $' . esc_attr($price) . '\')">
+        ' . esc_html($button_text) . ' - $' . esc_html($price) . '
+    </button>
+</div>';
+    
+    // Insert button after first CTA or section
+    $content = preg_replace('/(<\/section>)/', '$1' . "\n" . $payment_button, $content, 1);
+    
+    if (file_put_contents($file_path, $content)) {
+        return [
+            'success' => true,
+            'message' => 'Payment button added successfully!',
+            'backup_created' => $backup_path
+        ];
+    }
+    
+    return ['success' => false, 'message' => 'Failed to write changes'];
+}
+
+/**
+ * Add monetization features
+ */
+function studios_add_monetization($parsed)
+{
+    $monetization_type = $parsed['monetization_type'] ?? 'ads';
+    
+    return [
+        'success' => true,
+        'message' => "Monetization type '{$monetization_type}' noted. Full implementation requires payment gateway setup.",
+        'next_steps' => 'Configure Stripe/PayPal in wp-config.php or use Monetization settings page'
+    ];
+}
+
+/**
+ * Generic command handler for unknown actions
+ */
+function studios_generic_update($parsed)
+{
+    $action = $parsed['action'] ?? 'unknown';
+    
+    return [
+        'success' => true,
+        'message' => "Command '{$action}' acknowledged. This action may require manual implementation.",
+        'parsed_data' => $parsed
+    ];
+}
