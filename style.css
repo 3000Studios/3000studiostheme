@@ -572,3 +572,52 @@ h1, h2, h3, h4, h5, h6 {
     font-size: 1.8rem;
   }
 }
+
+/* ==== AI GENERATED CONTENT STYLES ==== */
+.ai-media-container {
+  margin: 2rem auto;
+  text-align: center;
+  max-width: 100%;
+}
+
+.ai-generated-media {
+  max-width: 100%;
+  border-radius: 12px;
+  display: block;
+  margin: 0 auto;
+}
+
+.ai-image {
+  box-shadow: 0 4px 12px rgba(0, 255, 231, 0.3);
+}
+
+.ai-video {
+  max-height: 600px;
+}
+
+.ai-link {
+  padding: 2rem;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  border: 1px solid var(--aqua);
+}
+
+.ai-link a {
+  color: var(--aqua);
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.ai-link a:hover {
+  text-shadow: var(--glow-shadow);
+}
+
+.payment-button-container {
+  text-align: center;
+  margin: 2rem auto;
+  padding: 2rem;
+}
+
+.payment-button {
+  cursor: pointer;
+}

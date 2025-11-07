@@ -571,19 +571,27 @@ function studios_add_media_content($parsed)
     $backup_path = $file_path . '.backup.' . time();
     copy($file_path, $backup_path);
     
+    // Clean old backups
+    studios_cleanup_old_backups(dirname($file_path), 5);
+    
     $content = file_get_contents($file_path);
     
-    // Create media element
+    // Create media element with proper class for styling
     if ($media_type === 'image') {
-        $media_element = '<img src="' . esc_url($media_url) . '" alt="AI Generated Image" style="max-width:100%;border-radius:12px;margin:2rem auto;display:block;">';
+        $media_element = '<img src="' . esc_url($media_url) . '" alt="AI Generated Image" class="ai-generated-media ai-image">';
     } elseif ($media_type === 'video') {
-        $media_element = '<video src="' . esc_url($media_url) . '" controls style="max-width:100%;border-radius:12px;margin:2rem auto;display:block;"></video>';
+        $media_element = '<video src="' . esc_url($media_url) . '" controls class="ai-generated-media ai-video"></video>';
     } else {
-        $media_element = '<div style="padding:2rem;background:rgba(255,255,255,0.1);border-radius:12px;margin:2rem auto;"><a href="' . esc_url($media_url) . '" target="_blank">View Media</a></div>';
+        $media_element = '<div class="ai-generated-media ai-link"><a href="' . esc_url($media_url) . '" target="_blank" rel="noopener">View Media</a></div>';
     }
     
-    // Insert media after first section or hero
-    $content = preg_replace('/(<\/section>)/', '$1' . "\n" . $media_element, $content, 1);
+    // Wrap in container for consistent styling
+    $media_container = '<div class="ai-media-container">' . $media_element . '</div>';
+    
+    // Insert media after first section if found
+    if (strpos($content, '</section>') !== false) {
+        $content = preg_replace('/(<\/section>)/', '$1' . "\n" . $media_container, $content, 1);
+    }
     
     if (file_put_contents($file_path, $content)) {
         return [
@@ -669,28 +677,53 @@ function studios_add_payment_button($parsed)
     $backup_path = $file_path . '.backup.' . time();
     copy($file_path, $backup_path);
     
+    // Clean old backups (keep only last 5)
+    studios_cleanup_old_backups(dirname($file_path), 5);
+    
     $content = file_get_contents($file_path);
     
-    // Create payment button
+    // Create payment button with data attributes instead of onclick
     $payment_button = '
-<div style="text-align:center;margin:2rem auto;padding:2rem;">
-    <button class="cta" onclick="alert(\'Payment integration coming soon! Price: $' . esc_attr($price) . '\')">
+<div class="payment-button-container" style="text-align:center;margin:2rem auto;padding:2rem;">
+    <button class="cta payment-button" data-price="' . esc_attr($price) . '">
         ' . esc_html($button_text) . ' - $' . esc_html($price) . '
     </button>
 </div>';
     
-    // Insert button after first CTA or section
-    $content = preg_replace('/(<\/section>)/', '$1' . "\n" . $payment_button, $content, 1);
+    // Insert button after first CTA or section using safer HTML manipulation
+    if (strpos($content, '</section>') !== false) {
+        $content = preg_replace('/(<\/section>)/', '$1' . "\n" . $payment_button, $content, 1);
+    }
     
     if (file_put_contents($file_path, $content)) {
         return [
             'success' => true,
-            'message' => 'Payment button added successfully!',
+            'message' => 'Payment button added successfully! Note: Add click handler in JavaScript.',
             'backup_created' => $backup_path
         ];
     }
     
     return ['success' => false, 'message' => 'Failed to write changes'];
+}
+
+/**
+ * Clean up old backup files
+ */
+function studios_cleanup_old_backups($directory, $keep_count = 5)
+{
+    $backups = glob($directory . '/*.backup.*');
+    if (count($backups) > $keep_count) {
+        // Sort by modification time, oldest first
+        usort($backups, function($a, $b) {
+            return filemtime($a) - filemtime($b);
+        });
+        
+        // Delete oldest backups
+        $to_delete = array_slice($backups, 0, count($backups) - $keep_count);
+        foreach ($to_delete as $file) {
+            @unlink($file);
+        }
+    }
 }
 
 /**
