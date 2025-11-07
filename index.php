@@ -26,7 +26,7 @@ add_action('wp_footer', function () {
 <section class="hero">
   <canvas id="particle-bg" style="position:absolute;inset:0;z-index:-2;"></canvas>
   <div class="container">
-    <h1 style="font-size:72px;font-weight:bold;text-align:center;margin:40px 0;">HEY WE DID IT!</h1>
+    <h1 style="font-size:72px;font-weight:bold;text-align:center;margin:40px 0;">hello we are still under development</h1>
     <p>Code, creativity, and innovation collide here. Dive into the fusion of art, AI, and engineering.</p>
     <a class="cta" href="<?php echo home_url(); ?>/experience">Enter the Experience</a>
   </div>

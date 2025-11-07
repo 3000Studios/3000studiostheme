@@ -122,13 +122,8 @@
   <?php wp_body_open(); ?>
 
   <div class="preloader">
-    <div class="pre-rings">
-      <div class="pre-ring">
-        <div class="pre-sector">3</div>
-        <div class="pre-sector">0</div>
-        <div class="pre-sector">0</div>
-        <div class="pre-sector">0</div>
-      </div>
+    <div class="field">
+      <progress id="loading" indeterminate>loading…</progress>
     </div>
   </div>
 

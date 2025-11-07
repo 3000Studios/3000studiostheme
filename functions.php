@@ -65,6 +65,11 @@ function studios_enqueue_assets()
 
     // Enqueue ball pit footer animation
     wp_enqueue_script('3000studios-ballpit', get_template_directory_uri() . '/assets/js/ball-pit-footer.js', array(), '1.0.0', true);
+
+    // Enqueue loader CSS
+    if (file_exists(get_template_directory() . '/assets/css/loader.css')) {
+        wp_enqueue_style('3000studios-loader', get_template_directory_uri() . '/assets/css/loader.css', array(), '1.0.0');
+    }
 }
 add_action('wp_enqueue_scripts', 'studios_enqueue_assets');
 

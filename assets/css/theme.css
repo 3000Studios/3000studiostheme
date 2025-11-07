@@ -57,3 +57,113 @@
     transform: translateX(10px) !important;
   }
 }
+
+/*
+ * 3000 Studios Neon-Futuristic Brand Styles
+ */
+
+@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Rajdhani:wght@400;700&display=swap');
+
+:root {
+  --neon-cyan: #00ffff;
+  --electric-purple: #9d4edd;
+  --lime-green: #00ff00;
+  --dark-bg: #0d0d0d;
+  --light-text: #e0e0e0;
+  --glow-shadow: 0 0 5px var(--neon-cyan), 0 0 10px var(--neon-cyan), 0 0 15px var(--neon-cyan);
+}
+
+body {
+  background-color: var(--dark-bg);
+  color: var(--light-text);
+  font-family: 'Rajdhani', sans-serif;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: 'Orbitron', sans-serif;
+  color: var(--neon-cyan);
+  text-shadow: var(--glow-shadow);
+}
+
+a {
+  color: var(--neon-cyan);
+  text-decoration: none;
+  transition: all 0.3s ease;
+}
+
+a:hover, a:focus {
+  color: var(--lime-green);
+  text-shadow: 0 0 5px var(--lime-green), 0 0 10px var(--lime-green);
+}
+
+.site-header {
+    background: transparent;
+    width: 100%;
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 1000;
+}
+
+.site-header .container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    padding: 0 20px;
+}
+
+.nav-menu, .nav ul {
+    display: flex;
+    flex-direction: row !important; /* Ensure horizontal layout */
+    align-items: center;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.nav-menu li, .nav ul li {
+    margin: 0 10px;
+}
+
+.nav-menu a, .site-header .nav ul a {
+    color: var(--light-text);
+    font-family: 'Orbitron', sans-serif;
+    text-transform: uppercase;
+    padding: 10px 20px;
+    border: 1px solid transparent;
+    transition: all 0.3s ease;
+    position: relative;
+}
+
+.nav-menu a:hover, .site-header .nav ul a:hover {
+    color: var(--neon-cyan);
+    border-color: var(--neon-cyan);
+    background-color: rgba(0, 255, 255, 0.1);
+    box-shadow: var(--glow-shadow);
+    transform: translateY(-2px);
+}
+
+.button, button, input[type="submit"] {
+  font-family: 'Orbitron', sans-serif;
+  background: transparent;
+  color: var(--neon-cyan);
+  border: 2px solid var(--neon-cyan);
+  padding: 10px 20px;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  box-shadow: var(--glow-shadow);
+}
+
+.button:hover, button:hover, input[type="submit"]:hover {
+  background: var(--neon-cyan);
+  color: var(--dark-bg);
+  box-shadow: 0 0 20px var(--neon-cyan), 0 0 30px var(--neon-cyan);
+}
+
+.glow-effect {
+  box-shadow: var(--glow-shadow);
+}
