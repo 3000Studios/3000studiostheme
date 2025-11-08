@@ -1,0 +1,55 @@
+name: 🔒 Security Watchdog (nightly)
+on:
+  schedule: [ { cron: "15 5 * * *" } ]  # 12:15 AM ET
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  security-events: write
+
+jobs:
+  scan:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with: { fetch-depth: 0 }
+
+      - name: Trivy scan (repo)
+        uses: aquasecurity/trivy-action@0.24.0
+        with:
+          scan-type: fs
+          format: sarif
+          output: trivy-results.sarif
+          ignore-unfixed: true
+
+      - name: Upload SARIF
+        uses: github/codeql-action/upload-sarif@v3
+        with:
+          sarif_file: trivy-results.sarif
+
+      - name: Write Markdown summary
+        run: |
+          mkdir -p reports/security
+          OUT="reports/security/security-$(date -u +%F).md"
+          echo "# Security Report $(date -u +"%F %TZ")" > "$OUT"
+          echo "- Scanner: Trivy" >> "$OUT"
+          echo "- SARIF: trivy-results.sarif" >> "$OUT"
+
+      - name: Commit report
+        run: |
+          git config user.name "3000 Studios Bot"
+          git config user.email "bot@3000studios.com"
+          git add reports/security/*.md
+          git commit -m "chore(reports): nightly security report" || echo "No report changes"
+          git push
+
+      - name: Mirror to Google Drive (optional)
+        if: env.DRIVE_ENABLED == 'true'
+        env:
+          DRIVE_ENABLED: ${{ vars.DRIVE_ENABLED }}
+          RCLONE_CONF_BASE64: ${{ secrets.RCLONE_CONF_BASE64 }}
+          DRIVE_FOLDER_ID: ${{ secrets.DRIVE_FOLDER_ID }}
+        run: |
+          echo "$RCLONE_CONF_BASE64" | base64 -d > rclone.conf
+          curl -fsSL https://rclone.org/install.sh | sudo bash
+          rclone --config rclone.conf copy reports "gdrive:${DRIVE_FOLDER_ID}/reports" --create-empty-src-dirs
