@@ -88,4 +88,24 @@
     });
   })();
 
+  // 6) Mobile menu toggle functionality
+  (function mobileMenuToggle(){
+    const toggle = document.querySelector('.menu-toggle');
+    const nav = document.querySelector('.nav');
+    if(!toggle || !nav) return;
+    
+    toggle.addEventListener('click', function(){
+      const isOpen = nav.classList.toggle('open');
+      toggle.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+    });
+    
+    // Close menu when clicking outside
+    document.addEventListener('click', function(e){
+      if(!nav.contains(e.target) && !toggle.contains(e.target)){
+        nav.classList.remove('open');
+        toggle.setAttribute('aria-expanded', 'false');
+      }
+    });
+  })();
+
 })();
