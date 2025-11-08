@@ -1,0 +1,25 @@
+name: 🧠 3000 Studios Command Center Automation Suite
+
+on:
+  workflow_run:
+    workflows: ["Auto Approve and Merge (always)"]
+    types:
+      - completed
+  schedule:
+    - cron: "0 0 * * *" # nightly
+
+jobs:
+  orchestrate:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Trigger Theme Deploy
+        run: gh workflow run 'theme-deploy.yml' --repo 3000Studios/3000studiostheme
+
+      - name: Trigger Repo Optimizer
+        run: gh workflow run 'repo-optimizer.yml' --repo 3000Studios/3000studiostheme
+
+      - name: Trigger Security Watchdog
+        run: gh workflow run 'security-watchdog.yml' --repo 3000Studios/3000studiostheme
+
+      - name: Trigger Command Center Sync
+        run: gh workflow run 'command-center-sync.yml' --repo 3000Studios/3000studiostheme
