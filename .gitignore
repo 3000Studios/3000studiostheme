@@ -1,10 +1,13 @@
 # 3000 Studios Theme - Git Ignore File
+# Copyright (c) 2025 3000 Studios. All rights reserved.
 
-# Node modules
+# Dependencies
 node_modules/
-npm-debug.log*
-yarn-debug.log*
-yarn-error.log*
+
+# Build outputs
+dist/
+build/
+*.zip
 
 # Environment variables and API keys (NEVER COMMIT KEYS!)
 .env
@@ -12,30 +15,6 @@ yarn-error.log*
 .env.*.local
 *_api_key*
 *.secret
-
-# OS files
-.DS_Store
-Thumbs.db
-desktop.ini
-
-# Editor directories and files
-.vscode/
-# Copyright (c) 2025 NAME.
-# All rights reserved.
-# Unauthorized copying, modification, distribution, or use of this is prohibited without express written permission.
-
-# Dependencies
-node_modules/
-package-lock.json
-
-# Build outputs
-dist/
-build/
-
-# Environment variables
-.env
-.env.local
-.env.*.local
 
 # IDE
 .vscode/*
@@ -45,9 +24,10 @@ build/
 *.swo
 *~
 
-# OS
+# OS files
 .DS_Store
 Thumbs.db
+desktop.ini
 
 # Logs
 *.log
