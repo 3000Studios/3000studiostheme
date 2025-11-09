@@ -46,7 +46,16 @@
     data.append('_ajax_nonce', ccData.nonce);
     data.append('prompt', prompt);
     fetch(ccData.ajaxUrl, { method: 'POST', body: data, credentials: 'same-origin' })
-      .then(r => r.json())
+      .then(r => {
+        if (!r.ok) {
+          throw new Error(`Network response was not ok: ${r.status} ${r.statusText}`);
+        }
+        const contentType = r.headers.get('content-type');
+        if (!contentType || !contentType.includes('application/json')) {
+          throw new Error(`Expected JSON response but got: ${contentType}`);
+        }
+        return r.json();
+      })
       .then(json => {
         if (!json.success) {
           responseBox.textContent = 'Error: ' + JSON.stringify(json.data || json);
@@ -65,7 +74,8 @@
         }
       })
       .catch(err => {
-        responseBox.textContent = 'Request failed: ' + err;
+        responseBox.textContent = 'Network error: ' + err.message + '. Please check your internet connection and try again.';
+        console.error('Command Center error:', err);
       });
   }
 
@@ -84,7 +94,16 @@
     data.append('title', 'AI Suggestion');
     data.append('content', content);
     fetch(ccData.ajaxUrl, { method: 'POST', body: data, credentials: 'same-origin' })
-      .then(r => r.json())
+      .then(r => {
+        if (!r.ok) {
+          throw new Error(`Network response was not ok: ${r.status} ${r.statusText}`);
+        }
+        const contentType = r.headers.get('content-type');
+        if (!contentType || !contentType.includes('application/json')) {
+          throw new Error(`Expected JSON response but got: ${contentType}`);
+        }
+        return r.json();
+      })
       .then(json => {
         if (json.success) {
           alert('Draft created: post id ' + json.data.id);
@@ -93,7 +112,8 @@
         }
       })
       .catch(err => {
-        alert('Request failed: ' + err);
+        alert('Network error: ' + err.message + '. Please check your internet connection and try again.');
+        console.error('Command Center draft creation error:', err);
       });
   });
 
