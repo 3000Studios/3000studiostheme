@@ -66,6 +66,12 @@ function cc_render_page() {
         <div style="margin: 20px 0;">
             <button id="cc-create-draft" class="button button-secondary" style="display:none;">Create Draft Post</button>
         </div>
+        
+        <div id="cc-images-section" style="margin: 20px 0; display:none;">
+            <h3>Images:</h3>
+            <div id="cc-images" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 15px; margin-top: 10px;">
+            </div>
+        </div>
     </div>
     <?php
 }
@@ -139,4 +145,33 @@ function cc_create_draft_handler() {
         wp_send_json_error(['error' => 'insert_failed', 'message' => $id->get_error_message()]);
     }
     wp_send_json_success(['id' => $id]);
+}
+
+add_action('wp_ajax_cc_search_images', 'cc_search_images_handler');
+function cc_search_images_handler() {
+    check_ajax_referer('cc-nonce');
+    if ( ! current_user_can('manage_options') ) {
+        wp_send_json_error(['error' => 'permission_denied']);
+    }
+    
+    $query = isset($_POST['query']) ? sanitize_text_field(wp_unslash($_POST['query'])) : '';
+    if ( empty($query) ) {
+        wp_send_json_error(['error' => 'empty_query', 'message' => 'Please provide a search query']);
+    }
+    
+    // Load API connector if not already loaded
+    require_once get_template_directory() . '/includes/api-connector.php';
+    
+    // Try Pexels first, then Unsplash, then Pixabay
+    $result = Studios_API_Connector::search_pexels($query, 6);
+    
+    if ( ! $result['success'] ) {
+        $result = Studios_API_Connector::search_unsplash($query, 6);
+    }
+    
+    if ( ! $result['success'] ) {
+        $result = Studios_API_Connector::search_pixabay($query, 'image', 6);
+    }
+    
+    wp_send_json_success($result);
 }
