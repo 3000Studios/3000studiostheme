@@ -330,6 +330,143 @@ footer.site-footer {
   font-weight: bold;
 }
 
+/* Livestream Page Styles */
+.livestream-video-container {
+  aspect-ratio: 16/9;
+  background: #111;
+  border-radius: 16px;
+  overflow: hidden;
+}
+
+.particle-bg {
+  position: absolute;
+  inset: 0;
+  z-index: -2;
+}
+
+.ghost-text-bg {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  pointer-events: none;
+  opacity: 0.06;
+}
+
+.ghost-text {
+  font: 900 20vw Orbitron, sans-serif;
+  letter-spacing: 0.1em;
+  color: #fff;
+}
+
+/* AI Dashboard Styles */
+.dashboard-subtitle {
+  color: #888;
+  font-size: 18px;
+}
+
+.form-label-primary {
+  color: var(--primary);
+  font-weight: 700;
+}
+
+.ai-status-ready h3 {
+  margin: 0 0 0.5rem 0;
+  color: var(--success);
+  font-size: 18px;
+}
+
+.ai-status-ready p {
+  margin: 0;
+  color: #ccc;
+  font-size: 14px;
+}
+
+.suggestions-container {
+  margin-top: 1.5rem;
+}
+
+.suggestions-title {
+  color: #888;
+  font-size: 13px;
+  margin: 0 0 0.75rem 0;
+}
+
+.empty-state {
+  color: #666;
+  text-align: center;
+  padding: 2rem;
+}
+
+.access-denied-container {
+  text-align: center;
+  padding: 4rem;
+}
+
+.access-denied-title {
+  color: var(--danger);
+}
+
+.access-denied-message {
+  color: #888;
+  font-size: 18px;
+}
+
+.toast-title {
+  margin: 0 0 0.5rem 0;
+  font-size: 18px;
+}
+
+.toast-message {
+  margin: 0;
+  color: #ccc;
+  font-size: 14px;
+}
+
+.command-parsed-box {
+  padding: 1rem;
+  background: rgba(0, 255, 231, 0.1);
+  border-radius: 8px;
+  border: 1px solid var(--primary);
+  margin-bottom: 1rem;
+}
+
+.command-parsed-title {
+  color: var(--primary);
+  margin: 0 0 0.5rem 0;
+}
+
+.command-parsed-item {
+  color: #ccc;
+  margin: 0;
+  font-size: 14px;
+}
+
+.page-structure-box {
+  padding: 1rem;
+  background: rgba(255, 255, 255, 0.03);
+  border-radius: 8px;
+}
+
+.page-structure-title {
+  color: #888;
+  margin: 0;
+  font-size: 13px;
+}
+
+.page-structure-info {
+  color: #666;
+  margin: 0.5rem 0 0 0;
+  font-size: 12px;
+}
+
+.execute-ready-message {
+  color: #00ff00;
+  margin-top: 1rem;
+  font-size: 14px;
+  text-align: center;
+}
+
 /* Mini responsive rules */
 @media (max-width:720px){
   .site-brand span{font-size:14px}
