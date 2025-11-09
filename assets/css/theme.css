@@ -27,6 +27,117 @@
 /* Footer attack smoothing */
 .footer-attack{transition:transform .08s ease-out}
 
+/* Footer Styles */
+footer.site-footer {
+  position: relative;
+  padding: 3rem 0;
+}
+
+.footer-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.footer-copyright {
+  margin: 0 0 1rem 0;
+  font-size: 16px;
+}
+
+.footer-email {
+  color: cyan;
+  text-decoration: none;
+}
+
+.footer-legal-notice {
+  margin-top: 2rem;
+  padding: 1.5rem;
+  background: rgba(255, 0, 0, 0.1);
+  border: 2px solid rgba(255, 0, 0, 0.5);
+  border-radius: 8px;
+  max-width: 800px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.footer-legal-title {
+  margin: 0 0 0.5rem 0;
+  color: #ff4444;
+  font-weight: bold;
+  font-size: 14px;
+}
+
+.footer-legal-text {
+  margin: 0;
+  font-size: 12px;
+  line-height: 1.6;
+  color: #ccc;
+}
+
+.footer-legal-text strong {
+  color: #ff6666;
+}
+
+.footer-legal-links {
+  margin: 0.5rem 0 0 0;
+  font-size: 11px;
+}
+
+.footer-legal-links a {
+  color: lime;
+  text-decoration: underline;
+}
+
+.footer-legal-links strong {
+  color: gold;
+}
+
+.footer-attributions {
+  margin-top: 2rem;
+  padding: 1rem;
+  background: rgba(100, 100, 100, 0.1);
+  border-radius: 8px;
+  cursor: pointer;
+  max-width: 800px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.footer-attributions summary {
+  font-size: 12px;
+  color: #888;
+  cursor: pointer;
+  user-select: none;
+}
+
+.footer-attributions-content {
+  margin-top: 1rem;
+  font-size: 11px;
+  color: #666;
+  text-align: left;
+  line-height: 1.8;
+}
+
+.footer-attributions-content ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.footer-attributions-content a {
+  color: cyan;
+}
+
+.footer-attributions-content p {
+  margin-top: 1rem;
+}
+
+.footer-powered-by {
+  margin-top: 2rem;
+  font-size: 11px;
+  color: #555;
+}
+
 /* Mini responsive rules */
 @media (max-width:720px){
   .site-brand span{font-size:14px}
