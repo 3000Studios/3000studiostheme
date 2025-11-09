@@ -1,84 +1,49 @@
-name: Theme Deploy
-
-on:
-  push:
-    branches: [ main ]
-  workflow_dispatch:
-
-concurrency:
-  group: theme-deploy
-  cancel-in-progress: false
-
-jobs:
-  build-and-deploy:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-
-      - name: Install deployment tools
+      - name: Build deploy summary
+        id: summary
+        if: ${{ success() }}
         run: |
-          sudo apt-get update -qq
-          sudo apt-get install -y zip lftp
+          echo "Site: https://3000studios.com"                         >  summary.txt
+          echo "Branch: $GITHUB_REF_NAME"                              >> summary.txt
+          echo "Commit: $GITHUB_SHA"                                   >> summary.txt
+          echo "Actor: $GITHUB_ACTOR"                                  >> summary.txt
+          echo "Run:   $GITHUB_SERVER_URL/$GITHUB_REPOSITORY/actions/runs/$GITHUB_RUN_ID" >> summary.txt
+          echo "Timestamp: $(date -u +"%Y-%m-%d %H:%M:%S UTC")"        >> summary.txt
+          echo "::notice::Deploy summary prepared"
 
-      - name: Build single theme zip (overwrite any old)
-        run: |
-          set -e
-          THEME_ZIP="3000studios-theme.zip"
-          echo "🧹 Removing any existing zips in workspace root"
-          rm -f *.zip || true
-          echo "📦 Zipping theme as ${THEME_ZIP}"
-          zip -r "${THEME_ZIP}" . \
-            -x "*/.git/*" \
-               "*/.github/*" \
-               "node_modules/*" \
-               "webhook-server/*" \
-               "scripts/*" \
-               "*.zip" \
-               "*.log" \
-               "*.md" \
-               "README*" \
-               "QUICKSTART.md" \
-               "LICENSE*"
-          ls -lh "${THEME_ZIP}"
-
-      - name: Deploy to server via SFTP (sync theme dir + keep only one zip)
-        if: ${{ secrets.IONOS_HOST != '' && secrets.IONOS_USER != '' && secrets.IONOS_PASS != '' && secrets.IONOS_THEME_PATH != '' }}
-        env:
-          SFTP_HOST: ${{ secrets.IONOS_HOST }}
-          SFTP_USER: ${{ secrets.IONOS_USER }}
-          SFTP_PASS: ${{ secrets.IONOS_PASS }}
-          THEME_PATH: ${{ secrets.IONOS_THEME_PATH }}
-        run: |
-          set -e
-          THEME_ZIP="3000studios-theme.zip"
-          echo "🌐 Connecting to ${SFTP_HOST} and syncing theme"
-          lftp -u "$SFTP_USER","$SFTP_PASS" sftp://"$SFTP_HOST" -e "\
-            set sftp:connect-program 'ssh -a -x -o StrictHostKeyChecking=no'; \
-            set ssl:verify-certificate no; \
-            # Ensure theme directory exists
-            mkdir -p $THEME_PATH; \
-            cd $THEME_PATH; \
-            # Reverse mirror local repo to remote theme dir, delete extras, exclude non-theme files
-            mirror -R --delete --verbose \
-              --exclude-glob .git/ \
-              --exclude-glob .github/ \
-              --exclude-glob node_modules/ \
-              --exclude-glob webhook-server/ \
-              --exclude-glob scripts/ \
-              --exclude-glob *.zip \
-              --exclude-glob *.log \
-              --exclude-glob README* \
-              --exclude-glob QUICKSTART.md \
-              --exclude-glob LICENSE* \
-              . .; \
-            # Keep only one theme zip: remove any existing zips then upload the new one
-            rm -f *.zip; \
-            put -O $THEME_PATH ${THEME_ZIP}; \
-            bye"
-          echo "✅ Deployed and ensured only one theme zip exists on server"
-
-      - name: Save artifact (zip)
-        uses: actions/upload-artifact@v4
+      - name: Email deploy notification
+        if: ${{ success() }}
+        uses: dawidd6/action-send-mail@v3
         with:
-          name: 3000studios-theme
-          path: 3000studios-theme.zip
+          server_address: ${{ secrets.SMTP_SERVER }}
+          server_port:     ${{ secrets.SMTP_PORT }}
+          username:        ${{ secrets.SMTP_USERNAME }}
+          password:        ${{ secrets.SMTP_PASSWORD }}
+          subject: "✅ 3000Studios: Theme deployed successfully"
+          to:       ${{ secrets.TO_EMAIL }}
+          from:     ${{ secrets.FROM_EMAIL }}
+          secure:   true
+          convert_markdown: true
+          html_body: |
+            <h2>Deploy Complete</h2>
+            <p><strong>Site:</strong> <a href="https://3000studios.com">3000studios.com</a></p>
+            <p><strong>Branch:</strong> ${{ github.ref_name }}<br/>
+               <strong>Commit:</strong> ${{ github.sha }}<br/>
+               <strong>Actor:</strong> ${{ github.actor }}</p>
+            <p><a href="${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}">View run</a></p>
+          attachments: summary.txt
+
+      - name: Email failure notice
+        if: ${{ failure() }}
+        uses: dawidd6/action-send-mail@v3
+        with:
+          server_address: ${{ secrets.SMTP_SERVER }}
+          server_port:     ${{ secrets.SMTP_PORT }}
+          username:        ${{ secrets.SMTP_USERNAME }}
+          password:        ${{ secrets.SMTP_PASSWORD }}
+          subject: "❌ 3000Studios: Theme deploy failed"
+          to:       ${{ secrets.TO_EMAIL }}
+          from:     ${{ secrets.FROM_EMAIL }}
+          secure:   true
+          html_body: |
+            <h2>Deploy Failed</h2>
+            <p><a href="${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}">Open run logs</a></p>

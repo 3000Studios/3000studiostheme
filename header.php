@@ -146,6 +146,10 @@
           </div>
           <a href="<?php echo esc_url(home_url('/')); ?>">3000 Studios</a>
         </div>
+        <button class="menu-toggle" aria-expanded="false" aria-label="Toggle navigation menu">
+          <span class="menu-icon">☰</span>
+          <span class="sr-only">Menu</span>
+        </button>
         <nav class="nav">
           <?php
           wp_nav_menu([
