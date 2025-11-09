@@ -391,7 +391,7 @@ get_header();
   <!-- Header -->
   <div class="dashboard-header">
     <h1 class="dashboard-title">🧠 AI Command Center</h1>
-    <p style="color:#888;font-size:18px;">Advanced Natural Language Website Editor</p>
+    <p class="dashboard-subtitle">Advanced Natural Language Website Editor</p>
   </div>
 
   <?php if ( is_user_logged_in() && current_user_can('edit_theme_options') ) : ?>
@@ -427,7 +427,7 @@ I understand WordPress, pages, layouts, grids, colors, animations, and more!"
 
           <!-- Page Selector -->
           <div class="page-selector">
-            <label style="color:var(--primary);font-weight:700;">Target Page:</label>
+            <label class="form-label-primary">Target Page:</label>
             <select id="target-page" name="target_page" class="page-select">
               <option value="homepage">🏠 Homepage</option>
               <?php
@@ -484,14 +484,14 @@ I understand WordPress, pages, layouts, grids, colors, animations, and more!"
     <div class="ai-status">
       <!-- AI Status Card -->
       <div class="glass-card">
-        <div id="ai-status-display" class="status-card ready">
-          <h3 style="margin:0 0 0.5rem 0;color:var(--success);font-size:18px;">🟢 AI Ready</h3>
-          <p style="margin:0;color:#ccc;font-size:14px;">Waiting for your command...</p>
+        <div id="ai-status-display" class="status-card ready ai-status-ready">
+          <h3>🟢 AI Ready</h3>
+          <p>Waiting for your command...</p>
         </div>
 
         <!-- AI Suggestions -->
-        <div style="margin-top:1.5rem;">
-          <p style="color:#888;font-size:13px;margin:0 0 0.75rem 0;">💡 Quick Suggestions:</p>
+        <div class="suggestions-container">
+          <p class="suggestions-title">💡 Quick Suggestions:</p>
           <div class="suggestions">
             <span class="suggestion-chip" onclick="insertCommand('Make homepage title bigger')">Bigger Title</span>
             <span class="suggestion-chip" onclick="insertCommand('Add bounce animation')">Add Bounce</span>
@@ -517,7 +517,7 @@ I understand WordPress, pages, layouts, grids, colors, animations, and more!"
       <div class="glass-card">
         <div class="preview-panel" id="preview-area">
           <h3 class="preview-title">🔮 Live Preview</h3>
-          <p style="color:#666;text-align:center;padding:2rem;">
+          <p class="empty-state">
             Enter a command and click "Preview Changes" to see a live preview here
           </p>
         </div>
@@ -526,9 +526,9 @@ I understand WordPress, pages, layouts, grids, colors, animations, and more!"
   </div>
 
   <?php else: ?>
-    <div class="glass-card" style="text-align:center;padding:4rem;">
-      <h2 style="color:var(--danger);">🔒 Access Denied</h2>
-      <p style="color:#888;font-size:18px;">Please log in with administrator privileges to access the AI Dashboard.</p>
+    <div class="glass-card access-denied-container">
+      <h2 class="access-denied-title">🔒 Access Denied</h2>
+      <p class="access-denied-message">Please log in with administrator privileges to access the AI Dashboard.</p>
       <?php wp_login_form(); ?>
     </div>
   <?php endif; ?>
@@ -602,8 +602,8 @@ I understand WordPress, pages, layouts, grids, colors, animations, and more!"
   function updateStatus(type, title, message) {
     statusDisplay.className = 'status-card ' + type;
     statusDisplay.innerHTML = `
-      <h3 style="margin:0 0 0.5rem 0;font-size:18px;">${title}</h3>
-      <p style="margin:0;color:#ccc;font-size:14px;">${message}</p>
+      <h3 class="toast-title">${title}</h3>
+      <p class="toast-message">${message}</p>
     `;
   }
   
@@ -639,22 +639,22 @@ I understand WordPress, pages, layouts, grids, colors, animations, and more!"
         const preview = document.getElementById('preview-area');
         preview.innerHTML = `
           <h3 class="preview-title">🔮 AI Analysis</h3>
-          <div style="padding:1rem;background:rgba(0,255,231,0.1);border-radius:8px;border:1px solid var(--primary);margin-bottom:1rem;">
-            <p style="color:var(--primary);margin:0 0 0.5rem 0;"><strong>✓ Command Parsed</strong></p>
-            <p style="color:#ccc;margin:0;font-size:14px;"><strong>Action:</strong> ${data.data.parsed.action || 'unknown'}</p>
-            <p style="color:#ccc;margin:0;font-size:14px;"><strong>Target:</strong> ${data.data.parsed.target || 'N/A'}</p>
-            <p style="color:#ccc;margin:0;font-size:14px;"><strong>Confidence:</strong> ${Math.round((data.data.parsed.confidence || 0) * 100)}%</p>
+          <div class="command-parsed-box">
+            <p class="command-parsed-title"><strong>✓ Command Parsed</strong></p>
+            <p class="command-parsed-item"><strong>Action:</strong> ${data.data.parsed.action || 'unknown'}</p>
+            <p class="command-parsed-item"><strong>Target:</strong> ${data.data.parsed.target || 'N/A'}</p>
+            <p class="command-parsed-item"><strong>Confidence:</strong> ${Math.round((data.data.parsed.confidence || 0) * 100)}%</p>
           </div>
-          <div style="padding:1rem;background:rgba(255,255,255,0.03);border-radius:8px;">
-            <p style="color:#888;margin:0;font-size:13px;"><strong>Page Structure:</strong></p>
-            <p style="color:#666;margin:0.5rem 0 0 0;font-size:12px;">
+          <div class="page-structure-box">
+            <p class="page-structure-title"><strong>Page Structure:</strong></p>
+            <p class="page-structure-info">
               ${data.data.page_structure.layout_type || 'standard'} layout
               ${data.data.page_structure.has_blocks ? '• Gutenberg blocks detected' : ''}
               ${data.data.page_structure.has_grid ? '• CSS Grid' : ''}
               ${data.data.page_structure.has_flex ? '• Flexbox' : ''}
             </p>
           </div>
-          <p style="color:#00ff00;margin-top:1rem;font-size:14px;text-align:center;">✓ Ready to execute. Click "Execute Now" to apply.</p>
+          <p class="execute-ready-message">✓ Ready to execute. Click "Execute Now" to apply.</p>
         `;
         updateStatus('ready', '✅ Preview Ready', 'AI understood your request');
       } else {
@@ -710,7 +710,7 @@ I understand WordPress, pages, layouts, grids, colors, animations, and more!"
         commandInput.value = '';
         document.getElementById('preview-area').innerHTML = `
           <h3 class="preview-title">🔮 Live Preview</h3>
-          <p style="color:#666;text-align:center;padding:2rem;">Enter another command to continue editing</p>
+          <p class="empty-state">Enter another command to continue editing</p>
         `;
       } else {
         throw new Error(data.data?.result?.message || data.data?.message || 'Execution failed');
@@ -753,7 +753,7 @@ async function loadStats() {
       if (data.data.top_patterns && data.data.top_patterns.length > 0) {
         const suggestionsDiv = document.querySelector('.suggestion-chips');
         if (suggestionsDiv) {
-          suggestionsDiv.innerHTML = '<p style="color:#888;margin:0 0 0.5rem 0;font-size:13px;">🎯 Smart Suggestions:</p>';
+          suggestionsDiv.innerHTML = '<p class="suggestions-title">🎯 Smart Suggestions:</p>';
           data.data.top_patterns.slice(0, 3).forEach(pattern => {
             const chip = document.createElement('button');
             chip.className = 'suggestion-chip';
