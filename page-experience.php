@@ -83,12 +83,12 @@ get_header(); ?>
 
     <div class="game-container">
         <!-- KBH Games Integration -->
-        <div id="game-frame" style="width: 100%; height: 100%; display: flex; justify-content: center; align-items: center;">
-            <div style="text-align: center; color: #fff;">
-                <h1 style="margin-bottom: 2rem; font-size: 3rem; background: linear-gradient(45deg, #ff6b6b, #4ecdc4); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">
+        <div id="game-frame" class="game-frame">
+            <div class="game-loading-container">
+                <h1 class="game-loading-title">
                     🎮 GAME LOADING...
                 </h1>
-                <div class="loading-spinner" style="width: 60px; height: 60px; border: 4px solid rgba(255,255,255,0.1); border-left: 4px solid #ff6b6b; border-radius: 50%; animation: spin 1s linear infinite; margin: 0 auto;"></div>
+                <div class="loading-spinner"></div>
             </div>
         </div>
     </div>

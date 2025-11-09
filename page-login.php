@@ -552,7 +552,7 @@ get_header(); ?>
   <!-- Header -->
   <div class="command-header">
   <h1 class="command-title">⚡ Black Vault SUPREME ⚡</h1>
-    <p style="color: rgba(255,255,255,0.8); font-size: 1.2rem; margin: 1rem 0 0 0;">
+    <p class="command-subtitle">
       AI Command Center • Mr.jwswain • 3000 Studios
     </p>
   </div>
@@ -610,7 +610,7 @@ get_header(); ?>
             <button type="button" id="voice-btn" class="voice-btn">
               🎤
             </button>
-            <div class="audio-viz" id="audio-viz" style="display: none;">
+            <div class="audio-viz" id="audio-viz">
               <div class="audio-bar"></div>
               <div class="audio-bar"></div>
               <div class="audio-bar"></div>
@@ -749,29 +749,29 @@ Just tell me what you want, then say 'RUN IT' and watch the magic! ✨"></textar
               }
 
               // Show preview with advanced features
-              echo '<div style="border:2px dashed var(--neon-pink);padding:1.5rem;border-radius:15px;background:rgba(255,0,255,0.1);backdrop-filter:blur(5px);">';
-              echo '<p style="color:var(--neon-pink);margin:0 0 1rem 0;font-weight:bold;"><strong>🤖 Black Vault SUPREME DETECTED:</strong></p>';
-              echo '<p style="margin:0.5rem 0;color:#fff;"><strong>Action:</strong> ' . ucwords(str_replace('_', ' ', $action_type)) . '</p>';
+              echo '<div class="ai-preview-box">';
+              echo '<p class="ai-preview-title"><strong>🤖 Black Vault SUPREME DETECTED:</strong></p>';
+              echo '<p class="ai-preview-item"><strong>Action:</strong> ' . ucwords(str_replace('_', ' ', $action_type)) . '</p>';
               if ($extracted_text) {
-                echo '<p style="margin:0.5rem 0;color:#fff;"><strong>New Text:</strong> ' . esc_html($extracted_text) . '</p>';
+                echo '<p class="ai-preview-item"><strong>New Text:</strong> ' . esc_html($extracted_text) . '</p>';
               }
               if ($font_size != '72px') {
-                echo '<p style="margin:0.5rem 0;color:#fff;"><strong>Font Size:</strong> ' . esc_html($font_size) . '</p>';
+                echo '<p class="ai-preview-item"><strong>Font Size:</strong> ' . esc_html($font_size) . '</p>';
               }
               if ($animation) {
-                echo '<p style="margin:0.5rem 0;color:#fff;"><strong>Animation:</strong> ✨ ' . ucfirst($animation) . '</p>';
+                echo '<p class="ai-preview-item"><strong>Animation:</strong> ✨ ' . ucfirst($animation) . '</p>';
               }
               if ($color) {
-                echo '<p style="margin:0.5rem 0;color:#fff;"><strong>Color:</strong> <span style="display:inline-block;width:20px;height:20px;background:' . $color . ';border:1px solid #fff;vertical-align:middle;border-radius:3px;"></span> ' . $color . '</p>';
+                echo '<p class="ai-preview-item"><strong>Color:</strong> <span class="ai-color-swatch" style="background:' . $color . ';"></span> ' . $color . '</p>';
               }
               if ($media_url) {
-                echo '<p style="margin:0.5rem 0;color:#fff;"><strong>Media:</strong> 🖼️ <a href="' . $media_url . '" target="_blank" style="color:var(--neon-cyan);">View Image/Video</a></p>';
+                echo '<p class="ai-preview-item"><strong>Media:</strong> 🖼️ <a href="' . $media_url . '" target="_blank" class="ai-media-link">View Image/Video</a></p>';
               }
               if ($music_url) {
-                echo '<p style="margin:0.5rem 0;color:#fff;"><strong>Music:</strong> 🎵 <a href="' . $music_url . '" target="_blank" style="color:var(--neon-pink);">Listen</a></p>';
+                echo '<p class="ai-preview-item"><strong>Music:</strong> 🎵 <a href="' . $music_url . '" target="_blank" class="ai-music-link">Listen</a></p>';
               }
-              echo '<hr style="border-color:var(--neon-pink);margin:1rem 0;">';
-              echo '<p style="margin:0.5rem 0 0 0;color:#fff;font-weight:bold;">Preview:</p>';
+              echo '<hr class="ai-preview-divider">';
+              echo '<p class="ai-preview-label">Preview:</p>';
 
               // Generate animation CSS
               $animation_style = '';
@@ -792,20 +792,23 @@ Just tell me what you want, then say 'RUN IT' and watch the magic! ✨"></textar
               }
 
               $color_style = $color ? 'color:' . $color . ';' : '';
+              $dynamic_style = 'font-size:' . esc_attr($font_size) . ';' . $color_style . $animation_style;
 
+              echo '<div class="ai-preview-content">';
               if ($action_type == 'homepage_title' && $extracted_text) {
-                echo '<h1 style="font-size:' . esc_attr($font_size) . ';font-weight:bold;text-align:center;margin:1rem 0;' . $color_style . $animation_style . '">' . esc_html($extracted_text) . '</h1>';
+                echo '<h1 style="' . $dynamic_style . '">' . esc_html($extracted_text) . '</h1>';
               } elseif ($action_type == 'hero_text' && $extracted_text) {
-                echo '<p style="font-size:18px;text-align:center;margin:1rem 0;' . $color_style . $animation_style . '">' . esc_html($extracted_text) . '</p>';
+                echo '<p style="' . $color_style . $animation_style . '">' . esc_html($extracted_text) . '</p>';
               } elseif ($action_type == 'add_media' && $media_url) {
-                echo '<img src="' . esc_url($media_url) . '" alt="Preview" style="max-width:100%;border-radius:8px;' . $animation_style . '">';
+                echo '<img src="' . esc_url($media_url) . '" alt="Preview" style="' . $animation_style . '">';
               } elseif ($action_type == 'add_music' && $music_url) {
-                echo '<audio controls style="width:100%;margin:1rem 0;"><source src="' . esc_url($music_url) . '" type="audio/mpeg"></audio>';
+                echo '<audio controls><source src="' . esc_url($music_url) . '" type="audio/mpeg"></audio>';
               } elseif ($action_type == 'change_background') {
-                echo '<div style="height:200px;background:linear-gradient(135deg, ' . ($color ?: 'var(--neon-cyan)') . ', var(--neon-pink));border-radius:15px;display:flex;align-items:center;justify-content:center;color:#fff;font-size:24px;font-weight:bold;">New Background Preview</div>';
+                echo '<div class="ai-background-preview" style="background:linear-gradient(135deg, ' . ($color ?: 'var(--neon-cyan)') . ', var(--neon-pink));">New Background Preview</div>';
               }
+              echo '</div>';
 
-              echo '<p style="color:var(--neon-green);margin-top:1rem;text-align:center;font-weight:bold;"><em>👆 This is how it will look!</em></p>';
+              echo '<p class="ai-preview-success"><em>👆 This is how it will look!</em></p>';
               echo '</div>';
 
               // Apply changes if requested
@@ -828,10 +831,10 @@ Just tell me what you want, then say 'RUN IT' and watch the magic! ✨"></textar
                   }
 
                   if (file_put_contents($index_file, $content)) {
-                    echo '<div style="margin-top:1.5rem;padding:1.5rem;background:rgba(0,255,65,0.15);border:3px solid var(--neon-green);border-radius:15px;text-align:center;backdrop-filter:blur(10px);">
-                      <h3 style="color:var(--neon-green);margin:0 0 1rem 0;text-shadow:0 0 15px currentColor;">✅ SUCCESS!</h3>
-                      <p style="color:#fff;margin:0 0 1rem 0;">Your change is now LIVE on the site!</p>
-                      <a href="' . home_url() . '" target="_blank" class="ai-btn" style="background:var(--neon-green);color:#000;display:inline-block;padding:0.75rem 2rem;text-decoration:none;border-radius:15px;font-weight:bold;border:2px solid var(--neon-green);">
+                    echo '<div class="ai-success-box">
+                      <h3 class="ai-success-title">✅ SUCCESS!</h3>
+                      <p class="ai-success-message">Your change is now LIVE on the site!</p>
+                      <a href="' . home_url() . '" target="_blank" class="ai-btn" style="background:var(--neon-green);color:#000;border:2px solid var(--neon-green);">
                         🌐 View Live Site →
                       </a>
                     </div>';
@@ -839,15 +842,15 @@ Just tell me what you want, then say 'RUN IT' and watch the magic! ✨"></textar
                 }
               }
             } else {
-              echo '<div style="text-align:center;color:rgba(255,255,255,0.6);padding:3rem;border:2px dashed var(--neon-pink);border-radius:15px;backdrop-filter:blur(5px);">
-                <h3 style="color:var(--neon-pink);margin:0 0 1rem 0;">✨ Ready for Commands</h3>
-                <p style="margin:0;">Use voice or type your command above to see a preview here...</p>
+              echo '<div class="ai-ready-box">
+                <h3 class="ai-ready-title">✨ Ready for Commands</h3>
+                <p class="ai-ready-message">Use voice or type your command above to see a preview here...</p>
               </div>';
             }
           } else {
-            echo '<div style="text-align:center;color:rgba(255,255,255,0.6);padding:3rem;border:2px dashed var(--neon-pink);border-radius:15px;backdrop-filter:blur(5px);">
-              <h3 style="color:var(--neon-pink);margin:0 0 1rem 0;">✨ Ready for Commands</h3>
-              <p style="margin:0;">Use voice or type your command above to see a preview here...</p>
+            echo '<div class="ai-ready-box">
+              <h3 class="ai-ready-title">✨ Ready for Commands</h3>
+              <p class="ai-ready-message">Use voice or type your command above to see a preview here...</p>
             </div>';
           }
           ?>
