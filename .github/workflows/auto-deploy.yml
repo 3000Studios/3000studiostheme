@@ -64,7 +64,7 @@ jobs:
           echo "ZIP_NAME=$ZIP_NAME" >> $GITHUB_ENV
       
       - name: 🚀 Deploy to WordPress (FTP)
-        if: secrets.FTP_SERVER != ''
+        if: ${{ secrets.FTP_SERVER != '' }}
         uses: SamKirkland/FTP-Deploy-Action@v4.3.5
         with:
           server: ${{ secrets.FTP_SERVER }}
@@ -81,7 +81,7 @@ jobs:
             **/.github/**
       
       - name: 🔄 Trigger Site Refresh
-        if: secrets.SITE_REFRESH_URL != ''
+        if: ${{ secrets.SITE_REFRESH_URL != '' }}
         run: |
           curl -X POST "${{ secrets.SITE_REFRESH_URL }}/wp-json/wp/v2/refresh-theme" \
                -H "Authorization: Bearer ${{ secrets.WP_API_TOKEN }}" \
