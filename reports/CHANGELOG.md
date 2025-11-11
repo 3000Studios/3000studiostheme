@@ -29,3 +29,8 @@
 * b40bc91 Initial plan (copilot-swe-agent[bot])
 * 55ec320 chore(reports): nightly security report (3000 Studios Bot)
 
+## 2025-11-11
+
+* 50896fb chore(reports): nightly security report (3000 Studios Bot)
+* 2991377 chore(reports): nightly changelog (3000 Studios Bot)
+
