@@ -39,3 +39,11 @@
 * 699f203 chore(reports): nightly security report (3000 Studios Bot)
 * db2170c chore(reports): nightly changelog (3000 Studios Bot)
 
+## 2025-11-13
+
+* 10c9bbe Merge pull request #24 from 3000Studios/codespace-fuzzy-space-acorn-7v6wv7wvqjv2p646 (Jeremy S.)
+* c4977d5 Update scripts/deploy.sh (Jeremy S.)
+* 31e4645 Pending changes exported from your codespace (Jeremy Swain)
+* 2274db8 chore(reports): nightly security report (3000 Studios Bot)
+* 39d7d97 chore(reports): nightly changelog (3000 Studios Bot)
+
