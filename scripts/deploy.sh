@@ -461,11 +461,14 @@ EOF
 # Create the package
 echo "📦 Creating deployment package..."
 
+# Move to parent directory to zip with proper folder structure
+cd ..
+
 # Create ZIP file
-zip -r "${OUTPUT_DIR}/${PACKAGE_NAME}.zip" . -x "*.git*" "*.DS_Store*" "*node_modules*"
+zip -r "${OUTPUT_DIR}/${PACKAGE_NAME}.zip" "${PACKAGE_NAME}" -x "*.git*" "*.DS_Store*" "*node_modules*"
 
 # Create TAR.GZ file
-tar -czf "${OUTPUT_DIR}/${PACKAGE_NAME}.tar.gz" .
+tar -czf "${OUTPUT_DIR}/${PACKAGE_NAME}.tar.gz" "${PACKAGE_NAME}"
 
 # Cleanup
 rm -rf "$TEMP_DIR"
