@@ -1,0 +1,19 @@
+name: 🛰️ Command Center Sync
+on:
+  workflow_dispatch:
+  schedule: [ { cron: "30 5 * * *" } ]  # 12:30 AM ET
+
+permissions:
+  contents: read
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Ping WP Command Center
+        env:
+          WP_SYNC_URL: ${{ secrets.WP_SYNC_URL }}        # e.g., https://3000studios.com/wp-json/command-center/v1/sync
+          WP_SYNC_TOKEN: ${{ secrets.WP_SYNC_TOKEN }}    # bearer or shared secret
+        run: |
+          [ -z "$WP_SYNC_URL" ] && echo "WP_SYNC_URL not set, skipping" && exit 0
+          curl -fsS -H "Authorization: Bearer $WP_SYNC_TOKEN" "$WP_SYNC_URL" || true

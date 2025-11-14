@@ -32,6 +32,21 @@ if (! defined('ABSPATH')) {
     exit;
 } // Prevent direct access
 
+/**
+ * Get theme version for cache-busting
+ * Uses filemtime for automatic versioning based on file modification time
+ */
+function studios_get_asset_version($file_path)
+{
+    $full_path = get_template_directory() . $file_path;
+    if (file_exists($full_path)) {
+        return filemtime($full_path);
+    }
+    // Fallback to theme version from style.css
+    $theme = wp_get_theme();
+    return $theme->get('Version');
+}
+
 function studios_enqueue_assets()
 {
     // Don't load theme assets on admin pages - prevents wp-admin conflicts
@@ -39,36 +54,43 @@ function studios_enqueue_assets()
         return;
     }
 
-    // Main stylesheet
-    wp_enqueue_style('3000studios-style', get_stylesheet_uri());
+    // Main stylesheet with cache-busting
+    $style_version = studios_get_asset_version('/style.css');
+    wp_enqueue_style('3000studios-style', get_stylesheet_uri(), array(), $style_version);
 
     // Additional theme CSS scaffold (ripples, cursor, mobile tweaks)
     if (file_exists(get_template_directory() . '/assets/css/theme.css')) {
-        wp_enqueue_style('3000studios-theme', get_template_directory_uri() . '/assets/css/theme.css', array('3000studios-style'), '1.0.0');
+        $theme_css_version = studios_get_asset_version('/assets/css/theme.css');
+        wp_enqueue_style('3000studios-theme', get_template_directory_uri() . '/assets/css/theme.css', array('3000studios-style'), $theme_css_version);
     }
 
     // Howler for audio handling (optional)
     wp_enqueue_script('howler-cdn', 'https://cdnjs.cloudflare.com/ajax/libs/howler/2.2.3/howler.min.js', array(), '2.2.3', true);
 
     // Main javascript (page features)
-    wp_enqueue_script('3000studios-main', get_template_directory_uri() . '/js/main.js', array(), '1.1', true);
+    $main_js_version = studios_get_asset_version('/js/main.js');
+    wp_enqueue_script('3000studios-main', get_template_directory_uri() . '/js/main.js', array(), $main_js_version, true);
 
     // Theme behaviour script (cursor, ripples, audio helpers)
     if (file_exists(get_template_directory() . '/assets/js/theme.js')) {
-        wp_enqueue_script('3000studios-theme-js', get_template_directory_uri() . '/assets/js/theme.js', array('3000studios-main', 'howler-cdn'), '1.0.0', true);
+        $theme_js_version = studios_get_asset_version('/assets/js/theme.js');
+        wp_enqueue_script('3000studios-theme-js', get_template_directory_uri() . '/assets/js/theme.js', array('3000studios-main', 'howler-cdn'), $theme_js_version, true);
     }
 
     // Enqueue galaxy background for homepage
     if (is_front_page() || is_home()) {
-        wp_enqueue_script('3000studios-galaxy', get_template_directory_uri() . '/assets/js/galaxy-background.js', array(), '1.0.0', true);
+        $galaxy_version = studios_get_asset_version('/assets/js/galaxy-background.js');
+        wp_enqueue_script('3000studios-galaxy', get_template_directory_uri() . '/assets/js/galaxy-background.js', array(), $galaxy_version, true);
     }
 
     // Enqueue ball pit footer animation
-    wp_enqueue_script('3000studios-ballpit', get_template_directory_uri() . '/assets/js/ball-pit-footer.js', array(), '1.0.0', true);
+    $ballpit_version = studios_get_asset_version('/assets/js/ball-pit-footer.js');
+    wp_enqueue_script('3000studios-ballpit', get_template_directory_uri() . '/assets/js/ball-pit-footer.js', array(), $ballpit_version, true);
 
     // Enqueue loader CSS
     if (file_exists(get_template_directory() . '/assets/css/loader.css')) {
-        wp_enqueue_style('3000studios-loader', get_template_directory_uri() . '/assets/css/loader.css', array(), '1.0.0');
+        $loader_version = studios_get_asset_version('/assets/css/loader.css');
+        wp_enqueue_style('3000studios-loader', get_template_directory_uri() . '/assets/css/loader.css', array(), $loader_version);
     }
 }
 add_action('wp_enqueue_scripts', 'studios_enqueue_assets');

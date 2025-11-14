@@ -146,6 +146,10 @@
           </div>
           <a href="<?php echo esc_url(home_url('/')); ?>">3000 Studios</a>
         </div>
+        <button class="menu-toggle" aria-expanded="false" aria-label="Toggle navigation menu">
+          <span class="menu-icon">☰</span>
+          <span class="sr-only">Menu</span>
+        </button>
         <nav class="nav">
           <?php
           wp_nav_menu([
@@ -153,7 +157,15 @@
             'container' => false,
             'menu_class' => 'nav-menu',
             'fallback_cb' => function () {
-              echo '<ul class="nav-menu"><li><a href="' . admin_url('nav-menus.php') . '">Create Menu</a></li></ul>';
+              // Default menu if no menu is set
+              echo '<ul class="nav-menu">';
+              echo '<li><a href="' . esc_url(home_url('/')) . '">Home</a></li>';
+              echo '<li><a href="' . esc_url(home_url('/experience')) . '">Experience</a></li>';
+              echo '<li><a href="' . esc_url(home_url('/blog')) . '">Blog</a></li>';
+              echo '<li><a href="' . esc_url(home_url('/shop')) . '">Shop</a></li>';
+              echo '<li><a href="' . esc_url(home_url('/ai-dashboard')) . '">AI Dashboard</a></li>';
+              echo '<li><a href="' . esc_url(home_url('/contact')) . '">Contact</a></li>';
+              echo '</ul>';
             }
           ]);
           ?>

@@ -16,6 +16,7 @@ VERSION="1.0.0"
 DATE=$(date +"%Y%m%d_%H%M%S")
 PACKAGE_NAME="${THEME_NAME}_v${VERSION}_${DATE}"
 OUTPUT_DIR="theme-packages"
+OUTPUT_DIR="$(pwd)/theme-packages"
 TEMP_DIR="/tmp/${PACKAGE_NAME}"
 
 # Create directories
