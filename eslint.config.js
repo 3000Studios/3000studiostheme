@@ -1,5 +1,5 @@
 // ESLint 9+ flat config
-export default [
+module.exports = [
   {
     ignores: [
       'node_modules/**',
