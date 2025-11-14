@@ -222,3 +222,14 @@ if (console.time && performance.timing) {
     console.log(`%cPage Load: ${loadTime}ms`, 'color:cyan;font-size:11px;');
   }, { passive: true });
 }
+
+// Payment button handler (secure, no inline onclick)
+document.addEventListener('DOMContentLoaded', () => {
+  document.querySelectorAll('.payment-button').forEach(button => {
+    button.addEventListener('click', function() {
+      const price = this.getAttribute('data-price') || '0.00';
+      alert(`Payment integration coming soon! Price: $${price}`);
+      // TODO: Integrate with Stripe/PayPal when ready
+    });
+  });
+});

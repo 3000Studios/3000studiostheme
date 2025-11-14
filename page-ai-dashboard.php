@@ -472,7 +472,7 @@ I understand WordPress, pages, layouts, grids, colors, animations, and more!"
             <button type="button" id="btn-preview" class="btn-preview">
               👁️ Preview Changes
             </button>
-            <button type="submit" name="execute" class="btn-execute">
+            <button type="button" id="btn-execute" class="btn-execute">
               ⚡ Execute Now
             </button>
           </div>
@@ -610,7 +610,7 @@ I understand WordPress, pages, layouts, grids, colors, animations, and more!"
   // Preview button - REAL AJAX CALL
   document.getElementById('btn-preview')?.addEventListener('click', async function() {
     const command = commandInput.value;
-    const pageId = document.getElementById('page-selector')?.value || 0;
+    const pageId = document.getElementById('target-page')?.value || 0;
     
     if (!command.trim()) {
       alert('Please enter a command first');
@@ -668,9 +668,11 @@ I understand WordPress, pages, layouts, grids, colors, animations, and more!"
   });
   
   // Execute button - REAL AJAX CALL
-  document.querySelector('.btn-execute')?.addEventListener('click', async function() {
+  document.getElementById('btn-execute')?.addEventListener('click', async function(e) {
+    e.preventDefault(); // Prevent any default behavior
+    
     const command = commandInput.value;
-    const pageId = document.getElementById('page-selector')?.value || 0;
+    const pageId = document.getElementById('target-page')?.value || 0;
     
     if (!command.trim()) {
       alert('Please enter a command first');

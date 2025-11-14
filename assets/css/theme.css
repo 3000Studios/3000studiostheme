@@ -5,15 +5,22 @@
  */
 
 /*!
- * 3000 Studios Theme
+ * 3000 Studios Theme - Additional Styles
  * Copyright © 2025 3000 Studios. All rights reserved.
  */
 
-/* Additional theme styles (scaffold)
-   - Add your custom ripple, cursor, border and audio UI styles here.
+/* Additional theme styles (custom ripple, cursor, and audio UI styles)
    - This file is enqueued from functions.php as '3000-theme'.
+   - Main styles are in style.css - this file is for extras only.
 */
 
+/* Custom cursor effects and interactions */
+#cursor-canvas {
+  position: fixed;
+  left: 0;
+  top: 0;
+  pointer-events: none;
+  z-index: 99999;
 /* Small tweaks for nav video overlay */
 .nav-video{position:absolute;inset:0;object-fit:cover;z-index:-2}
 .nav-overlay{position:absolute;inset:0;z-index:0;pointer-events:none}
@@ -587,26 +594,20 @@ a:hover, a:focus {
     transform: translateY(-2px);
 }
 
-.button, button, input[type="submit"] {
-  font-family: 'Orbitron', sans-serif;
-  background: transparent;
-  color: var(--neon-cyan);
-  border: 2px solid var(--neon-cyan);
-  padding: 10px 20px;
-  border-radius: 5px;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  text-transform: uppercase;
-  letter-spacing: 1px;
-  box-shadow: var(--glow-shadow);
+/* Ripple effects over navigation */
+.nav-ripples {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
 }
 
-.button:hover, button:hover, input[type="submit"]:hover {
-  background: var(--neon-cyan);
-  color: var(--dark-bg);
-  box-shadow: 0 0 20px var(--neon-cyan), 0 0 30px var(--neon-cyan);
+/* Smooth footer attack animation */
+.footer-attack {
+  transition: transform .08s ease-out;
 }
 
-.glow-effect {
-  box-shadow: var(--glow-shadow);
+/* Gallery positioning */
+.gallery {
+  position: relative;
 }
