@@ -52,3 +52,8 @@
 * 56597a3 chore(reports): nightly security report (3000 Studios Bot)
 * 508e592 chore(reports): nightly changelog (3000 Studios Bot)
 
+## 2025-11-15
+
+* 0a53ba7 chore(reports): nightly security report (3000 Studios Bot)
+* 49b7c6a chore(reports): nightly changelog (3000 Studios Bot)
+
