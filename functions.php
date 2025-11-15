@@ -138,6 +138,11 @@ function studios_ajax_preview_command()
         wp_send_json_error(['message' => 'Command is required']);
     }
 
+    // Check if required classes are available
+    if (!class_exists('Studios_WP_Intelligence') || !class_exists('Studios_API_Connector')) {
+        wp_send_json_error(['message' => 'Required AI components not loaded']);
+    }
+
     // Get page context
     $wp_intel = new Studios_WP_Intelligence();
     $page_structure = $wp_intel->analyze_page($page_id);
@@ -266,6 +271,11 @@ function studios_ajax_execute_command()
 
     if (empty($command)) {
         wp_send_json_error(['message' => 'Command is required, sexy!']);
+    }
+
+    // Check if required classes are available
+    if (!class_exists('Studios_API_Connector')) {
+        wp_send_json_error(['message' => 'Required AI components not loaded']);
     }
 
     $start_time = microtime(true);
@@ -536,6 +546,11 @@ function studios_ajax_search_images()
 
     if (empty($query)) {
         wp_send_json_error(['message' => 'Search query is required']);
+    }
+
+    // Check if required class is available
+    if (!class_exists('Studios_API_Connector')) {
+        wp_send_json_error(['message' => 'Required API components not loaded']);
     }
 
     $results = [];
