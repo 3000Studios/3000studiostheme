@@ -100,16 +100,20 @@ register_nav_menus(array(
     'primary' => __('Primary Menu', 'threek')
 ));
 
-// Load AI Intelligence Systems
+// Load AI Intelligence Systems - Always load ai-learning and api-settings for database setup
 require_once get_template_directory() . '/includes/ai-learning.php';
-require_once get_template_directory() . '/includes/wp-intelligence.php';
 require_once get_template_directory() . '/includes/api-settings.php';
-require_once get_template_directory() . '/includes/api-connector.php';
-require_once get_template_directory() . '/includes/monetization.php';
 
-// Load Live Reload System (Black Vault SUPREME) - Only in development
-if (defined('WP_DEBUG') && WP_DEBUG && file_exists(get_template_directory() . '/includes/live-reload-inject.php')) {
-    require_once get_template_directory() . '/includes/live-reload-inject.php';
+// Load frontend-only includes (not needed in admin)
+if (!is_admin()) {
+    require_once get_template_directory() . '/includes/wp-intelligence.php';
+    require_once get_template_directory() . '/includes/api-connector.php';
+    require_once get_template_directory() . '/includes/monetization.php';
+    
+    // Load Live Reload System (Black Vault SUPREME) - Only in development
+    if (defined('WP_DEBUG') && WP_DEBUG && file_exists(get_template_directory() . '/includes/live-reload-inject.php')) {
+        require_once get_template_directory() . '/includes/live-reload-inject.php';
+    }
 }
 
 // Initialize AI database tables
@@ -117,8 +121,12 @@ add_action('after_switch_theme', 'studios_ai_create_tables');
 
 /**
  * AJAX Handler: Preview AI Command
+ * Only register AJAX handlers if not in admin page view
  */
-add_action('wp_ajax_studios_preview_command', 'studios_ajax_preview_command');
+if (!is_admin() || (defined('DOING_AJAX') && DOING_AJAX)) {
+    add_action('wp_ajax_studios_preview_command', 'studios_ajax_preview_command');
+}
+
 function studios_ajax_preview_command()
 {
     check_ajax_referer('studios_ai_nonce', 'nonce');
@@ -243,8 +251,12 @@ function studios_generate_preview($parsed)
 
 /**
  * AJAX Handler: Execute AI Command - Black Vault SUPREME Edition
+ * Only register AJAX handlers if not in admin page view
  */
-add_action('wp_ajax_studios_execute_command', 'studios_ajax_execute_command');
+if (!is_admin() || (defined('DOING_AJAX') && DOING_AJAX)) {
+    add_action('wp_ajax_studios_execute_command', 'studios_ajax_execute_command');
+}
+
 function studios_ajax_execute_command()
 {
     check_ajax_referer('studios_ai_nonce', 'nonce');
@@ -509,8 +521,12 @@ function studios_clear_cache()
 
 /**
  * AJAX Handler: Search Images
+ * Only register AJAX handlers if not in admin page view
  */
-add_action('wp_ajax_studios_search_images', 'studios_ajax_search_images');
+if (!is_admin() || (defined('DOING_AJAX') && DOING_AJAX)) {
+    add_action('wp_ajax_studios_search_images', 'studios_ajax_search_images');
+}
+
 function studios_ajax_search_images()
 {
     check_ajax_referer('studios_ai_nonce', 'nonce');
@@ -539,8 +555,12 @@ function studios_ajax_search_images()
 
 /**
  * AJAX Handler: Get Learning Stats
+ * Only register AJAX handlers if not in admin page view
  */
-add_action('wp_ajax_studios_get_stats', 'studios_ajax_get_stats');
+if (!is_admin() || (defined('DOING_AJAX') && DOING_AJAX)) {
+    add_action('wp_ajax_studios_get_stats', 'studios_ajax_get_stats');
+}
+
 function studios_ajax_get_stats()
 {
     global $wpdb;
