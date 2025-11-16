@@ -1,0 +1,128 @@
+name: 🚀 Run All Workflows
+
+on:
+  workflow_dispatch:
+    inputs:
+      workflows_to_run:
+        description: 'Select workflows to run (comma-separated or "all")'
+        required: false
+        default: 'all'
+        type: string
+
+permissions:
+  actions: write
+  contents: read
+
+jobs:
+  trigger-workflows:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: 🔥 Checkout Repository
+        uses: actions/checkout@v4
+      
+      - name: 🎯 Trigger All Workflows
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          WORKFLOWS_INPUT: ${{ github.event.inputs.workflows_to_run }}
+        run: |
+          echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+          echo "🚀 3000 Studios - Running All Workflows"
+          echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+          echo ""
+          
+          # List of all workflows that support workflow_dispatch
+          WORKFLOWS=(
+            "auto-changelog.yml"
+            "auto-deploy.yml"
+            "command-center-sync.yml"
+            "deploy-wordpress-theme.yml"
+            "deploy-wordpress.yml"
+            "dev-inspector.yml"
+            "drive-sync.yml"
+            "github_workflows_auto-approve-and-merge_Version5.yml"
+            "nightly-backup.yml"
+            "repo-optimizer.yml"
+            "security-watchdog.yml"
+            "theme-package.yml"
+          )
+          
+          # Determine which workflows to run
+          if [ "$WORKFLOWS_INPUT" = "all" ] || [ -z "$WORKFLOWS_INPUT" ]; then
+            SELECTED_WORKFLOWS=("${WORKFLOWS[@]}")
+          else
+            IFS=',' read -ra SELECTED_WORKFLOWS <<< "$WORKFLOWS_INPUT"
+          fi
+          
+          echo "📋 Workflows to trigger:"
+          printf '   • %s\n' "${SELECTED_WORKFLOWS[@]}"
+          echo ""
+          
+          # Trigger each workflow
+          SUCCESS_COUNT=0
+          FAIL_COUNT=0
+          
+          for workflow in "${SELECTED_WORKFLOWS[@]}"; do
+            # Trim whitespace
+            workflow=$(echo "$workflow" | xargs)
+            
+            echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+            echo "⚡ Triggering: $workflow"
+            
+            if gh workflow run "$workflow" --repo 3000Studios/3000studiostheme; then
+              echo "✅ Successfully triggered: $workflow"
+              ((SUCCESS_COUNT++))
+            else
+              echo "❌ Failed to trigger: $workflow"
+              ((FAIL_COUNT++))
+            fi
+            
+            # Small delay to avoid rate limiting
+            sleep 2
+          done
+          
+          echo ""
+          echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+          echo "📊 Summary:"
+          echo "   ✅ Successful: $SUCCESS_COUNT"
+          echo "   ❌ Failed: $FAIL_COUNT"
+          echo "   📝 Total: $((SUCCESS_COUNT + FAIL_COUNT))"
+          echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+          
+          # Create job summary
+          echo "## 🚀 Workflow Trigger Summary" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "**Total Workflows Triggered:** $((SUCCESS_COUNT + FAIL_COUNT))" >> $GITHUB_STEP_SUMMARY
+          echo "- ✅ Successful: $SUCCESS_COUNT" >> $GITHUB_STEP_SUMMARY
+          echo "- ❌ Failed: $FAIL_COUNT" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "### Workflows Triggered:" >> $GITHUB_STEP_SUMMARY
+          for workflow in "${SELECTED_WORKFLOWS[@]}"; do
+            workflow=$(echo "$workflow" | xargs)
+            echo "- \`$workflow\`" >> $GITHUB_STEP_SUMMARY
+          done
+          
+          # Exit with error if any failed
+          if [ $FAIL_COUNT -gt 0 ]; then
+            exit 1
+          fi
+      
+      - name: 📋 List Recent Workflow Runs
+        if: always()
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          echo ""
+          echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+          echo "📋 Recent Workflow Runs (Last 5):"
+          echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+          gh run list --repo 3000Studios/3000studiostheme --limit 5
+          echo ""
+      
+      - name: ✅ Completion
+        if: success()
+        run: |
+          echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+          echo "✅ All workflows triggered successfully!"
+          echo "🌐 Check status at: https://github.com/3000Studios/3000studiostheme/actions"
+          echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
