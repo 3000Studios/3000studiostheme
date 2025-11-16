@@ -84,7 +84,8 @@ def main():
         
         if "choices" not in result or len(result["choices"]) == 0:
             print("ERROR: Unexpected API response format", file=sys.stderr)
-            print(f"Response: {response_data}", file=sys.stderr)
+            # Only print safe metadata, not full response
+            print(f"Response keys: {list(result.keys())}", file=sys.stderr)
             sys.exit(1)
         
         review_text = result["choices"][0]["message"]["content"]
