@@ -4,7 +4,7 @@ on:
   push:
     branches: [ main ]
   schedule:
-    - cron: "0 * * * *"   # every hour
+    - cron: "0 * * * *"
   workflow_dispatch:
 
 jobs:
@@ -28,52 +28,58 @@ jobs:
           php -l $(find . -type f -name "*.php") || true
           markdownlint '**/*.md' || true
 
+      # --------------------------------------------------------
+      # OPENAI STEP — correctly gated (NO secrets usage in "if")
+      # --------------------------------------------------------
       - name: Call OpenAI API (curl)
         id: advisor
-        if: ${{ secrets.OPENAI_API_KEY != '' }}
         env:
           OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
           OPENAI_MODEL: ${{ secrets.OPENAI_MODEL || 'gpt-4' }}
+        if: env.OPENAI_API_KEY != ''    # <- THIS is the correct way
         run: |
           set -euo pipefail
-          prompt='You are 3000 Studios'\'' DevOps Planner.
+
+          prompt='You are 3000 Studios DevOps Planner.
           1. Read the linter / scan outputs from the current job.
-          2. Produce a table:
+          2. Produce a table with:
              • File
              • Issue summary
              • Fix priority (P1–P3)
           3. Then suggest a 3-phase plan:
-             - Phase 1: urgent fixes and cleanup
-             - Phase 2: refactors and new features
-             - Phase 3: polish, monetization, marketing
+             - Phase 1: urgent fixes
+             - Phase 2: refactors + features
+             - Phase 3: polish + monetization
           Keep it concise and actionable.'
-          # Construct JSON payload safely using jq
+
           payload=$(jq -n \
             --arg model "$OPENAI_MODEL" \
             --arg prompt "$prompt" \
             '{model: $model, messages: [{role: "user", content: $prompt}], max_tokens: 800}')
-          # Call OpenAI API with error handling
+
           response=$(curl -f -s -X POST "https://api.openai.com/v1/chat/completions" \
             -H "Authorization: Bearer $OPENAI_API_KEY" \
             -H "Content-Type: application/json" \
-            -d "$payload") || { echo "Error: OpenAI API call failed"; exit 1; }
+            -d "$payload") || {
+              echo "Error: OpenAI API call failed"
+              exit 1
+            }
+
           echo "OpenAI response:"
           echo "$response"
-          # Extract the content from the response and save to a file
-          # Check for API error first
-          if echo "$response" | jq -e '.error' > /dev/null 2>&1; then
+
+          if echo "$response" | jq -e '.error' >/dev/null 2>&1; then
             echo "Error from OpenAI API:"
-            echo "$response" | jq -r '.error.message // "Unknown error"'
+            echo "$response" | jq -r '.error.message'
             exit 1
           else
-            echo "$response" | jq -r '.choices[0].message.content // "No response from OpenAI"' > /tmp/advisor_output.txt
+            echo "$response" | jq -r '.choices[0].message.content // "No response"' > /tmp/advisor_output.txt
           fi
-          cat /tmp/advisor_output.txt
-          # Set output for next step (file path for create-issue-from-file action)
+
           echo "text=/tmp/advisor_output.txt" >> $GITHUB_OUTPUT
 
       - name: Post Blueprint to Issues
-        if: ${{ steps.advisor.outputs.text != '' }}
+        if: steps.advisor.outputs.text != ''
         uses: peter-evans/create-issue-from-file@v5
         with:
           title: "📋 Dev-Inspector Report & Phase Blueprint"
