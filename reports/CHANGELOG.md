@@ -57,3 +57,13 @@
 * 0a53ba7 chore(reports): nightly security report (3000 Studios Bot)
 * 49b7c6a chore(reports): nightly changelog (3000 Studios Bot)
 
+## 2025-11-16
+
+* b4e07eb Add WordPress Shadow Recovery Panel (Jeremy S.)
+* 90c4f20 Merge pull request #28 from 3000Studios/copilot/fix-admin-page-loading-issue (Jeremy S.)
+* 0b89379 Add comprehensive admin fix summary documentation (copilot-swe-agent[bot])
+* 641ca13 Add error handling for AJAX handlers and create admin diagnostics page (copilot-swe-agent[bot])
+* 60d8b4a Fix wp-admin loading by preventing heavy frontend includes in admin area (copilot-swe-agent[bot])
+* b124644 Initial plan (copilot-swe-agent[bot])
+* 95272f4 chore(reports): nightly security report (3000 Studios Bot)
+
