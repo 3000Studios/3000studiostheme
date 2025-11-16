@@ -14,7 +14,10 @@
     "watch:push": "AUTO_PUSH=true bash scripts/auto-update-watcher.sh",
     "refresh-server": "node scripts/refresh-server.js",
     "dev": "concurrently \"npm run watch\" \"npm run refresh-server\"",
-    "version:bump": "node scripts/version-bump.js"
+    "version:bump": "node scripts/version-bump.js",
+    "workflows:run": "bash scripts/trigger-all-workflows.sh",
+    "workflows:list": "gh workflow list --repo 3000Studios/3000studiostheme",
+    "workflows:status": "gh run list --repo 3000Studios/3000studiostheme --limit 10"
   },
   "repository": {
     "type": "git",
