@@ -71,14 +71,14 @@ jobs:
             echo "Deploying new theme: ${THEME_NAME}"
             
             # Extract new theme with timestamped name
-            mkdir -p ${THEME_NAME}
-            unzip -o /tmp/${THEME_NAME}.zip -d ${THEME_NAME}
+            mkdir -p "${THEME_NAME}"
+            unzip -o "/tmp/${THEME_NAME}.zip" -d "${THEME_NAME}"
             
             # Set proper permissions
-            chmod -R 755 ${THEME_NAME}
+            chmod -R 755 "${THEME_NAME}"
             
             # Cleanup
-            rm /tmp/${THEME_NAME}.zip
+            rm "/tmp/${THEME_NAME}.zip"
             
             # List all 3000studios themes with timestamps
             echo ""
