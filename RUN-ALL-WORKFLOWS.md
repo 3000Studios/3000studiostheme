@@ -32,7 +32,29 @@ The repository contains **12 manually-triggerable workflows**:
 
 This will trigger all 12 workflows automatically!
 
-### Method 2: Using the Bash Script (Local)
+### Method 2: Using npm Scripts (Easiest)
+
+Run the workflows using npm scripts:
+
+```bash
+# Make sure you're in the repository root
+cd /path/to/3000studiostheme
+
+# Run all workflows
+npm run workflows:run
+
+# List all workflows
+npm run workflows:list
+
+# Check workflow run status
+npm run workflows:status
+```
+
+**Requirements:**
+- GitHub CLI (`gh`) installed: https://cli.github.com/
+- Authenticated with GitHub: `gh auth login`
+
+### Method 3: Using the Bash Script Directly
 
 Run the provided script from your local machine:
 
@@ -51,7 +73,7 @@ cd /path/to/3000studiostheme
 - GitHub CLI (`gh`) installed: https://cli.github.com/
 - Authenticated with GitHub: `gh auth login`
 
-### Method 3: GitHub CLI (Manual)
+### Method 4: GitHub CLI (Manual)
 
 Trigger workflows manually one by one:
 
@@ -66,7 +88,7 @@ gh workflow run "command-center-sync.yml" --repo $REPO
 # ... and so on
 ```
 
-### Method 4: Trigger via API
+### Method 5: Trigger via API
 
 Using curl or any HTTP client:
 
@@ -84,6 +106,15 @@ curl -X POST \
 ```
 
 ## 📊 Monitoring Workflow Runs
+
+### Using npm Scripts (Recommended)
+```bash
+# Check status of recent workflow runs
+npm run workflows:status
+
+# List all available workflows
+npm run workflows:list
+```
 
 ### View All Runs
 ```bash
