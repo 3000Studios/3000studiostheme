@@ -17,7 +17,7 @@ jobs:
   orchestrate:
     runs-on: ubuntu-latest
     env:
-      GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      GH_TOKEN: ${{ secrets.GITHUB_PAT }}
     steps:
       - name: Trigger Theme Deploy
         run: gh workflow run 'theme-deploy.yml' --repo 3000Studios/3000studiostheme

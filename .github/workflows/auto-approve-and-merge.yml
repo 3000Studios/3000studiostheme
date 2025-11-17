@@ -23,7 +23,7 @@ jobs:
       - name: ✅ Auto Approve PR
         uses: hmarr/auto-approve-action@v3
         with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
+          github-token: ${{ secrets.GITHUB_PAT }}
 
       - name: ⚡ Auto Merge PR
         run: |
@@ -33,4 +33,4 @@ jobs:
           
           gh pr merge "$PR" --merge --admin --delete-branch --repo "${{ github.repository }}"
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_PAT }}

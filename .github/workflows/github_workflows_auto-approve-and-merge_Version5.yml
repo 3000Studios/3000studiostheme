@@ -14,7 +14,7 @@ permissions:
   checks: read
 
 env:
-  MERGE_PAT: ${{ secrets.MERGE_PAT }}
+  GITHUB_PAT: ${{ secrets.GITHUB_PAT }}
 
 jobs:
   auto-approve-and-merge:
@@ -23,7 +23,7 @@ jobs:
       - name: Auto-approve and merge (handler)
         uses: actions/github-script@v6
         with:
-          github-token: ${{ secrets.MERGE_PAT }}
+          github-token: ${{ secrets.GITHUB_PAT }}
           script: |
             const owner = context.repo.owner;
             const repo = context.repo.repo;
