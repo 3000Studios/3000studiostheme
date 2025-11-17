@@ -52,7 +52,7 @@ $fileCount = 0
 foreach ($file in $deployFiles) {
     $sourcePath = Join-Path $repoRoot $file
     $destPath = Join-Path $deployDir $file
-    
+
     if (Test-Path $sourcePath) {
         Copy-Item -Path $sourcePath -Destination $destPath -Force
         Write-Host "  ✓ $file" -ForegroundColor Green

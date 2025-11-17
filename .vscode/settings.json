@@ -57,7 +57,7 @@
     "git.openRepositoryInParentFolders": "always",
     // ========= TERMINAL AUTO-APPROVAL =========
     "terminal.integrated.defaultProfile.windows": "PowerShell",
-    "terminal.integrated.enableMultiLinePasteWarning": false,
+    "terminal.integrated.enableMultiLinePasteWarning": "never",
     "terminal.integrated.autoReplies": {
         "Terminate batch job (Y/N)?": "Y",
         "Are you sure?": "Y",
