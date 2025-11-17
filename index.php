@@ -1,4 +1,4 @@
-<?php
+﻿<?php
 /*
  *   Copyright (c) 2025 NAME.
  *   All rights reserved.
@@ -7,7 +7,7 @@
 
 /*!
  * 3000 Studios Theme
- * Copyright © 2025 3000 Studios. All rights reserved.
+ * Copyright Â© 2025 3000 Studios. All rights reserved.
  */
 
 /* Template: Home */ if (! defined('ABSPATH')) {
@@ -26,7 +26,7 @@ add_action('wp_footer', function () {
 <section class="hero">
   <canvas id="particle-bg" style="position:absolute;inset:0;z-index:-2;"></canvas>
   <div class="container">
-    <h1 style="font-size:72px;font-weight:bold;text-align:center;margin:40px 0;background:linear-gradient(45deg, #00ffff, #9d4edd, #00ff00);-webkit-background-clip:text;-webkit-text-fill-color:transparent;animation:gradient-shift 3s ease infinite;">hello hello</h1>
+    <h1 style="font-size:72px;font-weight:bold;text-align:center;margin:40px 0;background:linear-gradient(45deg, #00ffff, #9d4edd, #00ff00);-webkit-background-clip:text;-webkit-text-fill-color:transparent;animation:gradient-shift 3s ease infinite;">HELLO THERE</h1>
     <p style="font-size:24px;text-align:center;margin:20px 0;color:#fff;">System updating. Advanced features loading. Stand by...</p>
     <p>Code, creativity, and innovation collide here. Dive into the fusion of art, AI, and engineering.</p>
     <a class="cta" href="<?php echo home_url(); ?>/experience">Enter the Experience</a>
@@ -516,19 +516,19 @@ add_action('wp_footer', function () {
     <div class="game-background" style="position:absolute;top:0;left:0;right:0;bottom:0;background:radial-gradient(circle at 30% 40%, rgba(120, 119, 198, 0.4), transparent 50%), radial-gradient(circle at 70% 60%, rgba(255, 119, 198, 0.4), transparent 50%);animation:game-bg-float 15s ease-in-out infinite;"></div>
 
     <div style="position:relative;z-index:2;">
-      <h3 style="color:#fff;text-align:center;margin-bottom:1.5rem;font-size:2rem;background:linear-gradient(45deg, #ff6b6b, #4ecdc4);-webkit-background-clip:text;-webkit-text-fill-color:transparent;font-weight:bold;">🎮 Epic Runner Game</h3>
+      <h3 style="color:#fff;text-align:center;margin-bottom:1.5rem;font-size:2rem;background:linear-gradient(45deg, #ff6b6b, #4ecdc4);-webkit-background-clip:text;-webkit-text-fill-color:transparent;font-weight:bold;">ðŸŽ® Epic Runner Game</h3>
 
       <canvas id="mini-game" width="800" height="400" style="width:100%;height:400px;background:#000;border-radius:15px;border:3px solid rgba(255,255,255,0.2);box-shadow:0 10px 30px rgba(0,0,0,0.3);display:block;"></canvas>
 
       <div class="game-controls" style="display:flex;justify-content:center;gap:1rem;margin-top:1.5rem;flex-wrap:wrap;">
-        <button onclick="kbhGame.start()" style="background:rgba(255,107,107,0.8);border:none;padding:12px 24px;border-radius:25px;color:#fff;font-weight:bold;cursor:pointer;transition:all 0.3s ease;backdrop-filter:blur(10px);">🎮 START</button>
-        <button onclick="kbhGame.pause()" style="background:rgba(78,205,196,0.8);border:none;padding:12px 24px;border-radius:25px;color:#fff;font-weight:bold;cursor:pointer;transition:all 0.3s ease;backdrop-filter:blur(10px);">⏸️ PAUSE</button>
-        <button onclick="kbhGame.reset()" style="background:rgba(69,183,209,0.8);border:none;padding:12px 24px;border-radius:25px;color:#fff;font-weight:bold;cursor:pointer;transition:all 0.3s ease;backdrop-filter:blur(10px);">🔄 RESET</button>
-        <a href="<?php echo home_url(); ?>/experience" style="background:rgba(249,202,36,0.8);border:none;padding:12px 24px;border-radius:25px;color:#000;font-weight:bold;text-decoration:none;transition:all 0.3s ease;backdrop-filter:blur(10px);display:inline-block;">🚀 FULL GAME</a>
+        <button onclick="kbhGame.start()" style="background:rgba(255,107,107,0.8);border:none;padding:12px 24px;border-radius:25px;color:#fff;font-weight:bold;cursor:pointer;transition:all 0.3s ease;backdrop-filter:blur(10px);">ðŸŽ® START</button>
+        <button onclick="kbhGame.pause()" style="background:rgba(78,205,196,0.8);border:none;padding:12px 24px;border-radius:25px;color:#fff;font-weight:bold;cursor:pointer;transition:all 0.3s ease;backdrop-filter:blur(10px);">â¸ï¸ PAUSE</button>
+        <button onclick="kbhGame.reset()" style="background:rgba(69,183,209,0.8);border:none;padding:12px 24px;border-radius:25px;color:#fff;font-weight:bold;cursor:pointer;transition:all 0.3s ease;backdrop-filter:blur(10px);">ðŸ”„ RESET</button>
+        <a href="<?php echo home_url(); ?>/experience" style="background:rgba(249,202,36,0.8);border:none;padding:12px 24px;border-radius:25px;color:#000;font-weight:bold;text-decoration:none;transition:all 0.3s ease;backdrop-filter:blur(10px);display:inline-block;">ðŸš€ FULL GAME</a>
       </div>
 
       <div class="game-instructions" style="text-align:center;margin-top:1rem;color:rgba(255,255,255,0.8);font-size:0.9rem;">
-        <p style="margin:0.5rem 0;">🖱️ Click or press SPACE to jump • 🎯 Avoid obstacles • 🏆 Beat your high score!</p>
+        <p style="margin:0.5rem 0;">ðŸ–±ï¸ Click or press SPACE to jump â€¢ ðŸŽ¯ Avoid obstacles â€¢ ðŸ† Beat your high score!</p>
       </div>
     </div>
   </div>
@@ -759,7 +759,7 @@ add_action('wp_footer', function () {
           }
 
           setTimeout(() => {
-            if (confirm(`💥 Game Over!\\n🎯 Score: ${this.score}\\n🏆 Best: ${this.highScore}\\n\\n🎮 Play again?`)) {
+            if (confirm(`ðŸ’¥ Game Over!\\nðŸŽ¯ Score: ${this.score}\\nðŸ† Best: ${this.highScore}\\n\\nðŸŽ® Play again?`)) {
               this.reset();
             }
           }, 100);
@@ -875,11 +875,11 @@ add_action('wp_footer', function () {
         this.ctx.textAlign = 'center';
 
         if (this.score === 0) {
-          this.ctx.fillText('🎮 KBH GAMES', this.canvas.width / 2, this.canvas.height / 2 - 20);
+          this.ctx.fillText('ðŸŽ® KBH GAMES', this.canvas.width / 2, this.canvas.height / 2 - 20);
           this.ctx.font = 'bold 16px Arial';
           this.ctx.fillText('Click START to begin your epic adventure!', this.canvas.width / 2, this.canvas.height / 2 + 20);
         } else {
-          this.ctx.fillText('⏸️ PAUSED', this.canvas.width / 2, this.canvas.height / 2);
+          this.ctx.fillText('â¸ï¸ PAUSED', this.canvas.width / 2, this.canvas.height / 2);
           this.ctx.font = 'bold 16px Arial';
           this.ctx.fillText('Click START to continue', this.canvas.width / 2, this.canvas.height / 2 + 30);
         }
@@ -903,7 +903,8 @@ add_action('wp_footer', function () {
 
 <section class="section container">
   <h2>Top Crypto Movers</h2>
-  <div id="crypto-ticker" class="small">Loading data…</div>
+  <div id="crypto-ticker" class="small">Loading dataâ€¦</div>
 </section>
 
 <?php get_footer(); ?>
+
