@@ -23,19 +23,35 @@ jobs:
       - name: Trigger Theme Deploy
         env:
           GH_TOKEN: ${{ github.token }}
-        run: gh workflow run 'theme-deploy.yml' --repo 3000Studios/3000studiostheme
+        run: |
+          if ! gh workflow run 'theme-deploy.yml' --repo 3000Studios/3000studiostheme; then
+            echo "Failed to trigger theme-deploy.yml"
+            exit 1
+          fi
 
       - name: Trigger Repo Optimizer
         env:
           GH_TOKEN: ${{ github.token }}
-        run: gh workflow run 'repo-optimizer.yml' --repo 3000Studios/3000studiostheme
+        run: |
+          if ! gh workflow run 'repo-optimizer.yml' --repo 3000Studios/3000studiostheme; then
+            echo "Failed to trigger repo-optimizer.yml"
+            exit 1
+          fi
 
       - name: Trigger Security Watchdog
         env:
           GH_TOKEN: ${{ github.token }}
-        run: gh workflow run 'security-watchdog.yml' --repo 3000Studios/3000studiostheme
+        run: |
+          if ! gh workflow run 'security-watchdog.yml' --repo 3000Studios/3000studiostheme; then
+            echo "Failed to trigger security-watchdog.yml"
+            exit 1
+          fi
 
       - name: Trigger Command Center Sync
         env:
           GH_TOKEN: ${{ github.token }}
-        run: gh workflow run 'command-center-sync.yml' --repo 3000Studios/3000studiostheme
+        run: |
+          if ! gh workflow run 'command-center-sync.yml' --repo 3000Studios/3000studiostheme; then
+            echo "Failed to trigger command-center-sync.yml"
+            exit 1
+          fi

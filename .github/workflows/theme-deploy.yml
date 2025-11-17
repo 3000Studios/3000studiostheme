@@ -9,6 +9,9 @@ on:
 permissions:
   contents: read
 
+env:
+  WP_THEMES_DIR: /clickandbuilds/3000Studios/wp-content/themes
+
 jobs:
   deploy:
     runs-on: ubuntu-latest
@@ -58,15 +61,16 @@ jobs:
         uses: appleboy/ssh-action@v1.0.3
         env:
           THEME_NAME: ${{ env.THEME_NAME }}
+          WP_THEMES_DIR: ${{ env.WP_THEMES_DIR }}
         with:
           host: ${{ secrets.WP_SSH_HOST }}
           username: ${{ secrets.WP_SSH_USER }}
           password: ${{ secrets.WP_SSH_PASSWORD }}
           port: ${{ secrets.WP_SSH_PORT }}
-          envs: THEME_NAME
+          envs: THEME_NAME,WP_THEMES_DIR
           script: |
             # Navigate to themes directory
-            cd /clickandbuilds/3000Studios/wp-content/themes
+            cd "${WP_THEMES_DIR}"
             
             echo "Deploying new theme: ${THEME_NAME}"
             
