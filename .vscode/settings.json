@@ -1,7 +1,7 @@
 {
     "// Copyright (c) 2025 3000 Studios. All Rights Reserved.": "",
     // ========= AI & AUTOPILOT =========
-    "CodeGPT.apiKey": "Google AI Studio",
+    "CodeGPT.apiKey": "Ollama",
     "CodeGPT.autoSend": true,
     "CodeGPT.generateDocstring": true,
     "CodeGPT.response.autoScroll": true,
