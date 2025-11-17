@@ -26,10 +26,10 @@ add_action('wp_footer', function () {
 <section class="hero">
   <canvas id="particle-bg" style="position:absolute;inset:0;z-index:-2;"></canvas>
   <div class="container">
-    <h1 style="font-size:72px;font-weight:bold;text-align:center;margin:40px 0;background:linear-gradient(45deg, #00ffff, #9d4edd, #00ff00);-webkit-background-clip:text;-webkit-text-fill-color:transparent;animation:gradient-shift 3s ease infinite;">HELLO THERE</h1>
-    <p style="font-size:24px;text-align:center;margin:20px 0;color:#fff;">System updating. Advanced features loading. Stand by...</p>
-    <p>Code, creativity, and innovation collide here. Dive into the fusion of art, AI, and engineering.</p>
-    <a class="cta" href="<?php echo home_url(); ?>/experience">Enter the Experience</a>
+    <h1 style="font-size:72px;font-weight:bold;text-align:center;margin:40px 0;background:linear-gradient(45deg, #00ffff, #9d4edd, #00ff00);-webkit-background-clip:text;-webkit-text-fill-color:transparent;animation:gradient-shift 3s ease infinite;">UNDER DEVELOPMENT</h1>
+    <p style="font-size:24px;text-align:center;margin:20px 0;color:#fff;">Site is currently being rebuilt with enhanced features.</p>
+    <p>Code, creativity, and innovation collide here. Check back soon for the new experience.</p>
+    <a class="cta" href="<?php echo home_url(); ?>/experience">Preview Experience</a>
   </div>
 </section>
 
