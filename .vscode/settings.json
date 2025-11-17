@@ -1,6 +1,11 @@
 {
     "// Copyright (c) 2025 3000 Studios. All Rights Reserved.": "",
+    // ========= AI & AUTOPILOT =========
     "CodeGPT.apiKey": "Google AI Studio",
+    "CodeGPT.autoSend": true,
+    "CodeGPT.generateDocstring": true,
+    "CodeGPT.response.autoScroll": true,
+    "CodeGPT.chat.autoExecuteCommands": true,
     "github.copilot.enable": {
         "*": true,
         "yaml": true,
@@ -8,44 +13,81 @@
         "markdown": true,
         "php": true,
         "javascript": true,
-        "typescript": true
+        "typescript": true,
+        "json": true
     },
+    "github.copilot.inlineSuggest.enable": true,
+    "github.copilot.editor.enableAutoCompletions": true,
     "github.copilot.advanced": {
-        "inlineSuggestCount": 3
+        "inlineSuggestCount": 10,
+        "autocompleteOnSelect": true
     },
     "editor.inlineSuggest.enabled": true,
+    "editor.suggest.showSnippets": true,
+    "editor.suggest.showWords": true,
     "editor.suggestOnTriggerCharacters": true,
     "editor.quickSuggestions": {
         "other": true,
         "comments": true,
         "strings": true
     },
-    "// Auto-approve and auto-save settings": "",
+    // ========= FULL AUTO-MODE =========
     "files.autoSave": "afterDelay",
-    "files.autoSaveDelay": 1000,
+    "files.autoSaveDelay": 500,
     "editor.formatOnSave": true,
     "editor.formatOnPaste": true,
     "editor.codeActionsOnSave": {
         "source.fixAll": "explicit",
         "source.organizeImports": "explicit"
     },
-    "// Git settings": "",
+    // Disable ALL confirmation prompts
+    "explorer.confirmDelete": false,
+    "explorer.confirmDragAndDrop": false,
+    "security.workspace.trust.enabled": false,
+    "security.workspace.trust.untrustedFiles": "open",
+    "security.promptForWorkspaceTrust": false,
+    "window.dialogStyle": "custom",
+    "workbench.startupEditor": "none",
+    // ========= GIT AUTOPILOT =========
     "git.autofetch": true,
     "git.confirmSync": false,
     "git.enableSmartCommit": true,
     "git.postCommitCommand": "push",
-    "// Disable confirmations (auto-approve)": "",
-    "explorer.confirmDelete": false,
-    "explorer.confirmDragAndDrop": false,
-    "debug.openDebug": "neverOpen",
-    "debug.showInStatusBar": "never",
-    "// PHP settings": "",
+    "git.autoRepositoryDetection": "openEditors",
+    "git.openRepositoryInParentFolders": "always",
+    // ========= TERMINAL AUTO-APPROVAL =========
+    "terminal.integrated.defaultProfile.windows": "PowerShell",
+    "terminal.integrated.enableMultiLinePasteWarning": false,
+    "terminal.integrated.autoReplies": {
+        "Terminate batch job (Y/N)?": "Y",
+        "Are you sure?": "Y",
+        "Proceed?": "Y",
+        "Continue?": "Y"
+    },
+    // Auto-approve tools
+    "chat.tools.terminal.autoApprove": {
+        "*": true,
+        "git add": true,
+        "git commit": true,
+        "git push": true,
+        "npm install": true,
+        "npm run": true,
+        "composer install": true,
+        "powershell": true,
+        "node": true,
+        "where.exe": true
+    },
+    // ========= LANGUAGES =========
+    // PHP
     "php.validate.enable": true,
     "php.validate.run": "onSave",
-    "// JavaScript/TypeScript settings": "",
+    "php.validate.executablePath": "",
+    // JavaScript/TypeScript
     "javascript.updateImportsOnFileMove.enabled": "always",
     "typescript.updateImportsOnFileMove.enabled": "always",
-    "// File watcher excludes": "",
+    "javascript.suggest.autoImports": true,
+    "typescript.suggest.autoImports": true,
+    // ========= FILE / SEARCH OPTIMIZATION =========
     "files.watcherExclude": {
         "**/.git/objects/**": true,
         "**/.git/subtree-cache/**": true,
@@ -54,12 +96,20 @@
         "**/*.backup.*": true,
         "**/*.zip": true
     },
-    "// Search excludes": "",
     "search.exclude": {
         "**/node_modules": true,
         "**/bower_components": true,
         "**/*.backup.*": true,
         "**/*.zip": true
     },
-    "php.validate.executablePath": ""
+    // ========= PERFORMANCE & UI =========
+    "editor.fontLigatures": true,
+    "editor.smoothScrolling": true,
+    "editor.cursorBlinking": "phase",
+    "editor.cursorSmoothCaretAnimation": "on",
+    "editor.largeFileOptimizations": false,
+    "workbench.colorTheme": "Default Dark Modern",
+    "workbench.tips.enabled": false,
+    "breadcrumbs.enabled": true,
+    "editor.minimap.enabled": true
 }
