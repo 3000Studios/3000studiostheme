@@ -15,7 +15,7 @@ THEME_NAME="3000studiostheme"
 VERSION="1.0.0"
 DATE=$(date +"%Y%m%d_%H%M%S")
 PACKAGE_NAME="${THEME_NAME}_v${VERSION}_${DATE}"
-OUTPUT_DIR="../theme-packages"
+OUTPUT_DIR="$(pwd)/theme-packages"
 TEMP_DIR="/tmp/${PACKAGE_NAME}"
 
 # Create directories
@@ -459,14 +459,16 @@ All Rights Reserved
 EOF
 
 # Create the package
-cd ..
 echo "📦 Creating deployment package..."
 
+# Move to parent directory to zip with proper folder structure
+cd ..
+
 # Create ZIP file
-zip -r "${OUTPUT_DIR}/${PACKAGE_NAME}.zip" "${PACKAGE_NAME}/" -x "*.git*" "*.DS_Store*" "*node_modules*"
+zip -r "${OUTPUT_DIR}/${PACKAGE_NAME}.zip" "${PACKAGE_NAME}" -x "*.git*" "*.DS_Store*" "*node_modules*"
 
 # Create TAR.GZ file
-tar -czf "${OUTPUT_DIR}/${PACKAGE_NAME}.tar.gz" "${PACKAGE_NAME}/"
+tar -czf "${OUTPUT_DIR}/${PACKAGE_NAME}.tar.gz" "${PACKAGE_NAME}"
 
 # Cleanup
 rm -rf "$TEMP_DIR"

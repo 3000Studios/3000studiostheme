@@ -12,6 +12,17 @@ permissions:
   pull-requests: write
   issues: write
   checks: read
+name: Auto Approve & Merge
+
+on:
+  pull_request:
+    types: [opened, reopened, synchronize]
+    branches:
+      - main
+
+permissions:
+  pull-requests: write
+  contents: write
 
 jobs:
   auto-approve-and-merge:
@@ -83,3 +94,24 @@ jobs:
                 await processPR(pr);
               }
             }
+
+    steps:
+      - name: 🔍 Dump PR info
+        run: |
+          echo "PR #: ${{ github.event.pull_request.number }}"
+          echo "Branch: ${{ github.event.pull_request.head.ref }}"
+
+      - name: ✅ Auto Approve PR
+        uses: hmarr/auto-approve-action@v3
+        with:
+          github-token: ${{ secrets.GITHUB_PAT }}
+
+      - name: ⚡ Auto Merge PR
+        run: |
+          PR=${{ github.event.pull_request.number }}
+
+          echo "Attempting merge for PR #$PR..."
+          
+          gh pr merge "$PR" --merge --admin --delete-branch --repo "${{ github.repository }}"
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_PAT }}

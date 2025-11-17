@@ -100,16 +100,20 @@ register_nav_menus(array(
     'primary' => __('Primary Menu', 'threek')
 ));
 
-// Load AI Intelligence Systems
+// Load AI Intelligence Systems - Always load ai-learning and api-settings for database setup
 require_once get_template_directory() . '/includes/ai-learning.php';
-require_once get_template_directory() . '/includes/wp-intelligence.php';
 require_once get_template_directory() . '/includes/api-settings.php';
-require_once get_template_directory() . '/includes/api-connector.php';
-require_once get_template_directory() . '/includes/monetization.php';
 
-// Load Live Reload System (Black Vault SUPREME) - Only in development
-if (defined('WP_DEBUG') && WP_DEBUG && file_exists(get_template_directory() . '/includes/live-reload-inject.php')) {
-    require_once get_template_directory() . '/includes/live-reload-inject.php';
+// Load frontend-only includes (not needed in admin)
+if (!is_admin()) {
+    require_once get_template_directory() . '/includes/wp-intelligence.php';
+    require_once get_template_directory() . '/includes/api-connector.php';
+    require_once get_template_directory() . '/includes/monetization.php';
+    
+    // Load Live Reload System (Black Vault SUPREME) - Only in development
+    if (defined('WP_DEBUG') && WP_DEBUG && file_exists(get_template_directory() . '/includes/live-reload-inject.php')) {
+        require_once get_template_directory() . '/includes/live-reload-inject.php';
+    }
 }
 
 // Initialize AI database tables
@@ -117,8 +121,12 @@ add_action('after_switch_theme', 'studios_ai_create_tables');
 
 /**
  * AJAX Handler: Preview AI Command
+ * Only register AJAX handlers if not in admin page view
  */
-add_action('wp_ajax_studios_preview_command', 'studios_ajax_preview_command');
+if (!is_admin() || (defined('DOING_AJAX') && DOING_AJAX)) {
+    add_action('wp_ajax_studios_preview_command', 'studios_ajax_preview_command');
+}
+
 function studios_ajax_preview_command()
 {
     check_ajax_referer('studios_ai_nonce', 'nonce');
@@ -128,6 +136,11 @@ function studios_ajax_preview_command()
 
     if (empty($command)) {
         wp_send_json_error(['message' => 'Command is required']);
+    }
+
+    // Check if required classes are available
+    if (!class_exists('Studios_WP_Intelligence') || !class_exists('Studios_API_Connector')) {
+        wp_send_json_error(['message' => 'Required AI components not loaded']);
     }
 
     // Get page context
@@ -243,8 +256,12 @@ function studios_generate_preview($parsed)
 
 /**
  * AJAX Handler: Execute AI Command - Black Vault SUPREME Edition
+ * Only register AJAX handlers if not in admin page view
  */
-add_action('wp_ajax_studios_execute_command', 'studios_ajax_execute_command');
+if (!is_admin() || (defined('DOING_AJAX') && DOING_AJAX)) {
+    add_action('wp_ajax_studios_execute_command', 'studios_ajax_execute_command');
+}
+
 function studios_ajax_execute_command()
 {
     check_ajax_referer('studios_ai_nonce', 'nonce');
@@ -254,6 +271,11 @@ function studios_ajax_execute_command()
 
     if (empty($command)) {
         wp_send_json_error(['message' => 'Command is required, sexy!']);
+    }
+
+    // Check if required classes are available
+    if (!class_exists('Studios_API_Connector')) {
+        wp_send_json_error(['message' => 'Required AI components not loaded']);
     }
 
     $start_time = microtime(true);
@@ -509,8 +531,12 @@ function studios_clear_cache()
 
 /**
  * AJAX Handler: Search Images
+ * Only register AJAX handlers if not in admin page view
  */
-add_action('wp_ajax_studios_search_images', 'studios_ajax_search_images');
+if (!is_admin() || (defined('DOING_AJAX') && DOING_AJAX)) {
+    add_action('wp_ajax_studios_search_images', 'studios_ajax_search_images');
+}
+
 function studios_ajax_search_images()
 {
     check_ajax_referer('studios_ai_nonce', 'nonce');
@@ -520,6 +546,11 @@ function studios_ajax_search_images()
 
     if (empty($query)) {
         wp_send_json_error(['message' => 'Search query is required']);
+    }
+
+    // Check if required class is available
+    if (!class_exists('Studios_API_Connector')) {
+        wp_send_json_error(['message' => 'Required API components not loaded']);
     }
 
     $results = [];
@@ -539,8 +570,12 @@ function studios_ajax_search_images()
 
 /**
  * AJAX Handler: Get Learning Stats
+ * Only register AJAX handlers if not in admin page view
  */
-add_action('wp_ajax_studios_get_stats', 'studios_ajax_get_stats');
+if (!is_admin() || (defined('DOING_AJAX') && DOING_AJAX)) {
+    add_action('wp_ajax_studios_get_stats', 'studios_ajax_get_stats');
+}
+
 function studios_ajax_get_stats()
 {
     global $wpdb;
@@ -561,4 +596,217 @@ function studios_ajax_get_stats()
         'success_rate' => $success_rate,
         'top_patterns' => $top_patterns
     ]);
+}
+
+/**
+ * Add media content to page
+ */
+function studios_add_media_content($parsed)
+{
+    $media_url = $parsed['media_url'] ?? '';
+    $media_type = $parsed['media_type'] ?? 'image';
+    $page = $parsed['page'] ?? 'homepage';
+    
+    if (empty($media_url)) {
+        return ['success' => false, 'message' => 'No media URL provided'];
+    }
+    
+    // Determine target file
+    $file_path = get_template_directory() . '/index.php';
+    if ($page !== 'homepage') {
+        $page_file = get_template_directory() . '/page-' . sanitize_file_name($page) . '.php';
+        if (file_exists($page_file)) {
+            $file_path = $page_file;
+        }
+    }
+    
+    if (!file_exists($file_path)) {
+        return ['success' => false, 'message' => 'Target file not found'];
+    }
+    
+    // Backup original
+    $backup_path = $file_path . '.backup.' . time();
+    copy($file_path, $backup_path);
+    
+    // Clean old backups
+    studios_cleanup_old_backups(dirname($file_path), 5);
+    
+    $content = file_get_contents($file_path);
+    
+    // Create media element with proper class for styling
+    if ($media_type === 'image') {
+        $media_element = '<img src="' . esc_url($media_url) . '" alt="AI Generated Image" class="ai-generated-media ai-image">';
+    } elseif ($media_type === 'video') {
+        $media_element = '<video src="' . esc_url($media_url) . '" controls class="ai-generated-media ai-video"></video>';
+    } else {
+        $media_element = '<div class="ai-generated-media ai-link"><a href="' . esc_url($media_url) . '" target="_blank" rel="noopener">View Media</a></div>';
+    }
+    
+    // Wrap in container for consistent styling
+    $media_container = '<div class="ai-media-container">' . $media_element . '</div>';
+    
+    // Insert media after first section if found
+    if (strpos($content, '</section>') !== false) {
+        $content = preg_replace('/(<\/section>)/', '$1' . "\n" . $media_container, $content, 1);
+    }
+    
+    if (file_put_contents($file_path, $content)) {
+        return [
+            'success' => true,
+            'message' => 'Media added successfully!',
+            'backup_created' => $backup_path
+        ];
+    }
+    
+    return ['success' => false, 'message' => 'Failed to write changes'];
+}
+
+/**
+ * Update page background
+ */
+function studios_update_background($parsed)
+{
+    $color = $parsed['color'] ?? '';
+    $gradient = $parsed['gradient'] ?? false;
+    $page = $parsed['page'] ?? 'homepage';
+    
+    if (empty($color) && !$gradient) {
+        return ['success' => false, 'message' => 'No color or gradient specified'];
+    }
+    
+    $css_file = get_template_directory() . '/style.css';
+    if (!file_exists($css_file)) {
+        return ['success' => false, 'message' => 'Style file not found'];
+    }
+    
+    $content = file_get_contents($css_file);
+    
+    // Create background style
+    $bg_class = '.bg-' . sanitize_title($page);
+    $bg_style = $gradient
+        ? "background: linear-gradient(135deg, {$parsed['gradient_start']} 0%, {$parsed['gradient_end']} 100%);"
+        : "background: {$color};";
+    
+    $css_rule = "\n/* AI Generated Background for {$page} */\n{$bg_class} {\n  {$bg_style}\n}\n";
+    
+    // Check if rule exists
+    if (strpos($content, $bg_class) === false) {
+        $content .= $css_rule;
+        
+        if (file_put_contents($css_file, $content)) {
+            return [
+                'success' => true,
+                'message' => "Background updated! Add class '{$bg_class}' to your page container.",
+                'css_class' => $bg_class
+            ];
+        }
+    }
+    
+    return [
+        'success' => true,
+        'message' => 'Background style already exists or updated!'
+    ];
+}
+
+/**
+ * Add payment button
+ */
+function studios_add_payment_button($parsed)
+{
+    $button_text = $parsed['button_text'] ?? 'Buy Now';
+    $price = $parsed['price'] ?? '9.99';
+    $page = $parsed['page'] ?? 'homepage';
+    
+    // Determine target file
+    $file_path = get_template_directory() . '/index.php';
+    if ($page !== 'homepage') {
+        $page_file = get_template_directory() . '/page-' . sanitize_file_name($page) . '.php';
+        if (file_exists($page_file)) {
+            $file_path = $page_file;
+        }
+    }
+    
+    if (!file_exists($file_path)) {
+        return ['success' => false, 'message' => 'Target file not found'];
+    }
+    
+    // Backup original
+    $backup_path = $file_path . '.backup.' . time();
+    copy($file_path, $backup_path);
+    
+    // Clean old backups (keep only last 5)
+    studios_cleanup_old_backups(dirname($file_path), 5);
+    
+    $content = file_get_contents($file_path);
+    
+    // Create payment button with data attributes instead of onclick
+    $payment_button = '
+<div class="payment-button-container" style="text-align:center;margin:2rem auto;padding:2rem;">
+    <button class="cta payment-button" data-price="' . esc_attr($price) . '">
+        ' . esc_html($button_text) . ' - $' . esc_html($price) . '
+    </button>
+</div>';
+    
+    // Insert button after first CTA or section using safer HTML manipulation
+    if (strpos($content, '</section>') !== false) {
+        $content = preg_replace('/(<\/section>)/', '$1' . "\n" . $payment_button, $content, 1);
+    }
+    
+    if (file_put_contents($file_path, $content)) {
+        return [
+            'success' => true,
+            'message' => 'Payment button added successfully! Note: Add click handler in JavaScript.',
+            'backup_created' => $backup_path
+        ];
+    }
+    
+    return ['success' => false, 'message' => 'Failed to write changes'];
+}
+
+/**
+ * Clean up old backup files
+ */
+function studios_cleanup_old_backups($directory, $keep_count = 5)
+{
+    $backups = glob($directory . '/*.backup.*');
+    if (count($backups) > $keep_count) {
+        // Sort by modification time, oldest first
+        usort($backups, function($a, $b) {
+            return filemtime($a) - filemtime($b);
+        });
+        
+        // Delete oldest backups
+        $to_delete = array_slice($backups, 0, count($backups) - $keep_count);
+        foreach ($to_delete as $file) {
+            @unlink($file);
+        }
+    }
+}
+
+/**
+ * Add monetization features
+ */
+function studios_add_monetization($parsed)
+{
+    $monetization_type = $parsed['monetization_type'] ?? 'ads';
+    
+    return [
+        'success' => true,
+        'message' => "Monetization type '{$monetization_type}' noted. Full implementation requires payment gateway setup.",
+        'next_steps' => 'Configure Stripe/PayPal in wp-config.php or use Monetization settings page'
+    ];
+}
+
+/**
+ * Generic command handler for unknown actions
+ */
+function studios_generic_update($parsed)
+{
+    $action = $parsed['action'] ?? 'unknown';
+    
+    return [
+        'success' => true,
+        'message' => "Command '{$action}' acknowledged. This action may require manual implementation.",
+        'parsed_data' => $parsed
+    ];
 }

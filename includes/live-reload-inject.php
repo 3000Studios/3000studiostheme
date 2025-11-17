@@ -12,6 +12,11 @@ if (!defined('ABSPATH')) exit;
  */
 function studios_inject_live_reload()
 {
+    // Never inject in admin area
+    if (is_admin()) {
+        return;
+    }
+
     // Only in development mode - NEVER in production
     if (!defined('WP_DEBUG') || !WP_DEBUG) {
         return;

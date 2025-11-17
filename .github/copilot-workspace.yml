@@ -5,23 +5,35 @@
 # This file configures GitHub Copilot behavior for the 3000 Studios Theme repository
 
 name: "3000 Studios Theme - Copilot Ωmega"
-version: "1.0.0"
+version: "2.0.0"
 
 # Project Context
 context:
   type: "wordpress-theme"
-  framework: "custom"
+  framework: "custom-wordpress"
   languages:
     - "php"
     - "javascript"
     - "css"
     - "html"
   
+  package_manager: "npm"
+  
   dependencies:
     - "WordPress 5.8+"
+    - "PHP 7.4+"
+    - "Node.js 16+"
     - "Tailwind CSS"
     - "Framer Motion"
     - "Three.js"
+  
+  key_directories:
+    root: "/"
+    javascript: "/js/"
+    assets: "/assets/"
+    includes: "/includes/"
+    scripts: "/scripts/"
+    github: "/.github/"
 
 # Coding Standards
 standards:
@@ -29,28 +41,57 @@ standards:
     style: "WordPress Coding Standards"
     version: "7.4+"
     security: "strict"
+    prefix: "threek_"
+    sanitization:
+      - "sanitize_text_field()"
+      - "sanitize_email()"
+      - "wp_kses_post()"
+    escape:
+      - "esc_html()"
+      - "esc_attr()"
+      - "esc_url()"
+    database: "wpdb->prepare()"
     
   javascript:
     style: "ESLint"
     ecmaVersion: "ES2021"
     modules: true
+    type: "vanilla"
+    no_typescript: true
+    jquery: "available"
     
   css:
     framework: "Tailwind CSS"
     style: "utility-first"
+    theme_file: "style.css"
     
   documentation:
     style: "JSDoc"
     required: true
+    wordpress_standards: true
 
 # Security Rules
 security:
-  - "Always sanitize user inputs"
-  - "Use nonce verification for forms"
-  - "Escape all outputs"
-  - "Use prepared statements for database queries"
-  - "Never expose credentials in code"
-  - "Implement proper error handling"
+  principles:
+    - "Always sanitize user inputs"
+    - "Use nonce verification for forms"
+    - "Escape all outputs"
+    - "Use prepared statements for database queries"
+    - "Never expose credentials in code"
+    - "Implement proper error handling"
+    - "Use environment variables for sensitive data"
+  
+  wordpress_specific:
+    - "wp_nonce_field() for forms"
+    - "wp_verify_nonce() for verification"
+    - "current_user_can() for capabilities"
+    - "wp_safe_redirect() for redirects"
+  
+  vault_location: "C:\\GPT\\Vault"
+  
+  audit:
+    enabled: true
+    auto_scan: true
 
 # Monetization Patterns
 monetization:
@@ -93,14 +134,25 @@ patterns:
     prefix: "page-"
     suffix: ".php"
     location: "root"
+    template_comment: "Template Name: {Name}"
+    
+  php_functions:
+    prefix: "threek_"
+    naming: "snake_case"
     
   javascript:
     location: "js/"
     minified: false
+    enqueue_via: "functions.php"
     
   styles:
     location: "assets/css/"
     preprocessor: "none"
+    main_file: "style.css"
+  
+  includes:
+    location: "includes/"
+    prefix: "threek-"
 
 # Ignore Patterns
 ignore:
@@ -115,15 +167,27 @@ ignore:
 commands:
   - name: "Create WordPress Page Template"
     pattern: "// @copilot-omega create-page-template [name]"
+    description: "Generates a complete WordPress page template with header, footer, and nonce security"
     
   - name: "Add Neon Animation"
     pattern: "/* @copilot-omega neon-animation */"
+    description: "Injects 3000 Studios brand neon animation effects"
     
   - name: "Integrate Payment"
     pattern: "// @copilot-omega add-payment [provider]"
+    description: "Adds Stripe, PayPal, or Cash App payment integration"
     
   - name: "SEO Optimization"
     pattern: "// @copilot-omega optimize-seo"
+    description: "Implements meta tags, structured data, and SEO best practices"
+  
+  - name: "Sanitize & Escape"
+    pattern: "// @copilot-omega secure [type]"
+    description: "Adds proper WordPress sanitization and escaping"
+  
+  - name: "Create AI Dashboard Component"
+    pattern: "// @copilot-omega ai-component [name]"
+    description: "Generates AI-powered dashboard component with 3000 Studios styling"
 
 # Learning Preferences
 learning:
@@ -131,6 +195,22 @@ learning:
   suggest_refactoring: true
   auto_fix_issues: true
   performance_optimization: true
+  security_audit: true
+  monetization_suggestions: true
+  
+  memory:
+    enabled: true
+    location: "C:\\GPT\\OmegaCache"
+    vector_storage: true
+  
+  logging:
+    enabled: true
+    location: "C:\\GPT\\logs"
+    
+  reports:
+    enabled: true
+    location: "C:\\GPT\\OmegaReports"
+    daily_summary: true
 
 # Deployment
 deployment:
@@ -140,21 +220,50 @@ deployment:
     - "production"
   
   platforms:
-    - "WordPress"
+    - "WordPress (3000studios.com)"
+    - "WordPress (YouTuneAI.com)"
     - "Vercel"
     - "cPanel"
+    - "IONOS"
+  
+  automation:
+    enabled: true
+    ci_cd: "GitHub Actions"
+    auto_deploy_on_merge: true
+  
+  mobile:
+    termux_support: true
+    android_deployment: true
 
 # Testing
 testing:
   unit_tests: false
   integration_tests: false
   manual_testing: true
+  
+  validation:
+    php_syntax: "php -l"
+    eslint: "npm run lint"
+    
+  local_environment:
+    required: true
+    wordpress_local: true
+    theme_location: "wp-content/themes/"
 
 # Version Control
 vcs:
   platform: "GitHub"
+  repository: "3000Studios/3000studiostheme"
   default_branch: "main"
   commit_style: "conventional"
+  branch_patterns:
+    feature: "feature/"
+    copilot: "copilot/"
+    fix: "fix/"
+  
+  automation:
+    husky: true
+    pre_commit_lint: true
   
 # Collaboration
 collaboration:
@@ -167,3 +276,43 @@ quality:
   performance_score: 95
   security_score: 100
   accessibility_score: 90
+  seo_score: 95
+  
+  targets:
+    load_time: "< 2s"
+    fps: 60
+    lighthouse_score: "> 90"
+
+# Autonomy Settings
+autonomy:
+  level: "high"
+  auto_fix: true
+  auto_optimize: true
+  auto_document: true
+  proactive_suggestions: true
+  
+  capabilities:
+    - "full build control"
+    - "deploy automation"
+    - "refactor optimization"
+    - "self-healing code"
+    - "dependency management"
+    - "security hardening"
+    - "monetization injection"
+
+# AI Integration
+ai:
+  models:
+    - "GitHub Copilot"
+    - "Custom LLM APIs"
+  
+  features:
+    voice_control: true
+    image_processing: true
+    code_generation: true
+    auto_documentation: true
+  
+  learning:
+    context_aware: true
+    pattern_recognition: true
+    continuous_improvement: true

@@ -201,6 +201,36 @@ Licensed users receive 1 year of premium support via email.
 
 ---
 
+## 🔄 GitHub Actions Workflows
+
+The theme includes **16 automated workflows** for CI/CD, security, and maintenance:
+
+### Run All Workflows:
+```bash
+# Using npm (easiest)
+npm run workflows:run
+
+# Check workflow status
+npm run workflows:status
+
+# List available workflows
+npm run workflows:list
+```
+
+### Available Workflows:
+- 🚀 **Auto-Deploy** - Automatic deployment to production
+- 📦 **Theme Package** - Build distribution packages
+- 🔒 **Security Watchdog** - Nightly security scans
+- 🧹 **Repo Optimizer** - Repository maintenance
+- 📝 **Auto Changelog** - Generate changelogs
+- ☁️ **Drive Sync** - Backup to Google Drive
+- 🔍 **Dev Inspector** - Code quality analysis
+- And 9 more workflows...
+
+**📚 Full Documentation:** [RUN-ALL-WORKFLOWS.md](RUN-ALL-WORKFLOWS.md)
+
+---
+
 ## 🔒 Security Features
 
 ### Built-in Protection:
