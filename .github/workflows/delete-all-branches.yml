@@ -1,0 +1,49 @@
+name: Delete All Branches Except Main (Manual Only)
+
+on:
+  workflow_dispatch:
+    inputs:
+      confirm_deletion:
+        description: 'Type DELETE to confirm deletion of all branches except main'
+        required: true
+        default: 'NO'
+
+permissions:
+  contents: write
+
+jobs:
+  delete-all-branches:
+    runs-on: ubuntu-latest
+    if: github.event.inputs.confirm_deletion == 'DELETE'
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          
+      - name: Delete ALL branches except main
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          echo "🚨 DANGER: Deleting ALL branches except main!"
+          echo "Confirmation: ${{ github.event.inputs.confirm_deletion }}"
+          
+          git fetch --all
+          
+          # Get all remote branches except main
+          BRANCHES=$(git branch -r | grep -v 'HEAD' | grep -v '/main$' | sed 's|origin/||' | sed 's/^[[:space:]]*//')
+          
+          echo "Branches to delete:"
+          echo "$BRANCHES"
+          echo ""
+          
+          # Delete each branch
+          for branch in $BRANCHES; do
+            echo "🗑️  Deleting branch: $branch"
+            git push origin --delete "$branch" 2>&1 || echo "⚠️  Failed to delete $branch (may be protected)"
+          done
+          
+          echo ""
+          echo "✅ All branches deleted except main!"
+          echo "Remaining branches:"
+          git branch -r
