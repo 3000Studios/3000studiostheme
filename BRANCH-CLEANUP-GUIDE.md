@@ -34,24 +34,30 @@ The repository now has automated branch cleanup workflows:
 5. Click "Run workflow" button
 
 ### Option 3: Command Line (Manual)
+Replace `{OWNER}` with `3000Studios` and `{REPO}` with `3000studiostheme` in the commands below:
+
 ```bash
 # Delete branches manually using GitHub CLI
 gh auth login
 
+# Set variables
+OWNER="3000Studios"
+REPO="3000studiostheme"
+
 # Delete each branch
-gh api -X DELETE repos/3000Studios/3000studiostheme/git/refs/heads/codespace-solid-tribble-v6rv744jw6xx34jw
-gh api -X DELETE repos/3000Studios/3000studiostheme/git/refs/heads/copilot/fix-191440426-1086339876-ca4397ee-2614-4f6a-a913-e12e3815c05e
-gh api -X DELETE repos/3000Studios/3000studiostheme/git/refs/heads/copilot/fix-admin-page-loading-issue
-gh api -X DELETE repos/3000Studios/3000studiostheme/git/refs/heads/copilot/fix-ai-reviewer-workflow
-gh api -X DELETE repos/3000Studios/3000studiostheme/git/refs/heads/copilot/fix-auto-review-comments
-gh api -X DELETE repos/3000Studios/3000studiostheme/git/refs/heads/copilot/fix-dev-inspector-workflow
-gh api -X DELETE repos/3000Studios/3000studiostheme/git/refs/heads/copilot/fix-website-loading-issues
-gh api -X DELETE repos/3000Studios/3000studiostheme/git/refs/heads/copilot/merge-all-branches-to-main
-gh api -X DELETE repos/3000Studios/3000studiostheme/git/refs/heads/copilot/remove-music-carousel
-gh api -X DELETE repos/3000Studios/3000studiostheme/git/refs/heads/copilot/remove-music-carousel-check-links
-gh api -X DELETE repos/3000Studios/3000studiostheme/git/refs/heads/copilot/remove-run-all-workflows
-gh api -X DELETE repos/3000Studios/3000studiostheme/git/refs/heads/copilot/update-gh-token-permissions
-gh api -X DELETE repos/3000Studios/3000studiostheme/git/refs/heads/copilot/cleanup-branches-and-merge
+gh api -X DELETE repos/${OWNER}/${REPO}/git/refs/heads/codespace-solid-tribble-v6rv744jw6xx34jw
+gh api -X DELETE repos/${OWNER}/${REPO}/git/refs/heads/copilot/fix-191440426-1086339876-ca4397ee-2614-4f6a-a913-e12e3815c05e
+gh api -X DELETE repos/${OWNER}/${REPO}/git/refs/heads/copilot/fix-admin-page-loading-issue
+gh api -X DELETE repos/${OWNER}/${REPO}/git/refs/heads/copilot/fix-ai-reviewer-workflow
+gh api -X DELETE repos/${OWNER}/${REPO}/git/refs/heads/copilot/fix-auto-review-comments
+gh api -X DELETE repos/${OWNER}/${REPO}/git/refs/heads/copilot/fix-dev-inspector-workflow
+gh api -X DELETE repos/${OWNER}/${REPO}/git/refs/heads/copilot/fix-website-loading-issues
+gh api -X DELETE repos/${OWNER}/${REPO}/git/refs/heads/copilot/merge-all-branches-to-main
+gh api -X DELETE repos/${OWNER}/${REPO}/git/refs/heads/copilot/remove-music-carousel
+gh api -X DELETE repos/${OWNER}/${REPO}/git/refs/heads/copilot/remove-music-carousel-check-links
+gh api -X DELETE repos/${OWNER}/${REPO}/git/refs/heads/copilot/remove-run-all-workflows
+gh api -X DELETE repos/${OWNER}/${REPO}/git/refs/heads/copilot/update-gh-token-permissions
+gh api -X DELETE repos/${OWNER}/${REPO}/git/refs/heads/copilot/cleanup-branches-and-merge
 ```
 
 ### Option 4: GitHub Web Interface

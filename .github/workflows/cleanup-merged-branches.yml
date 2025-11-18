@@ -25,7 +25,7 @@ jobs:
           git fetch --all
           
           echo "📝 Listing all remote branches..."
-          BRANCHES=$(git branch -r | grep -v 'HEAD' | grep -v '/main$' | sed 's|origin/||' | tr -d ' ')
+          BRANCHES=$(git branch -r | grep -v 'HEAD' | grep -v '/main$' | sed 's|origin/||' | sed 's/^[[:space:]]*//')
           
           echo "Found branches to potentially delete:"
           echo "$BRANCHES"
