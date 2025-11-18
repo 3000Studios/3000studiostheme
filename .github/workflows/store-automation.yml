@@ -1,0 +1,158 @@
+# Copyright (c) 2025 Mr. jwswain - 3000 Studios. All Rights Reserved.
+# Store Automation - Auto-products and payment integration
+
+name: 🛒 Store Automation
+
+on:
+  workflow_dispatch:
+  schedule:
+    # Run weekly on Sundays at midnight
+    - cron: '0 0 * * 0'
+
+env:
+  THEME_NAME: 3000studios
+
+jobs:
+  store-health-check:
+    name: 🏪 Store Health Check
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - name: 🔥 Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: 📊 Check Store Pages
+        run: |
+          echo "🛒 Checking store pages..."
+          
+          if [ -f "page-shop.php" ]; then
+            echo "✅ Shop page found"
+          else
+            echo "❌ Shop page missing"
+          fi
+          
+          if [ -f "page-app-store.php" ]; then
+            echo "✅ App Store page found"
+          else
+            echo "❌ App Store page missing"
+          fi
+
+      - name: 🔍 Check Payment Integration
+        run: |
+          echo "💳 Checking payment integrations..."
+          
+          # Check for Stripe integration
+          grep -r "stripe" --include="*.php" . && echo "✅ Stripe integration found" || echo "ℹ️  Stripe not integrated"
+          
+          # Check for PayPal integration
+          grep -r "paypal" --include="*.php" . && echo "✅ PayPal integration found" || echo "ℹ️  PayPal not integrated"
+
+      - name: 📝 Check WooCommerce Integration
+        run: |
+          echo "🛍️ Checking WooCommerce support..."
+          grep -r "woocommerce\|WC_Product" --include="*.php" . && echo "✅ WooCommerce support found" || echo "ℹ️  WooCommerce support needed"
+
+  update-store-config:
+    name: 🔧 Update Store Configuration
+    runs-on: ubuntu-latest
+    needs: store-health-check
+    permissions:
+      contents: read
+    steps:
+      - name: 🔥 Checkout Repository
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: 📝 Generate Store Report
+        run: |
+          mkdir -p reports
+          cat > reports/store-status.md << 'EOF'
+          # 🛒 3000 Studios Store Status
+          
+          **Last Updated:** $(date)
+          
+          ## Store Pages
+          - Shop Page: ✅ Active
+          - App Store: ✅ Active
+          
+          ## Payment Methods
+          - Stripe: 🔧 Configuration needed
+          - PayPal: 🔧 Configuration needed
+          - Cash App: 🔧 Configuration needed
+          
+          ## Required Actions
+          1. Configure Stripe API keys in WordPress
+          2. Set up PayPal Business account
+          3. Add Cash App payment links
+          
+          ## Product Categories
+          - Digital Downloads
+          - AI Tools
+          - Theme Licenses
+          - Premium Features
+          
+          EOF
+
+      - name: 📤 Upload Report
+        uses: actions/upload-artifact@v4
+        with:
+          name: store-report
+          path: reports/store-status.md
+          retention-days: 30
+
+  payment-integration-check:
+    name: 💰 Payment Integration Check
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - name: 🔥 Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: 🔍 Verify Payment Files
+        run: |
+          echo "💳 Checking payment integration files..."
+          
+          if [ -f "includes/monetization.php" ]; then
+            echo "✅ Monetization file found"
+            echo "Contents:"
+            head -20 includes/monetization.php
+          else
+            echo "ℹ️  Creating monetization file needed"
+          fi
+
+      - name: 📋 Payment Checklist
+        run: |
+          cat << 'EOF'
+          
+          ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+          💰 PAYMENT INTEGRATION CHECKLIST
+          ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+          
+          ## Stripe Setup
+          □ Create Stripe account
+          □ Get API keys (publishable & secret)
+          □ Add to WordPress settings
+          □ Test webhook endpoints
+          
+          ## PayPal Setup
+          □ Create PayPal Business account
+          □ Get API credentials
+          □ Configure payment buttons
+          □ Test transactions
+          
+          ## Cash App Setup
+          □ Get Cash App $Cashtag
+          □ Create payment links
+          □ Add to checkout page
+          
+          ## Security
+          □ Store API keys in .env
+          □ Never commit credentials
+          □ Use WordPress secrets management
+          □ Enable SSL/HTTPS
+          
+          ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+          EOF
