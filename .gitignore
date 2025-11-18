@@ -41,5 +41,12 @@ yarn-error.log*
 *.temp
 /tmp/
 
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+
 # WordPress
 wp-config-local.php
