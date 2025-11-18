@@ -1,0 +1,68 @@
+name: 🤖 AI Reviewer
+on:
+  pull_request_target:
+    types: [opened, reopened, synchronize, ready_for_review]
+
+permissions:
+  pull-requests: write
+  contents: read
+
+jobs:
+  review:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      
+      - name: Validate OPENAI_API_KEY
+        env:
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+        run: |
+          if [ -z "$OPENAI_API_KEY" ]; then
+            echo "ERROR: OPENAI_API_KEY secret is not configured!"
+            echo "Please add the OPENAI_API_KEY secret to your repository settings."
+            exit 1
+          fi
+          echo "✓ OPENAI_API_KEY is configured"
+      
+      - name: Prepare PR context
+        id: ctx
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const pr = context.payload.pull_request;
+            return { prNumber: pr.number, title: pr.title, user: pr.user.login, base: pr.base.ref, head: pr.head.ref };
+      
+      - name: Fetch diff
+        id: diff
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const pr = context.payload.pull_request;
+            const { data } = await github.rest.pulls.get({
+              owner: context.repo.owner, repo: context.repo.repo, pull_number: pr.number, mediaType: { format: 'diff' }
+            });
+            core.setOutput('diff', data);
+      
+      - name: Ask GPT for review
+        id: gpt
+        env:
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+          DIFF: ${{ steps.diff.outputs.diff }}
+        run: |
+          python3 scripts/run_ai_reviewer.py
+      - name: Post review comment
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const fs = require('fs');
+            const body = fs.readFileSync('ai-review.txt','utf8');
+            await github.rest.issues.createComment({
+              owner: context.repo.owner, repo: context.repo.repo,
+              issue_number: context.issue.number, body
+            });
