@@ -12,9 +12,9 @@
 #>
 
 param(
-    [string]$SftpHost = "access-5017098454.webspace-host.com",
+    [string]$SftpHost = "access-5018843677.webspace-host.com",
     [int]$Port = 22,
-    [string]$Username = "a132096",
+    [string]$Username = "a1819554",
     [string]$Pass = "Gabby3000!!!",
     [string]$RemotePath = "/3000studios.com"
 )
