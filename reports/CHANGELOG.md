@@ -89,3 +89,24 @@
 * 21b8570 Initial plan (copilot-swe-agent[bot])
 * afa82ee chore(reports): nightly security report (3000 Studios Bot)
 
+## 2025-11-18
+
+* c0058fe feat: Add comprehensive WordPress admin recovery tools (3000Studios)
+* 3cd98dc chore: Bump version to 1.84 - Test auto-deploy with updated FTP secrets (3000Studios)
+* 9f9b6e8 feat: Add IONOS SFTP deployment script with WinSCP integration (3000Studios)
+* 3f73b35 feat: Add WordPress admin fix toolkit and auto-deploy configuration (3000Studios)
+* 80c97c5 feat: Update homepage to 'Under Development' mode (3000Studios)
+* 81be8af Merge pull request #23 from 3000Studios/copilot/fix-all-workflows (Jeremy S.)
+* 7b05ed2 feat: add error handling to orchestrator and extract WP themes path (copilot-swe-agent[bot])
+* 66c0d6e Merge branch 'main' into copilot/fix-all-workflows (Jeremy S.)
+* 1cc2b95 Update .github/workflows/auto-approve-and-merge.yml (Jeremy S.)
+* 82ccb51 Update .github/workflows/auto-approve-and-merge.yml (Jeremy S.)
+* 57619d0 chore: update VSCode settings and deployment script (3000Studios)
+* 04c7def feat: Update all workflows to use GITHUB_PAT secret (3000Studios)
+* c4994b3 Remove music carousel and redesign experience page with interactive content (#35) (Copilot)
+* 4fb14cc feat: Complete AI Dashboard deployment package with auto-packager script (3000Studios)
+* 9fc5032 chore: update vscode settings (3000Studios)
+* 5ae9f74 feat: AI Dashboard ready for WordPress deployment - complete setup guide included (3000Studios)
+* 3ff3082 chore(reports): nightly security report (3000 Studios Bot)
+* 9260e7a chore(reports): nightly changelog (3000 Studios Bot)
+
