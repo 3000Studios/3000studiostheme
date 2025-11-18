@@ -1,4 +1,4 @@
-name: 3000 Studios — MASTER WordPress Theme Sync
+name: 3000 Studios — MASTER WordPress Theme Sync (With Cleanup)
 
 on:
   push:
@@ -7,7 +7,7 @@ on:
 
 jobs:
   deploy:
-    name: 🚀 Sync Theme to IONOS (No Duplicates)
+    name: 🚀 Sync WordPress Theme + Cleanup
     runs-on: ubuntu-latest
 
     steps:
@@ -16,7 +16,7 @@ jobs:
 
       - name: 📦 Build Theme Package
         run: |
-          mkdir -p dist
+          mkdir -p dist/3000studiostheme-main
           rsync -av --exclude='.github' --exclude='node_modules' --exclude='dist' ./ dist/3000studiostheme-main/
 
       - name: 📡 Deploy via SFTP (IONOS)
@@ -30,23 +30,49 @@ jobs:
           remote_path: "/clickandbuilds/3000Studios/wp-content/themes/3000studiostheme-main"
           args: "-avz --delete"
 
+      - name: 💣 CLEANUP — Delete all old theme folders
+        run: |
+          echo "Starting cleanup…"
+
+          # Cleanup script
+          CLEANUP_CMDS=$(cat <<'EOF'
+          cd /clickandbuilds/3000Studios/wp-content/themes
+
+          rm -rf 3000studios-clean
+          rm -rf 3000studios-ready
+          rm -rf 3000studios-ready-1
+          rm -rf 3000studiostheme
+          rm -rf 3000studiostheme-202*
+          rm -rf 3000studios-202*
+          EOF
+          )
+
+          # Execute cleanup via SFTP
+          sudo apt-get update
+          sudo apt-get install -y sshpass
+
+          sshpass -p "${{ secrets.IONOS_PASS }}" ssh -o StrictHostKeyChecking=no ${{ secrets.IONOS_USER }}@${{ secrets.IONOS_HOST }} "$CLEANUP_CMDS"
+
       - name: 🔧 Fix File Permissions
         run: |
-          echo "chmod -R 755 wp-content" >> fix.sh
-          echo "chmod -R 644 wp-content/themes/3000studiostheme-main" >> fix.sh
-        shell: bash
+          FIX_CMDS=$(cat <<'EOF'
+          cd /clickandbuilds/3000Studios/wp-content/themes
+          chmod -R 755 3000studiostheme-main
+          EOF
+          )
 
-      - name: 🔐 Auto-Heal wp-login (if broken)
+          sshpass -p "${{ secrets.IONOS_PASS }}" ssh -o StrictHostKeyChecking=no ${{ secrets.IONOS_USER }}@${{ secrets.IONOS_HOST }} "$FIX_CMDS"
+
+      - name: 🔐 Auto-Heal wp-login.php
         run: |
-          echo "Checking login page..."
           STATUS=$(curl -s -o /dev/null -w "%{http_code}" https://3000studios.com/wp-login.php)
           if [ "$STATUS" != "200" ]; then
-            echo "Login broken — restoring wp-login.php…"
-            curl -o restore.zip https://wordpress.org/latest.zip
-            unzip restore.zip
-            mv wordpress/wp-login.php wp-login.php
+            echo "Login page broken — restoring WordPress core file"
+            curl -o latest.zip https://wordpress.org/latest.zip
+            unzip latest.zip
+            cp wordpress/wp-login.php wp-login.php
           else
-            echo "Login OK ✔"
+            echo "Login OK"
           fi
 
       - name: 🧼 Clear WP Cache
@@ -54,4 +80,4 @@ jobs:
           curl -s https://3000studios.com/wp-admin/admin-ajax.php?action=flush_cache || true
 
       - name: 🎉 Deployment Finished
-        run: echo "🔥 3000studios theme updated successfully"
+        run: echo "🔥 Theme deployed and garbage cleared from server."
