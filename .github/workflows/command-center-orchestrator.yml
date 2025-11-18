@@ -8,18 +8,50 @@ on:
   schedule:
     - cron: "0 0 * * *" # nightly
 
+permissions:
+  contents: read
+  actions: write
+  workflows: write
+
 jobs:
   orchestrate:
     runs-on: ubuntu-latest
+    if: ${{ github.event.workflow_run.conclusion == 'success' && github.event.workflow_run.head_branch == 'main' }}
+    env:
+      GH_TOKEN: ${{ secrets.GITHUB_PAT }}
     steps:
       - name: Trigger Theme Deploy
-        run: gh workflow run 'theme-deploy.yml' --repo 3000Studios/3000studiostheme
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          if ! gh workflow run 'theme-deploy.yml' --repo 3000Studios/3000studiostheme; then
+            echo "Failed to trigger theme-deploy.yml"
+            exit 1
+          fi
 
       - name: Trigger Repo Optimizer
-        run: gh workflow run 'repo-optimizer.yml' --repo 3000Studios/3000studiostheme
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          if ! gh workflow run 'repo-optimizer.yml' --repo 3000Studios/3000studiostheme; then
+            echo "Failed to trigger repo-optimizer.yml"
+            exit 1
+          fi
 
       - name: Trigger Security Watchdog
-        run: gh workflow run 'security-watchdog.yml' --repo 3000Studios/3000studiostheme
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          if ! gh workflow run 'security-watchdog.yml' --repo 3000Studios/3000studiostheme; then
+            echo "Failed to trigger security-watchdog.yml"
+            exit 1
+          fi
 
       - name: Trigger Command Center Sync
-        run: gh workflow run 'command-center-sync.yml' --repo 3000Studios/3000studiostheme
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          if ! gh workflow run 'command-center-sync.yml' --repo 3000Studios/3000studiostheme; then
+            echo "Failed to trigger command-center-sync.yml"
+            exit 1
+          fi

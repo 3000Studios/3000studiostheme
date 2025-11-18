@@ -1,1 +1,11 @@
-npm run check
+#!/usr/bin/env sh
+. "$(dirname -- "$0")/_/husky.sh"
+
+# Check if npm is available
+if command -v npm >/dev/null 2>&1; then
+  npm run check
+else
+  echo "⚠️  npm not found - skipping lint check"
+  echo "Install Node.js from https://nodejs.org/ to enable pre-commit linting"
+  exit 0
+fi

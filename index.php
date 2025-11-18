@@ -1,4 +1,4 @@
-<?php
+﻿<?php
 /*
  *   Copyright (c) 2025 NAME.
  *   All rights reserved.
@@ -7,7 +7,7 @@
 
 /*!
  * 3000 Studios Theme
- * Copyright © 2025 3000 Studios. All rights reserved.
+ * Copyright Â© 2025 3000 Studios. All rights reserved.
  */
 
 /* Template: Home */ if (! defined('ABSPATH')) {
@@ -26,10 +26,10 @@ add_action('wp_footer', function () {
 <section class="hero">
   <canvas id="particle-bg" style="position:absolute;inset:0;z-index:-2;"></canvas>
   <div class="container">
-    <h1 style="font-size:72px;font-weight:bold;text-align:center;margin:40px 0;background:linear-gradient(45deg, #00ffff, #9d4edd, #00ff00);-webkit-background-clip:text;-webkit-text-fill-color:transparent;animation:gradient-shift 3s ease infinite;">hello hello</h1>
-    <p style="font-size:24px;text-align:center;margin:20px 0;color:#fff;">System updating. Advanced features loading. Stand by...</p>
-    <p>Code, creativity, and innovation collide here. Dive into the fusion of art, AI, and engineering.</p>
-    <a class="cta" href="<?php echo home_url(); ?>/experience">Enter the Experience</a>
+    <h1 style="font-size:72px;font-weight:bold;text-align:center;margin:40px 0;background:linear-gradient(45deg, #00ffff, #9d4edd, #00ff00);-webkit-background-clip:text;-webkit-text-fill-color:transparent;animation:gradient-shift 3s ease infinite;">UNDER DEVELOPMENT</h1>
+    <p style="font-size:24px;text-align:center;margin:20px 0;color:#fff;">Site is currently being rebuilt with enhanced features.</p>
+    <p>Code, creativity, and innovation collide here. Check back soon for the new experience.</p>
+    <a class="cta" href="<?php echo home_url(); ?>/experience">Preview Experience</a>
   </div>
 </section>
 
@@ -71,444 +71,7 @@ add_action('wp_footer', function () {
     <div class="slide"><img src="<?php echo esc_url(get_template_directory_uri() . '/assets/placeholder.png'); ?>" alt=""></div>
   </div>
 
-  <!-- Music Player Footer -->
-  <div class="music-player-footer" style="margin-top: 4rem;">
-    <div class="album-cover">
-      <div class="swiper">
-        <div class="swiper-wrapper">
-          <div class="swiper-slide">
-            <img src="https://github.com/ecemgo/mini-samples-great-tricks/assets/13468728/d3ca28bf-e1b7-467e-a00b-c7785be8e397" alt="Symphony" />
-            <div class="overlay">
-              <a href="https://www.youtube.com/watch?v=aatr_2MstrI&ab_channel=CleanBandit" target="_blank">
-                <ion-icon name="logo-youtube"></ion-icon>
-              </a>
-            </div>
-          </div>
-          <div class="swiper-slide">
-            <img src="https://github.com/ecemgo/mini-samples-great-tricks/assets/13468728/33afe2c4-6c89-4201-8ba2-6d88b7b16365" alt="Levitating" />
-            <div class="overlay">
-              <a href="https://www.youtube.com/watch?v=TUVcZfQe-Kw&ab_channel=DuaLipa" target="_blank">
-                <ion-icon name="logo-youtube"></ion-icon>
-              </a>
-            </div>
-          </div>
-          <div class="swiper-slide">
-            <img src="https://github.com/ecemgo/mini-samples-great-tricks/assets/13468728/be91c564-9c5e-44d1-b0a8-ad2a77e616b3" alt="Flowers" />
-            <div class="overlay">
-              <a href="https://www.youtube.com/watch?v=G7KNmW9a75Y&ab_channel=MileyCyrusVEVO" target="_blank">
-                <ion-icon name="logo-youtube"></ion-icon>
-              </a>
-            </div>
-          </div>
-          <div class="swiper-slide">
-            <img src="https://github.com/ecemgo/mini-samples-great-tricks/assets/13468728/c9898be7-7432-4c57-a1b5-6949ca06e205" alt="Heat Waves" />
-            <div class="overlay">
-              <a href="https://www.youtube.com/watch?v=mRD0-GxqHVo&ab_channel=GlassAnimals" target="_blank">
-                <ion-icon name="logo-youtube"></ion-icon>
-              </a>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
 
-    <div class="music-player">
-      <h1>Flowers</h1>
-      <p>Miley Cyrus</p>
-
-      <audio id="song">
-        <source src="https://github.com/ecemgo/mini-samples-great-tricks/raw/main/song-list/Miley-Cyrus-Flowers.mp3" type="audio/mpeg">
-      </audio>
-
-      <div class="progress-container">
-        <div class="progress" id="progress"></div>
-        <div class="music-duration">
-          <span id="current-time">0:00</span>
-          <span id="duration">3:20</span>
-        </div>
-      </div>
-
-      <div class="music-controls">
-        <div class="controls">
-          <button class="backward">
-            <ion-icon name="play-back"></ion-icon>
-          </button>
-          <button class="play-pause-btn">
-            <ion-icon name="pause" id="controlIcon"></ion-icon>
-          </button>
-          <button class="forward">
-            <ion-icon name="play-forward"></ion-icon>
-          </button>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<style>
-  /* Music Player Styles */
-  @import url("https://fonts.googleapis.com/css2?family=Nunito:wght@300;400;500;600&display=swap");
-
-  .music-player-footer {
-    --primary-clr: rgba(228, 228, 229, 1);
-  }
-
-  .music-player-footer * {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-    font-family: "Nunito", sans-serif;
-  }
-
-  .music-player-footer {
-    position: relative;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    min-height: 500px;
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    border-radius: 20px;
-    padding: 2rem;
-    overflow: hidden;
-  }
-
-  .music-player-footer::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background:
-      radial-gradient(circle at 20% 50%, rgba(120, 119, 198, 0.3), transparent 50%),
-      radial-gradient(circle at 80% 20%, rgba(255, 119, 198, 0.3), transparent 50%),
-      radial-gradient(circle at 40% 80%, rgba(120, 200, 255, 0.3), transparent 50%);
-    animation: music-bg-float 20s ease-in-out infinite;
-  }
-
-  @keyframes music-bg-float {
-
-    0%,
-    100% {
-      transform: translateY(0px) rotate(0deg);
-    }
-
-    33% {
-      transform: translateY(-15px) rotate(1deg);
-    }
-
-    66% {
-      transform: translateY(8px) rotate(-0.5deg);
-    }
-  }
-
-  .album-cover {
-    position: relative;
-    width: 250px;
-    height: 250px;
-    border-radius: 50%;
-    overflow: hidden;
-    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.4);
-    z-index: 2;
-    margin-bottom: 2rem;
-  }
-
-  .swiper {
-    width: 100%;
-    height: 100%;
-  }
-
-  .swiper-slide {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    position: relative;
-  }
-
-  .swiper-slide img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    border-radius: 50%;
-  }
-
-  .overlay {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(0, 0, 0, 0.6);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    opacity: 0;
-    transition: opacity 0.3s ease;
-    border-radius: 50%;
-  }
-
-  .swiper-slide:hover .overlay {
-    opacity: 1;
-  }
-
-  .overlay a {
-    color: white;
-    font-size: 2rem;
-    text-decoration: none;
-    transition: transform 0.3s ease;
-  }
-
-  .overlay a:hover {
-    transform: scale(1.2);
-  }
-
-  .music-player {
-    background: rgba(255, 255, 255, 0.1);
-    backdrop-filter: blur(20px);
-    border: 1px solid rgba(255, 255, 255, 0.2);
-    border-radius: 20px;
-    padding: 2rem;
-    text-align: center;
-    color: white;
-    width: 100%;
-    max-width: 400px;
-    z-index: 2;
-    position: relative;
-  }
-
-  .music-player h1 {
-    font-size: 1.8rem;
-    font-weight: 600;
-    margin-bottom: 0.5rem;
-    background: linear-gradient(45deg, #fff, #f0f0f0);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-  }
-
-  .music-player p {
-    font-size: 1rem;
-    opacity: 0.8;
-    margin-bottom: 2rem;
-  }
-
-  .progress-container {
-    position: relative;
-    width: 100%;
-    height: 6px;
-    background: rgba(255, 255, 255, 0.2);
-    border-radius: 3px;
-    margin-bottom: 1rem;
-    cursor: pointer;
-  }
-
-  .progress {
-    height: 100%;
-    background: linear-gradient(90deg, #ff6b6b, #4ecdc4);
-    border-radius: 3px;
-    width: 0%;
-    transition: width 0.1s ease;
-  }
-
-  .music-duration {
-    display: flex;
-    justify-content: space-between;
-    font-size: 0.8rem;
-    opacity: 0.7;
-    margin-bottom: 2rem;
-  }
-
-  .controls {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 1.5rem;
-  }
-
-  .controls button {
-    background: rgba(255, 255, 255, 0.1);
-    border: none;
-    border-radius: 50%;
-    width: 50px;
-    height: 50px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: white;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    backdrop-filter: blur(10px);
-  }
-
-  .play-pause-btn {
-    width: 60px !important;
-    height: 60px !important;
-    background: rgba(255, 255, 255, 0.2) !important;
-  }
-
-  .controls button:hover {
-    background: rgba(255, 255, 255, 0.2);
-    transform: scale(1.1);
-  }
-
-  .controls button ion-icon {
-    font-size: 1.5rem;
-  }
-
-  .play-pause-btn ion-icon {
-    font-size: 2rem;
-  }
-
-  /* Responsive design */
-  @media (max-width: 768px) {
-    .album-cover {
-      width: 200px;
-      height: 200px;
-    }
-
-    .music-player {
-      padding: 1.5rem;
-    }
-
-    .music-player h1 {
-      font-size: 1.5rem;
-    }
-  }
-</style>
-
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
-<script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
-<script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
-
-<script>
-  // Music Player JavaScript
-  const progress = document.getElementById("progress");
-  const song = document.getElementById("song");
-  const controlIcon = document.getElementById("controlIcon");
-  const playPauseButton = document.querySelector(".play-pause-btn");
-  const nextButton = document.querySelector(".controls button.forward");
-  const prevButton = document.querySelector(".controls button.backward");
-  const songName = document.querySelector(".music-player h1");
-  const artistName = document.querySelector(".music-player p");
-  const currentTimeEl = document.getElementById("current-time");
-  const durationEl = document.getElementById("duration");
-
-  const songs = [{
-      title: "Symphony",
-      name: "Clean Bandit ft. Zara Larsson",
-      source: "https://github.com/ecemgo/mini-samples-great-tricks/raw/main/song-list/Clean-Bandit-Symphony.mp3",
-    },
-    {
-      title: "Levitating",
-      name: "Dua Lipa",
-      source: "https://github.com/ecemgo/mini-samples-great-tricks/raw/main/song-list/Dua-Lipa-Levitating.mp3",
-    },
-    {
-      title: "Flowers",
-      name: "Miley Cyrus",
-      source: "https://github.com/ecemgo/mini-samples-great-tricks/raw/main/song-list/Miley-Cyrus-Flowers.mp3",
-    },
-    {
-      title: "Heat Waves",
-      name: "Glass Animals",
-      source: "https://github.com/ecemgo/mini-samples-great-tricks/raw/main/song-list/Glass-Animals-Heat-Waves.mp3",
-    },
-  ];
-
-  let currentSongIndex = 2;
-
-  function updateSongInfo() {
-    songName.textContent = songs[currentSongIndex].title;
-    artistName.textContent = songs[currentSongIndex].name;
-    song.src = songs[currentSongIndex].source;
-
-    song.addEventListener("loadedmetadata", function() {
-      const duration = song.duration;
-      const minutes = Math.floor(duration / 60);
-      const seconds = Math.floor(duration % 60);
-      durationEl.textContent = `${minutes}:${seconds.toString().padStart(2, '0')}`;
-    });
-  }
-
-  function playPause() {
-    if (song.paused) {
-      song.play();
-      controlIcon.setAttribute("name", "pause");
-    } else {
-      song.pause();
-      controlIcon.setAttribute("name", "play");
-    }
-  }
-
-  function nextSong() {
-    currentSongIndex = (currentSongIndex + 1) % songs.length;
-    updateSongInfo();
-    playPause();
-    swiper.slideNext();
-  }
-
-  function prevSong() {
-    currentSongIndex = (currentSongIndex - 1 + songs.length) % songs.length;
-    updateSongInfo();
-    playPause();
-    swiper.slidePrev();
-  }
-
-  function updateProgressBar() {
-    if (song.duration) {
-      const progressPercent = (song.currentTime / song.duration) * 100;
-      progress.style.width = progressPercent + "%";
-
-      const currentMinutes = Math.floor(song.currentTime / 60);
-      const currentSeconds = Math.floor(song.currentTime % 60);
-      currentTimeEl.textContent = `${currentMinutes}:${currentSeconds.toString().padStart(2, '0')}`;
-    }
-  }
-
-  playPauseButton.addEventListener("click", playPause);
-  nextButton.addEventListener("click", nextSong);
-  prevButton.addEventListener("click", prevSong);
-  song.addEventListener("timeupdate", updateProgressBar);
-
-  song.addEventListener("ended", function() {
-    nextSong();
-  });
-
-  // Progress bar click to seek
-  document.querySelector('.progress-container').addEventListener('click', function(e) {
-    const clickX = e.offsetX;
-    const width = this.offsetWidth;
-    const duration = song.duration;
-    song.currentTime = (clickX / width) * duration;
-  });
-
-  // Initialize Swiper
-  const swiper = new Swiper('.swiper', {
-    effect: 'coverflow',
-    grabCursor: true,
-    centeredSlides: true,
-    slidesPerView: 1,
-    coverflowEffect: {
-      rotate: 0,
-      stretch: 0,
-      depth: 100,
-      modifier: 2,
-      slideShadows: true,
-    },
-    loop: true,
-    initialSlide: currentSongIndex,
-  });
-
-  swiper.on('slideChange', function() {
-    currentSongIndex = swiper.realIndex;
-    updateSongInfo();
-  });
-
-  // Initialize
-  updateSongInfo();
-</script>
 
 <section id="game" class="section container">
   <h2>KBH Games Arcade</h2>
@@ -516,19 +79,19 @@ add_action('wp_footer', function () {
     <div class="game-background" style="position:absolute;top:0;left:0;right:0;bottom:0;background:radial-gradient(circle at 30% 40%, rgba(120, 119, 198, 0.4), transparent 50%), radial-gradient(circle at 70% 60%, rgba(255, 119, 198, 0.4), transparent 50%);animation:game-bg-float 15s ease-in-out infinite;"></div>
 
     <div style="position:relative;z-index:2;">
-      <h3 style="color:#fff;text-align:center;margin-bottom:1.5rem;font-size:2rem;background:linear-gradient(45deg, #ff6b6b, #4ecdc4);-webkit-background-clip:text;-webkit-text-fill-color:transparent;font-weight:bold;">🎮 Epic Runner Game</h3>
+      <h3 style="color:#fff;text-align:center;margin-bottom:1.5rem;font-size:2rem;background:linear-gradient(45deg, #ff6b6b, #4ecdc4);-webkit-background-clip:text;-webkit-text-fill-color:transparent;font-weight:bold;">ðŸŽ® Epic Runner Game</h3>
 
       <canvas id="mini-game" width="800" height="400" style="width:100%;height:400px;background:#000;border-radius:15px;border:3px solid rgba(255,255,255,0.2);box-shadow:0 10px 30px rgba(0,0,0,0.3);display:block;"></canvas>
 
       <div class="game-controls" style="display:flex;justify-content:center;gap:1rem;margin-top:1.5rem;flex-wrap:wrap;">
-        <button onclick="kbhGame.start()" style="background:rgba(255,107,107,0.8);border:none;padding:12px 24px;border-radius:25px;color:#fff;font-weight:bold;cursor:pointer;transition:all 0.3s ease;backdrop-filter:blur(10px);">🎮 START</button>
-        <button onclick="kbhGame.pause()" style="background:rgba(78,205,196,0.8);border:none;padding:12px 24px;border-radius:25px;color:#fff;font-weight:bold;cursor:pointer;transition:all 0.3s ease;backdrop-filter:blur(10px);">⏸️ PAUSE</button>
-        <button onclick="kbhGame.reset()" style="background:rgba(69,183,209,0.8);border:none;padding:12px 24px;border-radius:25px;color:#fff;font-weight:bold;cursor:pointer;transition:all 0.3s ease;backdrop-filter:blur(10px);">🔄 RESET</button>
-        <a href="<?php echo home_url(); ?>/experience" style="background:rgba(249,202,36,0.8);border:none;padding:12px 24px;border-radius:25px;color:#000;font-weight:bold;text-decoration:none;transition:all 0.3s ease;backdrop-filter:blur(10px);display:inline-block;">🚀 FULL GAME</a>
+        <button onclick="kbhGame.start()" style="background:rgba(255,107,107,0.8);border:none;padding:12px 24px;border-radius:25px;color:#fff;font-weight:bold;cursor:pointer;transition:all 0.3s ease;backdrop-filter:blur(10px);">ðŸŽ® START</button>
+        <button onclick="kbhGame.pause()" style="background:rgba(78,205,196,0.8);border:none;padding:12px 24px;border-radius:25px;color:#fff;font-weight:bold;cursor:pointer;transition:all 0.3s ease;backdrop-filter:blur(10px);">â¸ï¸ PAUSE</button>
+        <button onclick="kbhGame.reset()" style="background:rgba(69,183,209,0.8);border:none;padding:12px 24px;border-radius:25px;color:#fff;font-weight:bold;cursor:pointer;transition:all 0.3s ease;backdrop-filter:blur(10px);">ðŸ”„ RESET</button>
+        <a href="<?php echo home_url(); ?>/experience" style="background:rgba(249,202,36,0.8);border:none;padding:12px 24px;border-radius:25px;color:#000;font-weight:bold;text-decoration:none;transition:all 0.3s ease;backdrop-filter:blur(10px);display:inline-block;">ðŸš€ FULL GAME</a>
       </div>
 
       <div class="game-instructions" style="text-align:center;margin-top:1rem;color:rgba(255,255,255,0.8);font-size:0.9rem;">
-        <p style="margin:0.5rem 0;">🖱️ Click or press SPACE to jump • 🎯 Avoid obstacles • 🏆 Beat your high score!</p>
+        <p style="margin:0.5rem 0;">ðŸ–±ï¸ Click or press SPACE to jump â€¢ ðŸŽ¯ Avoid obstacles â€¢ ðŸ† Beat your high score!</p>
       </div>
     </div>
   </div>
@@ -759,7 +322,7 @@ add_action('wp_footer', function () {
           }
 
           setTimeout(() => {
-            if (confirm(`💥 Game Over!\\n🎯 Score: ${this.score}\\n🏆 Best: ${this.highScore}\\n\\n🎮 Play again?`)) {
+            if (confirm(`ðŸ’¥ Game Over!\\nðŸŽ¯ Score: ${this.score}\\nðŸ† Best: ${this.highScore}\\n\\nðŸŽ® Play again?`)) {
               this.reset();
             }
           }, 100);
@@ -875,11 +438,11 @@ add_action('wp_footer', function () {
         this.ctx.textAlign = 'center';
 
         if (this.score === 0) {
-          this.ctx.fillText('🎮 KBH GAMES', this.canvas.width / 2, this.canvas.height / 2 - 20);
+          this.ctx.fillText('ðŸŽ® KBH GAMES', this.canvas.width / 2, this.canvas.height / 2 - 20);
           this.ctx.font = 'bold 16px Arial';
           this.ctx.fillText('Click START to begin your epic adventure!', this.canvas.width / 2, this.canvas.height / 2 + 20);
         } else {
-          this.ctx.fillText('⏸️ PAUSED', this.canvas.width / 2, this.canvas.height / 2);
+          this.ctx.fillText('â¸ï¸ PAUSED', this.canvas.width / 2, this.canvas.height / 2);
           this.ctx.font = 'bold 16px Arial';
           this.ctx.fillText('Click START to continue', this.canvas.width / 2, this.canvas.height / 2 + 30);
         }
@@ -903,7 +466,8 @@ add_action('wp_footer', function () {
 
 <section class="section container">
   <h2>Top Crypto Movers</h2>
-  <div id="crypto-ticker" class="small">Loading data…</div>
+  <div id="crypto-ticker" class="small">Loading dataâ€¦</div>
 </section>
 
 <?php get_footer(); ?>
+

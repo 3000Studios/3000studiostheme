@@ -1,3 +1,97 @@
+name: 3000 Studios Theme Deploy
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+env:
+  WP_THEMES_DIR: /clickandbuilds/3000Studios/wp-content/themes
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Create theme ZIP with timestamp
+        run: |
+          TIMESTAMP=$(date -u +"%Y-%m-%d %H:%M UTC")
+          THEME_NAME="3000studios-$(date -u +"%Y%m%d-%H%M%S")"
+          echo "THEME_NAME=${THEME_NAME}" >> $GITHUB_ENV
+          echo "BUILD_TIME=${TIMESTAMP}" >> $GITHUB_ENV
+          
+          # Update style.css with build timestamp
+          sed -i "s/{{BUILD_TIME}}/${TIMESTAMP}/g" style.css || true
+          
+          # Create ZIP
+          zip -r ${THEME_NAME}.zip . \
+            -x ".git/*" \
+            -x ".github/*" \
+            -x "node_modules/*" \
+            -x ".DS_Store" \
+            -x "README*.md" \
+            -x "SETUP_COMPLETE.md" \
+            -x "QUICKSTART.md" \
+            -x "scripts/*" \
+            -x "webhook-server/*" \
+            -x "mobile-client/*"
+          ls -lh ${THEME_NAME}.zip
+          echo "✓ Created: ${THEME_NAME}.zip (Built: ${TIMESTAMP})"
+
+      - name: Upload theme ZIP via SCP
+        if: ${{ secrets.WP_SSH_HOST != '' }}
+        uses: appleboy/scp-action@v0.1.7
+        with:
+          host: ${{ secrets.WP_SSH_HOST }}
+          username: ${{ secrets.WP_SSH_USER }}
+          password: ${{ secrets.WP_SSH_PASSWORD }}
+          port: ${{ secrets.WP_SSH_PORT }}
+          source: "${{ env.THEME_NAME }}.zip"
+          target: "/tmp/"
+          overwrite: true
+
+      - name: Extract theme on server
+        if: ${{ secrets.WP_SSH_HOST != '' }}
+        uses: appleboy/ssh-action@v1.0.3
+        env:
+          THEME_NAME: ${{ env.THEME_NAME }}
+          WP_THEMES_DIR: ${{ env.WP_THEMES_DIR }}
+        with:
+          host: ${{ secrets.WP_SSH_HOST }}
+          username: ${{ secrets.WP_SSH_USER }}
+          password: ${{ secrets.WP_SSH_PASSWORD }}
+          port: ${{ secrets.WP_SSH_PORT }}
+          envs: THEME_NAME,WP_THEMES_DIR
+          script: |
+            # Navigate to themes directory
+            cd "${WP_THEMES_DIR}"
+            
+            echo "Deploying new theme: ${THEME_NAME}"
+            
+            # Extract new theme with timestamped name
+            mkdir -p "${THEME_NAME}"
+            unzip -o "/tmp/${THEME_NAME}.zip" -d "${THEME_NAME}"
+            
+            # Set proper permissions
+            chmod -R 755 "${THEME_NAME}"
+            
+            # Cleanup
+            rm "/tmp/${THEME_NAME}.zip"
+            
+            # List all 3000studios themes with timestamps
+            echo ""
+            echo "=== All 3000 Studios Themes ==="
+            ls -lht | grep "3000studios" | head -10
+            echo ""
+            echo "✓ Theme deployed successfully: ${THEME_NAME}"
+            echo "✓ Activate it in WordPress: Appearance > Themes > ${THEME_NAME}"
+
       - name: Build deploy summary
         id: summary
         if: ${{ success() }}
@@ -11,7 +105,7 @@
           echo "::notice::Deploy summary prepared"
 
       - name: Email deploy notification
-        if: ${{ success() }}
+        if: ${{ success() && secrets.SMTP_SERVER != '' }}
         uses: dawidd6/action-send-mail@v3
         with:
           server_address: ${{ secrets.SMTP_SERVER }}
@@ -33,7 +127,7 @@
           attachments: summary.txt
 
       - name: Email failure notice
-        if: ${{ failure() }}
+        if: ${{ failure() && secrets.SMTP_SERVER != '' }}
         uses: dawidd6/action-send-mail@v3
         with:
           server_address: ${{ secrets.SMTP_SERVER }}

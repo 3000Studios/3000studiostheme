@@ -1,1 +1,117 @@
-404: Not Found
+name: Auto Approve and Merge (always)
+
+on:
+  pull_request_target:
+    types: [opened, reopened, labeled, synchronize, ready_for_review]
+  schedule:
+    - cron: '*/15 * * * *'   # run every 15 minutes
+  workflow_dispatch: {}
+
+permissions:
+  contents: write
+  pull-requests: write
+  issues: write
+  checks: read
+name: Auto Approve & Merge
+
+on:
+  pull_request:
+    types: [opened, reopened, synchronize]
+    branches:
+      - main
+
+permissions:
+  pull-requests: write
+  contents: write
+
+jobs:
+  auto-approve-and-merge:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Auto-approve and merge (handler)
+        uses: actions/github-script@v7
+        with:
+          github-token: ${{ secrets.MERGE_PAT }}
+          script: |
+            const owner = context.repo.owner;
+            const repo = context.repo.repo;
+            const actorToNotify = '@3000Studios';
+
+            async function processPR(pr) {
+              const number = pr.number;
+              console.log(`Processing PR #${number} - ${pr.title} by ${pr.user.login}`);
+              try {
+                await github.rest.pulls.createReview({
+                  owner,
+                  repo,
+                  pull_number: number,
+                  event: 'APPROVE'
+                });
+                console.log(`Approved PR #${number}`);
+              } catch (err) {
+                console.log(`Approve failed for PR #${number}: ${err.message || err}`);
+              }
+
+              try {
+                const mergeResp = await github.rest.pulls.merge({
+                  owner,
+                  repo,
+                  pull_number: number,
+                  merge_method: 'squash'
+                });
+                const sha = mergeResp.data && mergeResp.data.sha ? mergeResp.data.sha : '';
+                console.log(`Merged PR #${number} - sha: ${sha}`);
+
+                await github.rest.issues.createComment({
+                  owner,
+                  repo,
+                  issue_number: number,
+                  body: `${actorToNotify} — This PR was auto-approved and auto-merged by repository automation. Merge SHA: ${sha}`
+                });
+
+                await github.rest.issues.create({
+                  owner,
+                  repo,
+                  title: `Auto-merge report: PR #${number} - ${pr.title}`,
+                  body: `Automated approval and merge executed.\n\n- PR: #${number}\n- Title: ${pr.title}\n- Author: ${pr.user.login}\n- Merge SHA: ${sha}\n- Merged by workflow: ${context.workflow}\n`
+                });
+
+                console.log(`Notified and logged PR #${number}`);
+              } catch (err) {
+                console.log(`Merge/notify failed for PR #${number}: ${err.message || err}`);
+              }
+            }
+
+            const payloadPR = context.payload && context.payload.pull_request;
+            if (payloadPR) {
+              await processPR(payloadPR);
+            } else {
+              const listParams = { owner, repo, state: 'open', per_page: 100 };
+              const response = await github.rest.pulls.list(listParams);
+              const prs = response.data || [];
+              console.log(`Found ${prs.length} open PR(s) to process.`);
+              for (const pr of prs) {
+                await processPR(pr);
+              }
+            }
+
+    steps:
+      - name: 🔍 Dump PR info
+        run: |
+          echo "PR #: ${{ github.event.pull_request.number }}"
+          echo "Branch: ${{ github.event.pull_request.head.ref }}"
+
+      - name: ✅ Auto Approve PR
+        uses: hmarr/auto-approve-action@v3
+        with:
+          github-token: ${{ secrets.GITHUB_PAT }}
+
+      - name: ⚡ Auto Merge PR
+        run: |
+          PR=${{ github.event.pull_request.number }}
+
+          echo "Attempting merge for PR #$PR..."
+          
+          gh pr merge "$PR" --merge --admin --delete-branch --repo "${{ github.repository }}"
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_PAT }}
