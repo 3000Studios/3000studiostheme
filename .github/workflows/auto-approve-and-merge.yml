@@ -30,6 +30,56 @@ jobs:
             async function processPR(pr) {
               const number = pr.number;
               console.log(`Processing PR #${number} - ${pr.title} by ${pr.user.login}`);
+              
+              // Skip if PR is already merged or closed
+              if (pr.state !== 'open') {
+                console.log(`Skipping PR #${number} - already ${pr.state}`);
+                return;
+              }
+              
+              // Check for auto-merge label (opt-in mechanism)
+              const hasAutoMergeLabel = pr.labels && pr.labels.some(label => 
+                label.name === 'auto-merge' || label.name === 'automerge'
+              );
+              if (!hasAutoMergeLabel) {
+                console.log(`Skipping PR #${number} - missing 'auto-merge' label`);
+                return;
+              }
+              
+              // Verify all required checks have passed
+              try {
+                const checks = await github.rest.checks.listForRef({
+                  owner,
+                  repo,
+                  ref: pr.head.sha
+                });
+                
+                const allChecksPassed = checks.data.check_runs.length === 0 || 
+                  checks.data.check_runs.every(run => 
+                    run.status === 'completed' && run.conclusion === 'success'
+                  );
+                
+                if (!allChecksPassed) {
+                  console.log(`Skipping PR #${number} - checks not passed`);
+                  return;
+                }
+                
+                // Also check commit statuses (for legacy CI systems)
+                const statuses = await github.rest.repos.getCombinedStatusForRef({
+                  owner,
+                  repo,
+                  ref: pr.head.sha
+                });
+                
+                if (statuses.data.state !== 'success' && statuses.data.statuses.length > 0) {
+                  console.log(`Skipping PR #${number} - status checks: ${statuses.data.state}`);
+                  return;
+                }
+              } catch (err) {
+                console.log(`Check verification failed for PR #${number}: ${err.message || err}`);
+                return;
+              }
+              
               try {
                 await github.rest.pulls.createReview({
                   owner,
