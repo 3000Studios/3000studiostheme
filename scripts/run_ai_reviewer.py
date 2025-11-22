@@ -94,7 +94,10 @@ def main():
         print("--- End of Review ---\n")
         
     except urllib.error.HTTPError as e:
-        error_body = e.read().decode('utf-8') if e.fp else "No error details"
+        try:
+            error_body = e.read().decode('utf-8')
+        except Exception:
+            error_body = "Unable to read error details"
         print(f"ERROR: HTTP {e.code} - {e.reason}", file=sys.stderr)
         print(f"Error details: {error_body}", file=sys.stderr)
         
