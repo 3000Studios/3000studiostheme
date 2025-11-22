@@ -13,8 +13,6 @@ permissions:
   issues: write
   checks: read
 
-env:
-  MERGE_PAT: ${{ secrets.MERGE_PAT }}
 
 jobs:
   auto-approve-and-merge:
