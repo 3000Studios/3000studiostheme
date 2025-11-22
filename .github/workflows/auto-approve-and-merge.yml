@@ -54,14 +54,16 @@ jobs:
                   ref: pr.head.sha
                 });
                 
-                const allChecksPassed = checks.data.check_runs.length === 0 || 
-                  checks.data.check_runs.every(run => 
+                // If there are check runs, all must pass
+                if (checks.data.check_runs.length > 0) {
+                  const allChecksPassed = checks.data.check_runs.every(run => 
                     run.status === 'completed' && run.conclusion === 'success'
                   );
-                
-                if (!allChecksPassed) {
-                  console.log(`Skipping PR #${number} - checks not passed`);
-                  return;
+                  
+                  if (!allChecksPassed) {
+                    console.log(`Skipping PR #${number} - checks not passed`);
+                    return;
+                  }
                 }
                 
                 // Also check commit statuses (for legacy CI systems)
@@ -71,7 +73,8 @@ jobs:
                   ref: pr.head.sha
                 });
                 
-                if (statuses.data.state !== 'success' && statuses.data.statuses.length > 0) {
+                // If there are statuses, the combined state must be success
+                if (statuses.data.statuses.length > 0 && statuses.data.state !== 'success') {
                   console.log(`Skipping PR #${number} - status checks: ${statuses.data.state}`);
                   return;
                 }
