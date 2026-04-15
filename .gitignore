@@ -1,13 +1,36 @@
-# Dependencies
-node_modules/
-package-lock.json
+# 3000 Studios Theme - Git Ignore File
+# Copyright (c) 2025 3000 Studios. All Rights Reserved.
 
-# Build artifacts
+# Node modules
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Environment variables and API keys (NEVER COMMIT KEYS!)
+.env
+.env.local
+.env.*.local
+*_api_key*
+*.secret
+
+# Build outputs
+dist/
+build/
 *.zip
+
+# IDE and Editors
+.vscode/*
+!.vscode/settings.json
+.idea/
+*.swp
+*.swo
+*~
 
 # OS files
 .DS_Store
 Thumbs.db
+desktop.ini
 
 # Editor directories
 .vscode/
@@ -15,9 +38,25 @@ Thumbs.db
 
 # Logs
 *.log
-npm-debug.log*
+logs/
 
 # Temporary files
 *.tmp
 *.temp
-.cache/
+*.backup.*
+/tmp/
+
+# WordPress specific
+wp-config-local.php
+error_log
+debug.log
+
+# Reports and artifacts
+reports/
+*.report.md
+ui-report.md
+error-report.md
+
+# Testing
+coverage/
+.nyc_output/
