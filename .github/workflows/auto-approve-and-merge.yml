@@ -8,11 +8,13 @@ on:
   workflow_dispatch: {}
 
 permissions:
-  contents: write  # Required for merging PRs
+  contents: read
   pull-requests: write
   issues: write
   checks: read
 
+env:
+  MERGE_PAT: ${{ secrets.MERGE_PAT }}
 
 jobs:
   auto-approve-and-merge:

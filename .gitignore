@@ -14,11 +14,6 @@ yarn-error.log*
 *_api_key*
 *.secret
 
-# Build outputs
-dist/
-build/
-*.zip
-
 # IDE and Editors
 .vscode/*
 !.vscode/settings.json
@@ -53,7 +48,7 @@ __pycache__/
 *.so
 .Python
 
-# WordPress
+# WordPress specific
 wp-config-local.php
 error_log
 debug.log
