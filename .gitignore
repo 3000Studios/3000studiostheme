@@ -46,7 +46,14 @@ logs/
 *.backup.*
 /tmp/
 
-# WordPress specific
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+
+# WordPress
 wp-config-local.php
 error_log
 debug.log
